@@ -102,7 +102,9 @@
     font-family:var(--font-display);font-weight:900;color:var(--accent-blue-deep);font-size:17px;
     flex:none;letter-spacing:-.5px;
     box-shadow:0 4px 14px rgba(0,0,0,.18);
+    overflow:hidden;
   }
+  .brand-mark img{width:100%;height:100%;object-fit:contain;padding:4px;}
   .top h1{font-family:var(--font-display);font-weight:700;font-size:21px;margin:0;letter-spacing:.2px;color:#FFFFFF;}
   .top .eyebrow{
     font-size:10.5px;font-weight:700;color:var(--accent-sky);letter-spacing:.6px;
@@ -636,11 +638,13 @@
   }
   .login-card .brand-mark{
     width:52px;height:52px;border-radius:14px;margin:0 auto 14px;
-    background:linear-gradient(160deg, var(--accent-blue), var(--accent-blue-deep));
+    background:#FFFFFF;
     display:flex;align-items:center;justify-content:center;
-    font-family:var(--font-display);font-weight:900;color:#FFFDF7;font-size:22px;
+    font-family:var(--font-display);font-weight:900;color:var(--accent-blue-deep);font-size:22px;
     box-shadow:0 8px 20px #2F6FED44;
+    overflow:hidden;
   }
+  .login-card .brand-mark img{width:100%;height:100%;object-fit:contain;padding:5px;}
   .login-card h2{font-family:var(--font-display);font-size:19px;margin:0 0 4px;text-align:center;color:var(--text);}
   .login-card .sub{font-size:12px;color:var(--text-dim);text-align:center;margin:0 0 20px;}
   .login-card .form-field{margin-bottom:14px;}
@@ -762,7 +766,7 @@
 
 <div id="loginScreen">
   <div class="login-card">
-    <div class="brand-mark">י.מ</div>
+    <div class="brand-mark"><img src="yaer.png" alt="לוגו"></div>
     <h2>התחברות ללוח הבקרה</h2>
     <div class="sub">הזינו שם משתמש וסיסמה כדי להמשיך</div>
     <form id="loginForm">
@@ -785,7 +789,7 @@
    כבר בזמן שהדפדפן עדיין טוען וממיר את שאר הדף - כך הטעינה מרגישה מהירה יותר.
    כדי לחבר את הלוח לקובץ ה-Google Sheets שלכם, הדביקו כאן את כתובת ה-Web App
    שקיבלתם לאחר פריסת הקובץ Code.gs (ראו קובץ ההוראות המצורף). */
-window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbwBK4axRdbveQr3PXzdXcJec7HRFxcgGzhT4nRAhM7MxEKTBzWOJmP-R4ffPTsv_Iob/exec"; // <-- הדביקו כאן את כתובת ה-Web App
+window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbyvJFiSARAk1-II3FopMVU1VaB2yQxkJleK-BvbdAfXVNsnFJ1-RWRMXtXxTdYnQQen/exec"; // <-- הדביקו כאן את כתובת ה-Web App
 window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
   ? (function(){
       var controller = new AbortController();
@@ -831,7 +835,7 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
 
   <header class="top">
     <div class="top-left">
-      <div class="brand-mark">י.מ</div>
+      <div class="brand-mark"><img src="yaer.png" alt="לוגו"></div>
       <div>
         <span class="eyebrow">לוח בקרה עסקי</span>
         <h1>י.מ ירום ישראל</h1>
@@ -1382,8 +1386,7 @@ let planningData = [];
 let companiesData = [];
 let filteredCompanies = [];
 let dashboardInsights = { planning: { empty: true }, detail: { empty: true } }; // מגיע מוכן מה-Apps Script
-let authData = []; // רשימת שם משתמש/סיסמה/הרשאות מגליון "התחברות"
-let currentUser = null; // {username, role} של המשתמש המחובר כרגע
+let currentUser = null; // {username, role, token} של המשתמש המחובר כרגע
 let maintenanceActive = false; // true כשמתג הכיבוי (התחברות!A27=1) דלוק - המסך נשאר על "טוען" בלבד
 let silentlyRetrying = false; // true כשהייתה שגיאת חיבור - נשארים על מסך "טוען" ומנסים שוב בשקט, בלי לחשוף שגיאה
 let retryTimeoutId = null;
@@ -1459,7 +1462,6 @@ async function loadData(){
       maintenanceActive = false;
       planningData = computeDemoPlanningRows(DEMO_PLANNING, DEMO_COMPANIES);
       companiesData = DEMO_COMPANIES;
-      authData = DEMO_AUTH;
       dashboardInsights = {
         planning: computeDemoPlanningInsights(planningData),
         detail: computeDemoDetailInsights(companiesData)
@@ -1504,7 +1506,6 @@ async function loadData(){
       maintenanceActive = false;
       planningData = json.planning || [];
       companiesData = json.companies || [];
-      authData = json.auth || [];
       dashboardInsights = json.insights || { planning:{empty:true}, detail:{empty:true} };
       document.getElementById('statusDot').className = 'status-dot live';
       document.getElementById('statusText').textContent = 'מחובר לגיליון';
@@ -1616,26 +1617,40 @@ function hideLoadingScreen(){
   if(el) el.classList.add('hidden');
 }
 
-/* ============================ התחברות והרשאות ============================ */
-const AUTH_STORAGE_KEY = 'dashboardCurrentUsername';
+/* ============================ התחברות והרשאות ============================
+ * ההתחברות עצמה מאומתת בשרת (Apps Script) במצב חי - הסיסמאות אף פעם לא מגיעות
+ * לדפדפן. השרת מחזיר טוקן זמני (session), שנשלח בחזרה בכל פעולת כתיבה (הוספת
+ * תשלום / שינוי סטטוס עובד) - והשרת בעצמו בודק שהטוקן תקף ושיש הרשאת אדמין,
+ * לא רק שהממשק "מסתיר" את הכפתור. במצב הדגמה (בלי חיבור לגיליון) אין שרת אמיתי
+ * לפנות אליו, אז שם ממשיכים לבדוק מול רשימת ההדגמה המקומית בלבד.
+ */
+const AUTH_STORAGE_KEY = 'dashboardSession';
 
-function findAuthUser(username, password){
-  const uname = (username||'').trim();
-  const pass = (password||'').trim();
-  return authData.find(u => u.username === uname && u.password === pass) || null;
+function saveSession(session){
+  try{ localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session)); }catch(e){}
+}
+function clearSession(){
+  try{ localStorage.removeItem(AUTH_STORAGE_KEY); }catch(e){}
+}
+function loadSavedSession(){
+  try{
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    if(!raw) return null;
+    const parsed = JSON.parse(raw);
+    if(parsed && parsed.username && parsed.role) return parsed;
+    return null;
+  }catch(e){ return null; }
 }
 
 function applyAuthGate(){
-  const savedUsername = localStorage.getItem(AUTH_STORAGE_KEY);
-  if(savedUsername){
-    const match = authData.find(u => u.username === savedUsername);
-    if(match){
-      currentUser = { username: match.username, role: match.role };
-      hideLoginScreen();
-      applyRoleUI();
-      return;
-    }
-    localStorage.removeItem(AUTH_STORAGE_KEY); // המשתמש כבר לא קיים ברשימה — יש להתחבר מחדש
+  const saved = loadSavedSession();
+  if(saved){
+    // שחזור אופטימי מהעדפה שמורה - הבדיקה האמיתית מול השרת תתבצע בפעולת הכתיבה הבאה
+    // (אם הטוקן כבר לא תקף, השרת ידחה את הפעולה ונבקש התחברות מחדש אז)
+    currentUser = saved;
+    hideLoginScreen();
+    applyRoleUI();
+    return;
   }
   currentUser = null;
   showLoginScreen();
@@ -1671,26 +1686,56 @@ function applyRoleUI(){
   if(document.getElementById('planningModalOverlay').classList.contains('open')) renderPlanningFullTable();
 }
 
-document.getElementById('loginForm').addEventListener('submit', (e)=>{
+// אם פעולת כתיבה נדחתה ע"י השרת בגלל טוקן לא תקף/פג-תוקף, מתנתקים ומחזירים
+// למסך ההתחברות כדי שהמשתמש יתחבר מחדש ויקבל טוקן טרי.
+function forceReloginDueToAuthError(){
+  currentUser = null;
+  clearSession();
+  applyRoleUI();
+  showLoginScreen();
+  showToast('ההתחברות פגה - נא להתחבר מחדש', 'error');
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const username = document.getElementById('loginUsername').value;
   const password = document.getElementById('loginPassword').value;
   const msg = document.getElementById('loginMsg');
-  const user = findAuthUser(username, password);
-  if(!user){
-    msg.textContent = 'שם משתמש או סיסמה שגויים.';
-    return;
+  const btn = document.getElementById('loginSubmitBtn');
+  msg.textContent = '';
+  btn.disabled = true; btn.textContent = 'מתחבר…';
+
+  try{
+    if(!API_URL){
+      // מצב הדגמה בלבד - בדיקה מקומית מול רשימת ההדגמה (אין שרת אמיתי לפנות אליו)
+      const uname = (username||'').trim(), pass = (password||'').trim();
+      const user = DEMO_AUTH.find(u => u.username === uname && u.password === pass);
+      if(!user){ msg.textContent = 'שם משתמש או סיסמה שגויים.'; return; }
+      currentUser = { username: user.username, role: user.role, token: 'demo' };
+    } else {
+      const res = await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({ action:'login', username, password })
+      });
+      const json = await res.json();
+      if(!json.success){ msg.textContent = json.error || 'שם משתמש או סיסמה שגויים.'; return; }
+      currentUser = { username: json.username, role: json.role, token: json.token };
+    }
+    saveSession(currentUser);
+    hideLoginScreen();
+    applyRoleUI();
+    showToast('התחברת בהצלחה, ' + currentUser.username, 'success');
+  }catch(err){
+    msg.textContent = 'שגיאת חיבור לשרת. נסו שוב.';
+  }finally{
+    btn.disabled = false; btn.textContent = 'התחברות';
   }
-  currentUser = { username: user.username, role: user.role };
-  localStorage.setItem(AUTH_STORAGE_KEY, user.username);
-  hideLoginScreen();
-  applyRoleUI();
-  showToast('התחברת בהצלחה, ' + user.username, 'success');
 });
 
 document.getElementById('logoutLink').addEventListener('click', ()=>{
   currentUser = null;
-  localStorage.removeItem(AUTH_STORAGE_KEY);
+  clearSession();
   applyRoleUI();
   showLoginScreen();
 });
@@ -1757,10 +1802,13 @@ async function submitEmployeeStatus(newStatus){
     const res = await fetch(API_URL, {
       method:'POST',
       headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify({ action:'updateEmployeeStatus', rowIndex: empStatusTarget.rowIndex, status: newStatus })
+      body: JSON.stringify({ action:'updateEmployeeStatus', rowIndex: empStatusTarget.rowIndex, status: newStatus, employee: empStatusTarget.employee, token: currentUser && currentUser.token })
     });
     const json = await res.json();
-    if(!json.success) throw new Error(json.error || 'שגיאה לא ידועה');
+    if(!json.success){
+      if(json.authError){ closeEmployeeStatusModal(); forceReloginDueToAuthError(); return; }
+      throw new Error(json.error || 'שגיאה לא ידועה');
+    }
     showToast('סטטוס העובד עודכן בהצלחה', 'success');
     closeEmployeeStatusModal();
     await loadData();
@@ -2790,6 +2838,8 @@ document.getElementById('paymentForm').addEventListener('submit', async (e)=>{
   msg.textContent=''; msg.className='form-msg';
 
   const payload = {
+    action: 'addPayment',
+    token: currentUser && currentUser.token,
     date: document.getElementById('pDate').value,
     employee: document.getElementById('pEmployee').value,
     company: document.getElementById('pCompany').value,
@@ -2831,7 +2881,10 @@ document.getElementById('paymentForm').addEventListener('submit', async (e)=>{
       body: JSON.stringify(payload)
     });
     const json = await res.json();
-    if(!json.success) throw new Error(json.error || 'שגיאה לא ידועה');
+    if(!json.success){
+      if(json.authError){ closeModal(); forceReloginDueToAuthError(); return; }
+      throw new Error(json.error || 'שגיאה לא ידועה');
+    }
     showToast('התשלום נשמר בהצלחה בגיליון', 'success');
     closeModal();
     await loadData();
