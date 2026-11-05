@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>י.מ ירום ישראל — לוח בקרה עסקי</title>
+<title>י.מ ירום ישראל בע״מ — לוח בקרה עסקי</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+<script>try{var __t=localStorage.getItem("yeromTheme");if(!__t){__t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}document.documentElement.setAttribute("data-theme",__t);}catch(e){}</script>
 <style>
   /* ============ טוקנים — ערכת אור ============ */
   :root{
@@ -293,6 +294,113 @@
   }
   .field select:focus, .field input:focus{outline:none;border-color:var(--accent-blue);background:rgba(255,255,255,.75);}
   .date-row{display:flex;gap:8px;}
+  .range-title{font-size:11.5px;color:var(--text-muted);font-weight:600;margin:0 0 5px;}
+  .range-row{display:flex;gap:6px;margin-bottom:8px;}
+  .range-row select{flex:1;min-width:0;}
+  .ms{position:relative;}
+  .ms-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;text-align:right;
+    background:rgba(255,255,255,.55);border:1px solid var(--glass-border);color:var(--text);
+    border-radius:9px;padding:8px 10px;font-size:13px;font-family:inherit;cursor:pointer;}
+  .ms-btn:focus-visible,.ms.open .ms-btn{outline:none;border-color:var(--accent-blue);background:rgba(255,255,255,.8);}
+  .ms-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ms-panel{display:none;position:absolute;inset-inline:0;top:calc(100% + 4px);z-index:60;
+    background:var(--glass-bg-strong, #fff);border:1px solid var(--glass-border);border-radius:10px;
+    box-shadow:0 12px 30px rgba(20,40,80,.18);padding:8px;
+    backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);}
+  .ms.open .ms-panel{display:block;}
+  .ms-search{width:100%;margin-bottom:6px;}
+  .ms-actions{display:flex;justify-content:space-between;margin-bottom:4px;}
+  .ms-actions button{background:none;border:none;color:var(--accent-blue);font-size:11.5px;font-weight:600;cursor:pointer;padding:2px 4px;}
+  .ms-list{max-height:210px;overflow:auto;}
+  .ms-item{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:7px;font-size:13px;cursor:pointer;}
+  .ms-item:hover{background:rgba(47,111,237,.09);}
+  .ms-item input{width:auto;margin:0;}
+  .ms-empty{padding:8px;color:var(--text-dim);font-size:12px;}
+  /* --- בחירה מרובה משודרגת --- */
+  .ms-btn{min-height:38px;transition:border-color .15s, box-shadow .15s, background .15s;}
+  .ms-btn:hover{border-color:var(--accent-blue);}
+  .ms.open .ms-btn{box-shadow:0 0 0 3px var(--accent-blue-soft);}
+  .ms-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0;}
+  .ms-chip{display:inline-flex;align-items:center;max-width:100%;background:var(--accent-blue-soft);color:var(--accent-blue-deep);
+    border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;animation:chipIn .18s ease both;}
+  .ms-chip.more{background:var(--accent-blue);color:#fff;}
+  .ms-placeholder{color:var(--text-dim);}
+  .ms-caret{transition:transform .2s;font-size:11px;color:var(--text-muted);}
+  .ms.open .ms-caret{transform:rotate(180deg);}
+  .ms-panel{transform-origin:top;animation:panelIn .16s cubic-bezier(.2,.8,.2,1) both;padding:10px;border-radius:14px;}
+  .ms-search{padding:8px 10px;border-radius:9px;}
+  .ms-actions button{background:var(--accent-blue-soft);border-radius:999px;padding:3px 10px;}
+  .ms-actions button:hover{background:var(--accent-blue);color:#fff;}
+  .ms-count{font-size:11px;color:var(--text-dim);align-self:center;}
+  .field .ms-item,.ms-item{display:flex;margin:0;color:var(--text);font-size:13px;font-weight:500;transition:background .12s;position:relative;}
+  .field .ms-item.sel{font-weight:700;}
+  .ms-item input{position:absolute;opacity:0;pointer-events:none;}
+  .ms-box{width:17px;height:17px;border-radius:5px;border:1.6px solid var(--text-dim);flex:none;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+  .ms-box svg{width:11px;height:11px;stroke:#fff;stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.4);transition:all .15s;}
+  .ms-item.sel{background:rgba(47,111,237,.10);font-weight:700;}
+  .ms-item.sel .ms-box{background:var(--accent-blue);border-color:var(--accent-blue);}
+  .ms-item.sel .ms-box svg{opacity:1;transform:scale(1);}
+  .ms-item input:focus-visible + .ms-box{box-shadow:0 0 0 3px var(--accent-blue-soft);}
+  @keyframes panelIn{from{opacity:0;transform:translateY(-6px) scale(.98);}to{opacity:1;transform:none;}}
+  @keyframes chipIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:none;}}
+  /* --- בוחר חודש ושנה --- */
+  .mp-ico{width:16px;height:16px;flex:none;color:var(--accent-blue);display:inline-flex;}
+  .mp-ico svg{width:16px;height:16px;}
+  .mp-btn .ms-label{flex:1;}
+  .mp-btn.empty .ms-label{color:var(--text-dim);}
+  .mp-panel{padding:12px;}
+  .mp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .mp-year{font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--text);}
+  .mp-nav{width:30px;height:30px;border-radius:50%;border:1px solid var(--glass-border);background:rgba(255,255,255,.6);cursor:pointer;font-size:14px;color:var(--accent-blue);transition:all .15s;}
+  .mp-nav:hover:not(:disabled){background:var(--accent-blue);color:#fff;transform:scale(1.08);}
+  .mp-nav:disabled{opacity:.3;cursor:default;}
+  .mp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+  .mp-m{padding:9px 2px;border-radius:10px;border:1px solid transparent;background:rgba(255,255,255,.5);font-size:12.5px;font-family:inherit;color:var(--text);cursor:pointer;transition:all .14s;}
+  .mp-m:hover{background:var(--accent-blue-soft);border-color:var(--accent-blue);transform:translateY(-1px);}
+  .mp-m.sel{background:var(--accent-blue);color:#fff;font-weight:700;box-shadow:0 6px 14px #2F6FED44;}
+  .mp-m.cur{border-color:var(--accent-blue);}
+  .mp-foot{display:flex;justify-content:space-between;margin-top:10px;}
+  .mp-foot button{background:none;border:none;color:var(--accent-blue);font-size:11.5px;font-weight:700;cursor:pointer;padding:3px 6px;border-radius:8px;}
+  .mp-foot button:hover{background:var(--accent-blue-soft);}
+  /* --- מסך כניסה: אפקטים --- */
+  #loginScreen::before,#loginScreen::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none;animation:orbFloat 14s ease-in-out infinite;}
+  #loginScreen::before{width:380px;height:380px;background:#8FB5FF;top:-80px;right:-60px;}
+  #loginScreen::after{width:320px;height:320px;background:#B9F0E0;bottom:-80px;left:-40px;animation-delay:-7s;}
+  @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,24px) scale(1.12);}}
+  .login-card{position:relative;z-index:1;}
+  .login-card.step-swap > form{animation:stepIn .35s cubic-bezier(.2,.8,.2,1) both;}
+  @keyframes stepIn{from{opacity:0;transform:translateX(-18px);}to{opacity:1;transform:none;}}
+  .login-btn{position:relative;overflow:hidden;transition:transform .15s, box-shadow .15s;}
+  .login-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 10px 22px #2F6FED44;}
+  .login-btn:disabled{opacity:.75;cursor:wait;}
+  .login-btn.busy::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);animation:shine 1s linear infinite;}
+  @keyframes shine{from{transform:translateX(-100%);}to{transform:translateX(100%);}}
+  .otp-mail{width:58px;height:58px;margin:0 auto 10px;border-radius:50%;background:var(--accent-blue-soft);color:var(--accent-blue);display:flex;align-items:center;justify-content:center;animation:mailFloat 2.6s ease-in-out infinite;position:relative;}
+  .otp-mail svg{width:28px;height:28px;}
+  .otp-mail::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--accent-blue);opacity:0;animation:ping 2.6s ease-out infinite;}
+  @keyframes mailFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+  @keyframes ping{0%{transform:scale(.85);opacity:.5;}100%{transform:scale(1.35);opacity:0;}}
+  .otp-wrap{display:flex;gap:8px;direction:ltr;justify-content:center;margin:6px 0 14px;}
+  .login-card .otp-box{border:1.5px solid #C5D3EA;background:#fff;width:44px;height:54px;padding:0;text-align:center;font-size:24px;font-weight:800;font-family:var(--font-display);border-radius:12px;transition:transform .15s, border-color .15s, box-shadow .15s, background .15s;}
+  .login-card .otp-box:focus{transform:translateY(-3px) scale(1.06);box-shadow:0 8px 18px #2F6FED33;}
+  .login-card .otp-box.filled{border-color:var(--accent-blue);background:#fff;animation:digitPop .18s ease;}
+  @keyframes digitPop{0%{transform:scale(.85);}60%{transform:scale(1.12);}100%{transform:scale(1);}}
+  .otp-wrap.shake{animation:shake .45s ease;}
+  .login-card .otp-wrap.shake .otp-box{border-color:#E5484D;background:#FFF1F1;color:#E5484D;}
+  @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-9px);}40%{transform:translateX(8px);}60%{transform:translateX(-6px);}80%{transform:translateX(4px);}}
+  .login-card.ok .otp-box{border-color:#16A34A;background:#EAFBF0;color:#16A34A;animation:okWave .5s ease both;}
+  .login-card.ok .otp-box:nth-child(2){animation-delay:.04s}.login-card.ok .otp-box:nth-child(3){animation-delay:.08s}
+  .login-card.ok .otp-box:nth-child(4){animation-delay:.12s}.login-card.ok .otp-box:nth-child(5){animation-delay:.16s}.login-card.ok .otp-box:nth-child(6){animation-delay:.2s}
+  @keyframes okWave{0%{transform:translateY(0);}40%{transform:translateY(-8px);}100%{transform:translateY(0);}}
+  .otp-ok{display:none;text-align:center;color:#16A34A;font-weight:800;font-size:13px;margin-bottom:6px;}
+  .login-card.ok .otp-ok{display:block;animation:stepIn .3s both;}
+  .otp-timer{height:3px;border-radius:3px;background:var(--border);overflow:hidden;margin:0 0 10px;}
+  .otp-timer i{display:block;height:100%;width:100%;background:var(--accent-blue);transform-origin:right;}
+  .link-disabled{opacity:.5;cursor:default !important;text-decoration:none !important;}
+  @media (max-width:380px){ .login-card .otp-box{width:38px;height:48px;font-size:21px;} .otp-wrap{gap:6px;} }
+  @media (prefers-reduced-motion:reduce){ #loginScreen::before,#loginScreen::after,.otp-mail,.otp-mail::after{animation:none;} .ms-panel,.login-card.step-swap > form{animation:none;} }
+  .trend-toggle{display:flex;gap:6px;align-items:center;}
+  .trend-toggle .btn.on{background:var(--accent-blue);color:#fff;border-color:var(--accent-blue);}
 
   /* ============ כרטיסי תרשימים ============ */
   .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
@@ -735,7 +843,6 @@
     .top-right{gap:8px;}
     .btn{padding:9px 12px;font-size:12.5px;}
     #fullscreenBtn, #mobilePreviewBtn{display:none;} /* לא רלוונטיים בתצוגת מובייל עצמה */
-    #openModalBtn{order:1;width:100%;justify-content:center;margin-top:2px;}
     .bridge-row{flex-direction:column;align-items:stretch;gap:6px;}
     .bridge-label{width:auto;}
     .bridge-pct{width:auto;text-align:start;}
@@ -754,11 +861,172 @@
     .top h1{font-size:17px;}
     .brand-mark{width:38px;height:38px;font-size:17px;}
   }
+
+  /* ============ v3: מצב כהה ============ */
+  html[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#0A111F; --bg-elevated:#111B2E; --surface:#111B2E; --surface-2:#18243A;
+    --border:#26354F; --border-soft:#1E2B43;
+    --text:#E7EEF9; --text-muted:#A3B4D1; --text-dim:#7A8DAE;
+    --accent-blue:#5B93FF; --accent-blue-soft:#5B93FF24; --accent-blue-deep:#1B3A86;
+    --accent-indigo:#A08CFF; --accent-indigo-soft:#A08CFF22;
+    --accent-sky:#4DBDEE; --accent-sky-soft:#4DBDEE20;
+    --accent-green:#2FC9B9; --accent-green-soft:#2FC9B91F;
+    --accent-red:#F27D69; --accent-red-soft:#F27D691F;
+    --accent-amber:#EBBB4C; --accent-amber-soft:#EBBB4C20;
+    --shadow:0 6px 22px rgba(0,0,0,.45);
+    --glass-bg:rgba(22,34,56,.62); --glass-bg-strong:rgba(22,34,56,.86); --glass-bg-soft:rgba(22,34,56,.45);
+    --glass-border:rgba(255,255,255,.08); --glass-shadow:0 8px 32px rgba(0,0,0,.5);
+  }
+  html[data-theme="dark"] body{
+    background:
+      radial-gradient(1000px 620px at 90% -6%, #14305F 0%, transparent 58%),
+      radial-gradient(820px 560px at 4% 4%, #231B4F 0%, transparent 55%),
+      radial-gradient(760px 520px at 30% 92%, #0E3A38 0%, transparent 52%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  html[data-theme="dark"] .btn{background:var(--glass-bg-strong);color:var(--text);border-color:var(--glass-border);}
+  html[data-theme="dark"] .btn:hover{border-color:#3A4C6E;}
+  html[data-theme="dark"] .btn.ghost{background:rgba(255,255,255,.05);}
+  html[data-theme="dark"] .top-right .btn{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2);}
+  html[data-theme="dark"] .field select, html[data-theme="dark"] .field input,
+  html[data-theme="dark"] .ms-btn, html[data-theme="dark"] .search-box,
+  html[data-theme="dark"] .login-card input, html[data-theme="dark"] .pager button,
+  html[data-theme="dark"] .a11y-opt, html[data-theme="dark"] .mp-nav, html[data-theme="dark"] .mp-m{
+    background:rgba(255,255,255,.06);color:var(--text);border-color:var(--glass-border);
+  }
+  html[data-theme="dark"] .field select:focus, html[data-theme="dark"] .field input:focus,
+  html[data-theme="dark"] .ms.open .ms-btn, html[data-theme="dark"] .search-box:focus,
+  html[data-theme="dark"] .login-card input:focus{background:rgba(255,255,255,.1);}
+  html[data-theme="dark"] .mp-m.sel, html[data-theme="dark"] .a11y-opt.active{background:var(--accent-blue);color:#fff;}
+  html[data-theme="dark"] .grid-scroll thead th{background:rgba(24,36,58,.92);}
+  html[data-theme="dark"] tbody tr:nth-child(even){background:rgba(255,255,255,.025);}
+  html[data-theme="dark"] tbody tr:hover{background:rgba(91,147,255,.1);}
+  html[data-theme="dark"] .bridge-track{background:rgba(255,255,255,.06);}
+  html[data-theme="dark"] .bridge-row:hover{background:rgba(255,255,255,.05);}
+  html[data-theme="dark"] .insight-item{background:rgba(255,255,255,.04);}
+  html[data-theme="dark"] .modal-overlay{background:#02060F99;}
+  html[data-theme="dark"] .ms-panel{background:var(--glass-bg-strong);}
+  html[data-theme="dark"] .setup-banner, html[data-theme="dark"] .setup-banner b, html[data-theme="dark"] .setup-banner code{color:#BCD2FF;}
+  html[data-theme="dark"] .error-banner, html[data-theme="dark"] .error-banner-head b{color:#FFB4A6;}
+  html[data-theme="dark"] .kpi::before, html[data-theme="dark"] .chart-card::before{opacity:.25;}
+  html[data-theme="dark"] #loginScreen{background:
+      radial-gradient(1000px 600px at 88% -8%, #14305F 0%, transparent 62%),
+      radial-gradient(820px 520px at -5% 10%, #261B52 0%, transparent 55%),
+      radial-gradient(700px 480px at 50% 100%, #0E3A38 0%, transparent 55%), var(--bg);}
+  html[data-theme="dark"] .login-card .otp-box{background:rgba(255,255,255,.07);border-color:#33466A;color:var(--text);}
+  html[data-theme="dark"] .login-card .otp-box.filled{background:rgba(91,147,255,.14);}
+  #themeBtn{padding:7px 11px;font-size:15px;line-height:1;}
+  .updated-ago{font-size:11.5px;color:#C5D3F2;white-space:nowrap;}
+
+  /* ============ v3: התראות, מצב ריק, השוואה ============ */
+  .alert-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:0 0 16px;padding:10px 14px;border-radius:12px;
+    background:var(--accent-amber-soft);border:1px solid #D6A02E55;font-size:13px;line-height:1.6;}
+  .alert-strip .al-item b{font-weight:800;}
+  .alert-strip .al-item.over{color:var(--accent-red);}
+  .alert-strip .al-item.near{color:var(--accent-amber);}
+  .alert-strip .al-sp{flex:1;}
+  .alert-strip button{font-family:inherit;font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;color:var(--text);cursor:pointer;}
+  .empty-state{margin:0 0 16px;padding:22px 18px;text-align:center;border-radius:14px;border:1.5px dashed var(--border);background:var(--glass-bg);}
+  .empty-state .es-ico{font-size:30px;line-height:1;margin-bottom:6px;}
+  .empty-state .es-t{font-weight:800;font-size:15px;margin-bottom:4px;}
+  .empty-state .es-s{font-size:12.5px;color:var(--text-muted);margin-bottom:12px;}
+  .compare-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-4px 0 12px;font-size:12px;color:var(--text-muted);}
+  .compare-bar button{font-family:inherit;font-size:11.5px;padding:4px 11px;border-radius:999px;border:1px solid var(--border);background:var(--glass-bg);color:var(--text-muted);cursor:pointer;}
+  .compare-bar button.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;font-weight:700;}
+  .kpi-delta{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 6px;margin-top:6px;font-size:11.5px;line-height:1.35;}
+  .kpi-delta b{font-family:var(--font-mono);font-weight:700;font-size:12px;}
+  .kpi-delta span{color:var(--text-dim);font-size:10.5px;}
+  .kpi-delta.up b{color:var(--accent-green);} .kpi-delta.down b{color:var(--accent-red);} .kpi-delta.flat b{color:var(--text-muted);}
+  .kpi-delta.none{color:var(--text-dim);font-size:10.5px;}
+
+  /* ============ v3: טעינה (שלד) ============ */
+  @keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  body.refreshing #kpiGrid .kpi .value{color:transparent !important;border-radius:8px;
+    background:linear-gradient(90deg,var(--border-soft) 25%,var(--border) 37%,var(--border-soft) 63%);background-size:300% 100%;animation:skelShimmer 1.3s linear infinite;min-height:1.2em;}
+  body.refreshing .chart-card canvas, body.refreshing .bridge-card #bridgeContainer{opacity:.35;transition:opacity .2s;}
+  body.refreshing .kpi-delta{opacity:.3;}
+  #refreshBtn.spin .icon{animation:spin360 .9s linear infinite;}
+  @keyframes spin360{to{transform:rotate(360deg)}}
+
+  /* ============ v3: דירוג רווחיות ============ */
+  .rank-card h3{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .rank-tabs{display:flex;gap:4px;}
+  .rank-tabs button{font-family:inherit;font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--glass-bg);color:var(--text-muted);cursor:pointer;}
+  .rank-tabs button.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;font-weight:700;}
+  .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;margin-top:6px;}
+  .rank-grid.one{grid-template-columns:1fr;}
+  .rank-col h4{margin:8px 0 6px;font-size:12px;color:var(--text-muted);font-weight:700;}
+  .rank-row{display:grid;grid-template-columns:22px minmax(0,1.2fr) minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 6px;border-radius:9px;cursor:pointer;font-size:12.5px;}
+  .rank-row:hover{background:var(--accent-blue-soft);}
+  .rank-row .rk{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);text-align:center;}
+  .rank-row .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
+  .rank-row .bar{height:8px;border-radius:6px;background:var(--border-soft);overflow:hidden;}
+  .rank-row .bar i{display:block;height:100%;border-radius:6px;}
+  .rank-row .val{font-family:var(--font-mono);font-size:11.5px;text-align:end;white-space:nowrap;}
+  .rank-row .val small{display:block;color:var(--text-dim);font-size:10px;}
+  @media (max-width:760px){ .rank-grid{grid-template-columns:1fr;} }
+
+  /* ============ v3: תחזית ============ */
+  .fc{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap;}
+  .fc.ok{background:var(--accent-green-soft);color:var(--accent-green);}
+  .fc.warn{background:var(--accent-amber-soft);color:var(--accent-amber);}
+  .fc.bad{background:var(--accent-red-soft);color:var(--accent-red);}
+  .fc.na{color:var(--text-dim);font-weight:500;}
+
+  /* ============ v3: מודלי ייצוא ויומן ============ */
+  .exp-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:13px 14px;margin-bottom:10px;border-radius:12px;border:1px solid var(--border);
+    background:var(--glass-bg);color:var(--text);font-family:inherit;cursor:pointer;}
+  .exp-opt:hover{border-color:var(--accent-blue);background:var(--accent-blue-soft);}
+  .exp-opt .ic{font-size:22px;}
+  .exp-opt b{display:block;font-size:14px;} .exp-opt span{display:block;font-size:12px;color:var(--text-muted);margin-top:2px;}
+  .exp-month{display:flex;align-items:center;gap:8px;margin:2px 0 14px;font-size:13px;}
+  .exp-month select{font-family:inherit;padding:7px 10px;border-radius:9px;border:1px solid var(--border);background:var(--glass-bg-strong);color:var(--text);}
+  .log-tools{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
+  .log-act{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;background:var(--accent-blue-soft);color:var(--accent-blue);}
+  .log-act.bad{background:var(--accent-red-soft);color:var(--accent-red);}
+  .log-act.ok{background:var(--accent-green-soft);color:var(--accent-green);}
+  .m-sort{display:none;}
+
+  /* ============ v3: טבלאות כרטיסים במובייל ============ */
+  @media (max-width:640px){
+    .m-sort{display:block;width:100%;margin:0 0 10px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--glass-bg-strong);color:var(--text);font-family:inherit;font-size:13px;}
+    table.card-table{min-width:0 !important;width:100%;}
+    table.card-table thead{display:none;}
+    table.card-table, table.card-table tbody, table.card-table tr, table.card-table td{display:block;width:100%;}
+    table.card-table tr{margin:0 0 10px;padding:8px 12px;border:1px solid var(--border-soft);border-radius:12px;background:var(--glass-bg-strong);}
+    table.card-table td{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:5px 0;border:none !important;text-align:end;font-size:13px;}
+    table.card-table td::before{content:attr(data-label);color:var(--text-dim);font-size:11.5px;font-weight:600;flex-shrink:0;text-align:start;}
+    table.card-table td[colspan]{display:block;text-align:center;}
+    table.card-table td[colspan]::before{content:none;}
+    table.card-table td.num{font-variant-numeric:tabular-nums;}
+    .grid-scroll, .table-scroll{max-height:none !important;overflow:visible !important;}
+    .alert-strip{font-size:12px;}
+  }
+
+
+  /* ============ לוגו עגול (יחס הלוגו 243:228, העיגול מתאים לו בדיוק) ============ */
+  :root{ --logo:url("data:image/webp;base64,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"); }
+  .brand-mark, .login-card .brand-mark, .loading-mark{
+    background:var(--logo) center/100% 100% no-repeat !important;
+    border-radius:50% !important; overflow:visible !important; font-size:0 !important; color:transparent !important;
+  }
+  .brand-mark{ width:68px !important; height:64px !important; box-shadow:0 0 0 2px #fff, 0 6px 18px rgba(0,0,0,.4) !important; }
+  .login-card .brand-mark{ width:112px !important; height:105px !important; margin:0 auto 16px !important;
+    box-shadow:0 0 0 3px #fff, 0 0 0 4px rgba(15,35,80,.10), 0 10px 28px #2F6FED55 !important; }
+  .loading-mark{ width:150px !important; height:141px !important;
+    box-shadow:0 0 0 3px #fff, 0 0 0 4px rgba(15,35,80,.10), 0 10px 36px rgba(47,111,237,.35) !important;
+    animation:loadingPulse 1.8s ease-in-out infinite !important; backdrop-filter:none !important; }
+  @media (max-width:420px){
+    .brand-mark{ width:52px !important; height:49px !important; }
+    .loading-mark{ width:120px !important; height:113px !important; }
+  }
 </style>
 </head>
 <body>
 <div id="loadingScreen">
-  <div class="loading-mark">₪</div>
+  <div class="loading-mark" role="img" aria-label="לוגו י.מ ירום ישראל"></div>
   <div class="loading-spinner"></div>
   <div class="loading-text">טוען את לוח הבקרה…</div>
   <div class="loading-sub" id="loadingSub">מתחבר לגיליון הנתונים</div>
@@ -766,9 +1034,9 @@
 
 <div id="loginScreen">
   <div class="login-card">
-    <div class="brand-mark"><img src="yaer.png" alt="לוגו"></div>
+    <div class="brand-mark" role="img" aria-label="לוגו י.מ ירום ישראל"></div>
     <h2>התחברות ללוח הבקרה</h2>
-    <div class="sub">הזינו שם משתמש וסיסמה כדי להמשיך</div>
+    <div class="sub" id="loginSub">הזינו שם משתמש וסיסמה כדי להמשיך</div>
     <form id="loginForm">
       <div class="form-field">
         <label>שם משתמש</label>
@@ -778,8 +1046,28 @@
         <label>סיסמה</label>
         <input type="password" id="loginPassword" autocomplete="current-password" required>
       </div>
-      <button type="submit" class="login-btn" id="loginSubmitBtn">התחברות</button>
+      <button type="submit" class="login-btn" id="loginSubmitBtn">המשך</button>
       <div class="login-msg" id="loginMsg"></div>
+    </form>
+    <form id="codeForm" style="display:none;" autocomplete="off">
+      <div class="otp-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></div>
+      <div class="otp-wrap" id="otpWrap" role="group" aria-label="קוד אימות בן 6 ספרות">
+        <input class="otp-box" inputmode="numeric" maxlength="6" autocomplete="one-time-code" aria-label="ספרה 1">
+        <input class="otp-box" inputmode="numeric" maxlength="1" aria-label="ספרה 2">
+        <input class="otp-box" inputmode="numeric" maxlength="1" aria-label="ספרה 3">
+        <input class="otp-box" inputmode="numeric" maxlength="1" aria-label="ספרה 4">
+        <input class="otp-box" inputmode="numeric" maxlength="1" aria-label="ספרה 5">
+        <input class="otp-box" inputmode="numeric" maxlength="1" aria-label="ספרה 6">
+      </div>
+      <input type="hidden" id="loginCode">
+      <div class="otp-ok">✓ אומת! נכנסים…</div>
+      <div class="otp-timer" aria-hidden="true"><i id="otpTimerBar"></i></div>
+      <button type="submit" class="login-btn" id="codeSubmitBtn">אימות וכניסה</button>
+      <div class="login-msg" id="codeMsg"></div>
+      <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:12px;">
+        <span class="logout-link" id="codeResendLink" style="cursor:pointer;text-decoration:underline;">שליחת קוד חדש</span>
+        <span class="logout-link" id="codeBackLink" style="cursor:pointer;text-decoration:underline;">חזרה</span>
+      </div>
     </form>
   </div>
 </div>
@@ -789,29 +1077,34 @@
    כבר בזמן שהדפדפן עדיין טוען וממיר את שאר הדף - כך הטעינה מרגישה מהירה יותר.
    כדי לחבר את הלוח לקובץ ה-Google Sheets שלכם, הדביקו כאן את כתובת ה-Web App
    שקיבלתם לאחר פריסת הקובץ Code.gs (ראו קובץ ההוראות המצורף). */
-window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbwArrTnVfNHg2SGAIIfuQP3S_kN84Ipr2XeaOueJp8zyqjNO-Zdqxs8wioli7JbJwj8/exec"; // <-- הדביקו כאן את כתובת ה-Web App
-window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
-  ? (function(){
-      var controller = new AbortController();
-      var timeoutId = setTimeout(function(){ controller.abort(); }, 25000); // בטיחות: לא להמתין יותר מ-25 שניות (אם תקוע, עדיף להיכשל ולנסות שוב מהר)
-      return fetch(window.__DASHBOARD_API_URL__ + '?action=getData', { signal: controller.signal })
-        .then(function(r){
-          clearTimeout(timeoutId);
-          return r.text().then(function(text){
-            var parsed = null;
-            try { parsed = JSON.parse(text); } catch(parseErr) {}
-            if(!r.ok || !parsed){
-              var err = new Error(!r.ok ? ('שגיאת שרת (סטטוס ' + r.status + ')') : 'התשובה שהתקבלה אינה JSON תקין');
-              err.httpStatus = r.status;
-              err.snippet = (text || '').slice(0, 400);
-              throw err;
-            }
-            return parsed;
-          });
-        })
-        .catch(function(e){ clearTimeout(timeoutId); return { __prefetchError: e }; });
-    })()
-  : null;
+window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbxUhMJl8FK8JvUhEC-8E-7RlXE5uxKs5Hsep5ojjTsiuglmHYOcDPacliRk93r3bU84/exec"; // <-- הדביקו כאן את כתובת ה-Web App
+window.__DASHBOARD_PREFETCH__ = (function(){
+  if(!window.__DASHBOARD_API_URL__) return null;
+  var token = '';
+  try{
+    var saved = JSON.parse(localStorage.getItem('dashboardSession') || 'null');
+    if(saved && saved.token) token = saved.token;
+  }catch(e){}
+  if(!token) return Promise.resolve({ needLogin: true }); // אין התחברות שמורה - לא פונים לשרת לפני כניסה
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function(){ controller.abort(); }, 25000);
+  return fetch(window.__DASHBOARD_API_URL__ + '?action=getData&token=' + encodeURIComponent(token), { signal: controller.signal })
+    .then(function(r){
+      clearTimeout(timeoutId);
+      return r.text().then(function(text){
+        var parsed = null;
+        try { parsed = JSON.parse(text); } catch(parseErr) {}
+        if(!r.ok || !parsed){
+          var err = new Error(!r.ok ? ('שגיאת שרת (סטטוס ' + r.status + ')') : 'התשובה שהתקבלה אינה JSON תקין');
+          err.httpStatus = r.status;
+          err.snippet = (text || '').slice(0, 400);
+          throw err;
+        }
+        return parsed;
+      });
+    })
+    .catch(function(e){ clearTimeout(timeoutId); return { __prefetchError: e }; });
+})();
 </script>
 
 <script>
@@ -835,11 +1128,10 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
 
   <header class="top">
     <div class="top-left">
-      <div class="brand-mark"><img src="yaer.png" alt="לוגו"></div>
+      <div class="brand-mark" role="img" aria-label="לוגו י.מ ירום ישראל"></div>
       <div>
         <span class="eyebrow">לוח בקרה עסקי</span>
-        <h1>י.מ ירום ישראל</h1>
-        <div class="sub" id="subLine">רווחיות, מסגרות ותשלומים לפי חברה, לקוח ועובד</div>
+        <h1>י.מ ירום ישראל בע״מ</h1>
       </div>
     </div>
     <div class="top-right">
@@ -848,7 +1140,17 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
         <span class="role-tag" id="userPillRole"></span>
         <span class="logout-link" id="logoutLink">התנתקות</span>
       </div>
-      <div class="status-pill"><span class="status-dot" id="statusDot"></span><span id="statusText">טוען…</span></div>
+      <div class="status-pill" style="display:none !important;"><span class="status-dot" id="statusDot"></span><span id="statusText">טוען…</span></div>
+      <button class="btn ghost" id="themeBtn" type="button" title="מעבר למצב כהה" aria-label="מעבר למצב כהה">☾</button>
+      <button class="btn" id="exportBtn" type="button" style="display:none;" title="ייצוא נתונים ודוח חודשי (אדמין)">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+        ייצוא
+      </button>
+      <button class="btn" id="logBtn" type="button" style="display:none;" title="יומן כניסות (אדמין)">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        יומן כניסות
+      </button>
+      <span class="updated-ago" id="updatedAgo" aria-live="polite" style="display:none !important;"></span>
       <button class="btn ghost" id="refreshBtn" title="רענון נתונים">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v6h-6"/></svg>
         רענון
@@ -861,13 +1163,9 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         צפייה בתכנון
       </button>
-      <button class="btn" id="mobilePreviewBtn" title="תצוגה מקדימה במסך אייפון 15">
+      <button class="btn" id="mobilePreviewBtn" style="display:none;" title="תצוגה מקדימה במסך אייפון 15">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
         תצוגת מובייל
-      </button>
-      <button class="btn primary" id="openModalBtn">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
-        הוספת תשלום עובד
       </button>
     </div>
   </header>
@@ -892,6 +1190,9 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
 
   <div class="filter-chips" id="filterChips"></div>
 
+  <div class="alert-strip" id="alertStrip" style="display:none;" role="status"></div>
+  <div class="empty-state" id="emptyState" style="display:none;"></div>
+
   <div class="section-label"><span class="dot" style="background:var(--accent-blue);"></span>סקירה כללית</div>
   <div class="kpi-grid" id="kpiGrid"></div>
 
@@ -908,10 +1209,28 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
 
       <div class="chart-card" style="margin-bottom:16px;">
         <h3 style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span><span class="chart-dot" style="background:var(--accent-blue);"></span>מגמת רווח והפסד לפי חודשים</span>
-          <span id="trendBadge"></span>
+          <span><span class="chart-dot" style="background:var(--accent-blue);"></span><span id="trendTitle">מגמת רווח והפסד לפי חודשים</span></span>
+          <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="trend-toggle" role="group" aria-label="תצוגת מגמה">
+              <button class="btn ghost on" id="trendMonthBtn" style="padding:4px 10px;font-size:11px;">לפי חודשים</button>
+              <button class="btn ghost" id="trendYearBtn" style="padding:4px 10px;font-size:11px;">לפי שנים</button>
+            </span>
+            <span id="trendBadge"></span>
+          </span>
         </h3>
         <div class="canvas-wrap" style="height:280px;"><canvas id="chartMonthlyTrend"></canvas></div>
+      </div>
+
+      <div class="chart-card rank-card" style="margin-bottom:16px;">
+        <h3>
+          <span><span class="chart-dot" style="background:var(--accent-green);"></span>דירוג רווחיות — מי מושך את המספרים</span>
+          <span class="rank-tabs" id="rankTabs" role="group" aria-label="חלוקה">
+            <button type="button" data-dim="employee">עובדים</button>
+            <button type="button" data-dim="endClient">לקוחות קצה</button>
+            <button type="button" data-dim="company">חברות</button>
+          </span>
+        </h3>
+        <div class="rank-grid" id="rankGrid"></div>
       </div>
 
       <div class="charts-grid">
@@ -944,6 +1263,7 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
           <table id="planningTable">
             <thead>
               <tr>
+                <th data-key="year">שנה</th>
                 <th data-key="employee">שם עובד</th>
                 <th data-key="company">חברה</th>
                 <th data-key="endClient">לקוח קצה</th>
@@ -954,6 +1274,7 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
                 <th data-key="actualPaid" class="num">שולם בפועל (בתקופה)</th>
                 <th data-key="remaining" class="num">יתרה למסגרת</th>
                 <th data-key="utilization" class="num">% ניצול</th>
+                <th data-key="forecastSort" class="num" title="לפי קצב התשלומים מתחילת השנה">תחזית לסוף שנה</th>
               </tr>
             </thead>
             <tbody id="planningTbody"></tbody>
@@ -972,6 +1293,7 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
             <thead>
               <tr>
                 <th data-key="date">תאריך</th>
+                <th data-key="year">שנה</th>
                 <th data-key="company">חברה</th>
                 <th data-key="tenderType">סוג מכרז</th>
                 <th data-key="endClient">לקוח קצה</th>
@@ -999,21 +1321,19 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
 
     <aside class="filters">
       <h3>סינון נתונים <button id="clearFilters">איפוס</button></h3>
-      <div class="field date-row">
-        <div style="flex:1;">
-          <label>מתאריך</label>
-          <input type="date" id="fDateFrom">
-        </div>
-        <div style="flex:1;">
-          <label>עד תאריך</label>
-          <input type="date" id="fDateTo">
-        </div>
+      <div class="field">
+        <div class="range-title">מחודש ושנה</div>
+        <div class="mp" id="fFromPicker" data-m="fFromMonth" data-y="fFromYear" style="margin-bottom:8px;"></div>
+        <div class="range-title">עד חודש ושנה</div>
+        <div class="mp" id="fToPicker" data-m="fToMonth" data-y="fToYear"></div>
+        <select id="fFromMonth" hidden></select><select id="fFromYear" hidden></select>
+        <select id="fToMonth" hidden></select><select id="fToYear" hidden></select>
       </div>
-      <div class="field"><label>חברה מעסיקה</label><select id="fCompany"><option value="">הכל</option></select></div>
-      <div class="field"><label>לקוח קצה</label><select id="fEndClient"><option value="">הכל</option></select></div>
-      <div class="field"><label>מאשר</label><select id="fApprover"><option value="">הכל</option></select></div>
-      <div class="field"><label>שם עובד</label><select id="fEmployee"><option value="">הכל</option></select></div>
-      <div class="field"><label>סוג מכרז</label><select id="fTenderType"><option value="">הכל</option></select></div>
+      <div class="field"><label>חברה מעסיקה</label><div id="fCompany"></div></div>
+      <div class="field"><label>לקוח קצה</label><div id="fEndClient"></div></div>
+      <div class="field"><label>מאשר</label><div id="fApprover"></div></div>
+      <div class="field"><label>שם עובד</label><div id="fEmployee"></div></div>
+      <div class="field"><label>סוג מכרז</label><div id="fTenderType"></div></div>
     </aside>
   </div>
 
@@ -1067,87 +1387,6 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
     </div>
     <div class="modal-body">
       <div id="legalModalBody" class="legal-doc"></div>
-    </div>
-  </div>
-</div>
-
-<!-- מודל הוספת תשלום -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-head">
-      <h2>הוספת תשלום עובד</h2>
-      <button class="modal-close" id="modalCloseBtn">✕</button>
-    </div>
-    <div class="modal-body">
-      <form id="paymentForm">
-        <div class="form-grid">
-          <div class="form-field">
-            <label>תאריך <span class="req">*</span></label>
-            <input type="date" id="pDate" required>
-          </div>
-          <div class="form-field">
-            <label>שם עובד <span class="req">*</span></label>
-            <select id="pEmployee" required>
-              <option value="">בחר עובד…</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>חברה</label>
-            <input type="text" id="pCompany" readonly>
-          </div>
-          <div class="form-field">
-            <label>סוג מכרז</label>
-            <input type="text" id="pTenderType" readonly>
-          </div>
-          <div class="form-field">
-            <label>לקוח קצה</label>
-            <input type="text" id="pEndClient" readonly>
-          </div>
-          <div class="form-field">
-            <label>מאשר</label>
-            <input type="text" id="pApprover" readonly>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="form-grid">
-          <div class="form-field full">
-            <label>חיוב לקוח כולל מע״מ (₪) <span class="req">*</span></label>
-            <input type="number" step="0.01" id="pClientBilling" required placeholder="0.00">
-          </div>
-          <div class="form-field">
-            <label>חשבונית עסקה כולל מע״מ (₪) <span class="req">*</span></label>
-            <input type="number" step="0.01" id="pDealInvoice" required placeholder="0.00">
-          </div>
-          <div class="form-field">
-            <label>תשלום לעובד כולל מע״מ (₪) <span class="req">*</span></label>
-            <input type="number" step="0.01" id="pEmployeePayment" required placeholder="0.00">
-          </div>
-        </div>
-
-        <div class="computed-box">
-          <div>
-            <div class="l">רווח גולמי כולל מע״מ (מחושב אוטומטית: חשבונית עסקה − תשלום לעובד)</div>
-          </div>
-          <div class="v" id="pGrossProfitDisplay">₪0.00</div>
-        </div>
-        <div class="form-field" style="margin-top:10px;">
-          <label style="display:flex;align-items:center;gap:7px;font-weight:400;">
-            <input type="checkbox" id="pOverrideProfit" style="width:auto;"> לערוך ידנית את הרווח הגולמי
-          </label>
-          <input type="number" step="0.01" id="pGrossProfitManual" style="display:none;margin-top:6px;">
-        </div>
-
-        <div class="form-msg" id="formMsg"></div>
-      </form>
-    </div>
-    <div class="modal-foot">
-      <span class="hint" style="font-size:11.5px;color:var(--text-dim);">שדות עם * הם שדות חובה</span>
-      <div style="display:flex;gap:10px;">
-        <button class="btn ghost" type="button" id="cancelBtn">ביטול</button>
-        <button class="btn primary" type="submit" form="paymentForm" id="submitPaymentBtn">הוסף תשלום לעובד</button>
-      </div>
     </div>
   </div>
 </div>
@@ -1227,6 +1466,7 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
           <table id="planningFullTable">
             <thead>
               <tr>
+                <th data-key="year">שנה</th>
                 <th data-key="company">חברה</th>
                 <th data-key="tenderType">סוג מכרז</th>
                 <th data-key="endClient">לקוח קצה</th>
@@ -1264,6 +1504,46 @@ window.__DASHBOARD_PREFETCH__ = window.__DASHBOARD_API_URL__
   </div>
 </div>
 
+<!-- מודל ייצוא (אדמין בלבד) -->
+<div class="modal-overlay" id="exportOverlay">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-head">
+      <h2>ייצוא נתונים</h2>
+      <button class="modal-close" id="exportCloseBtn" aria-label="סגירה">✕</button>
+    </div>
+    <div class="modal-body">
+      <button type="button" class="exp-opt" id="expExcelBtn">
+        <span class="ic">📊</span>
+        <div><b>Excel — הנתונים המסוננים</b><span>גיליון חיוב חודשי ("הרשומות שמוצגות עכשיו") וגיליון תכנון מול ביצוע</span></div>
+      </button>
+      <div class="exp-month"><label for="expMonthSel">דוח חודשי עבור:</label><select id="expMonthSel"></select></div>
+      <button type="button" class="exp-opt" id="expPdfBtn">
+        <span class="ic">📄</span>
+        <div><b>דוח חודשי מסכם (PDF)</b><span>סיכום החודש מול החודש הקודם ומול אשתקד, מובילים וחריגות. בחלון ההדפסה בוחרים "שמירה כ-PDF"</span></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- מודל יומן כניסות (אדמין בלבד) -->
+<div class="modal-overlay" id="logOverlay">
+  <div class="modal xwide">
+    <div class="modal-head">
+      <div><h2>יומן כניסות</h2><div class="modal-sub" id="logSub"></div></div>
+      <button class="modal-close" id="logCloseBtn" aria-label="סגירה">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="log-tools"><input class="search-box" id="logSearch" placeholder="חיפוש (משתמש, פעולה, פרטים…)"></div>
+      <div class="table-scroll detail-table-wrap">
+        <table id="logTable">
+          <thead><tr><th>זמן</th><th>משתמש</th><th>פעולה</th><th>פרטים</th></tr></thead>
+          <tbody id="logTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1271,13 +1551,14 @@ const API_URL = window.__DASHBOARD_API_URL__; // מוגדר בראש ה-<body> (
 
 /* ============================ נתוני הדגמה ============================ */
 const DEMO_PLANNING = [
-  {rowIndex:2, company:"CA",tenderType:"תוצרים",endClient:"הגנה",approver:"רוז",employee:"גוזלנד",status:"פעיל",annualBudget:500000,monthlyBudget:41666.67,afterTax:35416.67,employeePayment:31875,remainder:3541.67,profitPercent:8.5},
-  {rowIndex:3, company:"אלביט",tenderType:"שעות עבודה",endClient:'פד"ם',approver:"ברומי",employee:"יניב",status:"לא פעיל",annualBudget:600000,monthlyBudget:50000,afterTax:42500,employeePayment:37777.78,remainder:4722.22,profitPercent:9.44},
-  {rowIndex:4, company:"A.S.O",tenderType:"שעות עבודה",endClient:"קריית התקשוב",approver:"עידן",employee:"עידו",status:"פעיל",annualBudget:750000,monthlyBudget:62500,afterTax:53125,employeePayment:48697.92,remainder:4427.08,profitPercent:7.08},
-  {rowIndex:5, company:"NESS",tenderType:"שעות עבודה",endClient:"לוטם",approver:"דנה",employee:"שרון",status:"פעיל",annualBudget:350000,monthlyBudget:29166.67,afterTax:24791.67,employeePayment:19833.33,remainder:4958.33,profitPercent:17},
-  {rowIndex:6, company:"אלביט",tenderType:"שעות עבודה",endClient:"אגף",approver:"שחר",employee:"יעל",status:"פעיל",annualBudget:690000,monthlyBudget:57500,afterTax:48875,employeePayment:36656.25,remainder:12218.75,profitPercent:21.25},
-  {rowIndex:7, company:"NESS",tenderType:"תוצרים",endClient:"קריית התקשוב",approver:"דנה",employee:"דוד",status:"פעיל",annualBudget:470000,monthlyBudget:39166.67,afterTax:33291.67,employeePayment:31627.08,remainder:1664.58,profitPercent:4.25},
+  {rowIndex:2, year:2026, company:"CA",tenderType:"תוצרים",endClient:"הגנה",approver:"רוז",employee:"גוזלנד",status:"פעיל",annualBudget:500000,monthlyBudget:41666.67,afterTax:35416.67,employeePayment:31875,remainder:3541.67,profitPercent:8.5},
+  {rowIndex:3, year:2026, company:"אלביט",tenderType:"שעות עבודה",endClient:'פד"ם',approver:"ברומי",employee:"יניב",status:"לא פעיל",annualBudget:600000,monthlyBudget:50000,afterTax:42500,employeePayment:37777.78,remainder:4722.22,profitPercent:9.44},
+  {rowIndex:4, year:2026, company:"A.S.O",tenderType:"שעות עבודה",endClient:"קריית התקשוב",approver:"עידן",employee:"עידו",status:"פעיל",annualBudget:750000,monthlyBudget:62500,afterTax:53125,employeePayment:48697.92,remainder:4427.08,profitPercent:7.08},
+  {rowIndex:5, year:2026, company:"NESS",tenderType:"שעות עבודה",endClient:"לוטם",approver:"דנה",employee:"שרון",status:"פעיל",annualBudget:350000,monthlyBudget:29166.67,afterTax:24791.67,employeePayment:19833.33,remainder:4958.33,profitPercent:17},
+  {rowIndex:6, year:2026, company:"אלביט",tenderType:"שעות עבודה",endClient:"אגף",approver:"שחר",employee:"יעל",status:"פעיל",annualBudget:690000,monthlyBudget:57500,afterTax:48875,employeePayment:36656.25,remainder:12218.75,profitPercent:21.25},
+  {rowIndex:7, year:2026, company:"NESS",tenderType:"תוצרים",endClient:"קריית התקשוב",approver:"דנה",employee:"דוד",status:"פעיל",annualBudget:470000,monthlyBudget:39166.67,afterTax:33291.67,employeePayment:31627.08,remainder:1664.58,profitPercent:4.25},
 ];
+DEMO_PLANNING.push({rowIndex:8, year:2025, company:"CA",tenderType:"תוצרים",endClient:"הגנה",approver:"רוז",employee:"גוזלנד",status:"פעיל",annualBudget:480000,monthlyBudget:40000,afterTax:34000,employeePayment:28000,remainder:6000,profitPercent:15});
 const DEMO_COMPANIES = [
   {date:"2026-01-01",company:"CA",tenderType:"תוצרים",endClient:"הגנה",approver:"רוז",employee:"גוזלנד",clientBilling:41666.67,dealInvoice:35416.67,employeePayment:29000,grossProfit:6416.67},
   {date:"2026-01-01",company:"אלביט",tenderType:"שעות עבודה",endClient:'פד"ם',approver:"ברומי",employee:"יניב",clientBilling:50000,dealInvoice:42500,employeePayment:35000,grossProfit:7500},
@@ -1306,12 +1587,12 @@ const DEMO_AUTH = [
  * לגיליון) השרת הוא היחיד שמחשב את הנתונים האלה. */
 function computeDemoPlanningRows(planningRows, companies){
   const currentYear = new Date().getFullYear();
-  const paidByEmployeeThisYear = groupSum(
-    companies.filter(c=>c.date && new Date(c.date).getFullYear()===currentYear),
-    c=>c.employee, c=>c.employeePayment
+  const paidByEmployeeYear = groupSum(
+    companies.filter(c=>c.date),
+    c=>c.employee + '|' + new Date(c.date).getFullYear(), c=>c.employeePayment
   );
   return planningRows.map(p=>{
-    const actualPaidThisYear = paidByEmployeeThisYear.get(p.employee) || 0;
+    const actualPaidThisYear = paidByEmployeeYear.get(p.employee + '|' + (p.year || currentYear)) || 0;
     const remaining = (p.annualBudget||0) - actualPaidThisYear;
     const utilization = p.annualBudget ? (actualPaidThisYear/p.annualBudget*100) : 0;
     return {...p, actualPaidThisYear, remaining, utilization};
@@ -1451,6 +1732,7 @@ let isLoadingData = false; // מונע קריאות חופפות (רענון א�
 async function loadData(){
   if(isLoadingData) return;
   isLoadingData = true;
+  document.body.classList.add('refreshing'); document.getElementById('refreshBtn').classList.add('spin'); updateAgo();
   document.getElementById('statusText').textContent = 'טוען…';
   document.getElementById('statusDot').className = 'status-dot';
   hideConnectionError();
@@ -1463,7 +1745,7 @@ async function loadData(){
       planningData = computeDemoPlanningRows(DEMO_PLANNING, DEMO_COMPANIES);
       companiesData = DEMO_COMPANIES;
       dashboardInsights = {
-        planning: computeDemoPlanningInsights(planningData),
+        planning: computeDemoPlanningInsights(planningData.filter(p=>!p.year || p.year===new Date().getFullYear())),
         detail: computeDemoDetailInsights(companiesData)
       };
       document.getElementById('statusDot').className = 'status-dot demo';
@@ -1481,20 +1763,33 @@ async function loadData(){
         const timeoutId = setTimeout(()=> controller.abort(), 25000); // בטיחות: לא להמתין יותר מ-25 שניות (אם תקוע, עדיף להיכשל ולנסות שוב מהר)
         let res, text;
         try{
-          res = await fetch(API_URL + '?action=getData', { signal: controller.signal });
-          text = await res.text();
+          const tk = (loadSavedSession()||{}).token || '';
+          if(!tk){ json = { needLogin:true }; }
+          else res = await fetch(API_URL + '?action=getData&token=' + encodeURIComponent(tk), { signal: controller.signal });
+          if(res) text = await res.text();
         } finally {
           clearTimeout(timeoutId);
         }
-        let parsed = null;
-        try{ parsed = JSON.parse(text); }catch(parseErr){}
-        if(!res.ok || !parsed){
+        let parsed = json && json.needLogin ? json : null;
+        if(!parsed){ try{ parsed = JSON.parse(text); }catch(parseErr){} }
+        if(res && (!res.ok || !parsed)){
           const err = new Error(!res.ok ? ('שגיאת שרת (סטטוס ' + res.status + ')') : 'התשובה שהתקבלה אינה JSON תקין');
           err.httpStatus = res.status;
           err.snippet = (text || '').slice(0, 400);
           throw err;
         }
         json = parsed;
+      }
+      if(json && json.needLogin){
+        // אין התחברות תקפה (לא קיימת / פג תוקף / עברה חצות) - מציגים מסך כניסה בלבד, בלי נתונים
+        maintenanceActive = false;
+        silentlyRetrying = false;
+        retryAttemptCount = 0;
+        currentUser = null;
+        clearSession();
+        applyRoleUI();
+        showLoginScreen();
+        return;
       }
       // תכנון-מול-ביצוע (יתרה/% ניצול) וההמלצות מגיעים כבר מחושבים מה-Apps Script
       if(json && json.maintenance){
@@ -1512,8 +1807,8 @@ async function loadData(){
       document.getElementById('setupBanner').style.display = 'none';
     }
     document.getElementById('lastUpdated').textContent = new Date().toLocaleString('he-IL');
+    lastLoadedAt = Date.now();
     populateFilterOptions();
-    populateEmployeeSelect();
     applyFiltersAndRender();
     applyAuthGate();
     silentlyRetrying = false;
@@ -1533,6 +1828,7 @@ async function loadData(){
   } finally {
     if(!maintenanceActive && !silentlyRetrying) hideLoadingScreen();
     isLoadingData = false;
+    document.body.classList.remove('refreshing'); document.getElementById('refreshBtn').classList.remove('spin'); updateAgo();
   }
 }
 
@@ -1626,18 +1922,26 @@ function hideLoadingScreen(){
  */
 const AUTH_STORAGE_KEY = 'dashboardSession';
 
+function israelDayKey(){
+  try{ return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); }
+  catch(e){ return new Date().toISOString().slice(0,10); }
+}
 function saveSession(session){
   try{ localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session)); }catch(e){}
 }
 function clearSession(){
   try{ localStorage.removeItem(AUTH_STORAGE_KEY); }catch(e){}
 }
+// מחזיר session שמור רק אם הוא מהיום (שעון ישראל) - אחרת נמחק (התנתקות יומית בחצות)
 function loadSavedSession(){
   try{
     const raw = localStorage.getItem(AUTH_STORAGE_KEY);
     if(!raw) return null;
     const parsed = JSON.parse(raw);
-    if(parsed && parsed.username && parsed.role) return parsed;
+    if(parsed && parsed.username && parsed.role && parsed.token){
+      if(parsed.day && parsed.day !== israelDayKey()){ clearSession(); return null; }
+      return parsed;
+    }
     return null;
   }catch(e){ return null; }
 }
@@ -1645,8 +1949,6 @@ function loadSavedSession(){
 function applyAuthGate(){
   const saved = loadSavedSession();
   if(saved){
-    // שחזור אופטימי מהעדפה שמורה - הבדיקה האמיתית מול השרת תתבצע בפעולת הכתיבה הבאה
-    // (אם הטוקן כבר לא תקף, השרת ידחה את הפעולה ונבקש התחברות מחדש אז)
     currentUser = saved;
     hideLoginScreen();
     applyRoleUI();
@@ -1656,7 +1958,24 @@ function applyAuthGate(){
   showLoginScreen();
 }
 
+/* התנתקות יומית: בחצות (שעון ישראל) מוחקים את ההתחברות וטוענים מחדש את הדף למסך כניסה.
+ * נבדק גם בטיימר מדויק לחצות וגם כל 30 שניות / בחזרה ללשונית (למקרה של שינה/מחשב ישן). */
+let midnightTimerId = null;
+function scheduleMidnightLogout(){
+  const startDay = israelDayKey();
+  const check = ()=>{
+    if(israelDayKey() !== startDay){ clearSession(); location.reload(); return true; }
+    return false;
+  };
+  if(midnightTimerId) clearInterval(midnightTimerId);
+  midnightTimerId = setInterval(check, 30000);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) check(); });
+  window.addEventListener('focus', check);
+}
+scheduleMidnightLogout();
+
 function showLoginScreen(){
+  showLoginStep('credentials');
   document.getElementById('loginScreen').classList.add('open');
   applyRoleUI();
   setTimeout(()=> document.getElementById('loginUsername').focus(), 50);
@@ -1664,7 +1983,83 @@ function showLoginScreen(){
 function hideLoginScreen(){
   document.getElementById('loginScreen').classList.remove('open');
   document.getElementById('loginForm').reset();
+  document.getElementById('codeForm').reset();
+  otpReset();
   document.getElementById('loginMsg').textContent = '';
+  document.getElementById('codeMsg').textContent = '';
+}
+
+/* --- תיבות קוד אימות --- */
+const otpBoxes = [...document.querySelectorAll('.otp-box')];
+const otpWrap = document.getElementById('otpWrap');
+function otpValue(){ return otpBoxes.map(b=>b.value).join(''); }
+function otpSync(){ document.getElementById('loginCode').value = otpValue(); }
+function otpReset(){
+  otpBoxes.forEach(b=>{ b.value=''; b.classList.remove('filled'); });
+  otpWrap.classList.remove('shake');
+  document.querySelector('.login-card').classList.remove('ok');
+  otpSync();
+}
+function otpFillFrom(i, digits){
+  for(let j=0; j<digits.length && i+j<6; j++){ otpBoxes[i+j].value = digits[j]; otpBoxes[i+j].classList.add('filled'); }
+  otpSync();
+  const next = Math.min(i + digits.length, 5);
+  otpBoxes[next].focus();
+  if(otpValue().length === 6) document.getElementById('codeForm').requestSubmit();
+}
+otpBoxes.forEach((b,i)=>{
+  b.addEventListener('input', ()=>{
+    const digits = b.value.replace(/\D/g,'');
+    b.value = '';
+    b.classList.remove('filled');
+    if(digits) otpFillFrom(i, digits); else otpSync();
+  });
+  b.addEventListener('keydown', (e)=>{
+    if(e.key === 'Backspace' && !b.value && i > 0){ otpBoxes[i-1].value=''; otpBoxes[i-1].classList.remove('filled'); otpBoxes[i-1].focus(); otpSync(); e.preventDefault(); }
+    else if(e.key === 'ArrowLeft' && i > 0) otpBoxes[i-1].focus();
+    else if(e.key === 'ArrowRight' && i < 5) otpBoxes[i+1].focus();
+  });
+  b.addEventListener('focus', ()=> b.select());
+  b.addEventListener('paste', (e)=>{
+    const t = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'');
+    if(t){ e.preventDefault(); otpFillFrom(i, t); }
+  });
+});
+function otpFail(){
+  otpWrap.classList.remove('shake'); void otpWrap.offsetWidth; otpWrap.classList.add('shake');
+  setTimeout(()=>{ otpReset(); otpBoxes[0].focus(); }, 650);
+}
+function otpSuccess(){
+  document.querySelector('.login-card').classList.add('ok');
+  return new Promise(r=>setTimeout(r, 750));
+}
+// ספירה לאחור לשליחה חוזרת
+let resendTimerId = null;
+function startResendTimer(sec=45){
+  const link = document.getElementById('codeResendLink'), bar = document.getElementById('otpTimerBar');
+  clearInterval(resendTimerId);
+  let left = sec;
+  link.classList.add('link-disabled');
+  bar.style.transition = 'none'; bar.style.transform = 'scaleX(1)'; void bar.offsetWidth;
+  bar.style.transition = 'transform ' + sec + 's linear'; bar.style.transform = 'scaleX(0)';
+  const tick = ()=>{
+    if(left <= 0){ clearInterval(resendTimerId); link.classList.remove('link-disabled'); link.textContent = 'שליחת קוד חדש'; return; }
+    link.textContent = 'שליחה חוזרת בעוד ' + left + ' שנ׳'; left--;
+  };
+  tick(); resendTimerId = setInterval(tick, 1000);
+}
+let loginChallenge = null; // מזהה השלב הראשון (נחתם בשרת), נדרש לאימות הקוד
+let loginEmailMasked = '';
+function showLoginStep(step){
+  const isCode = step === 'code';
+  document.getElementById('loginForm').style.display = isCode ? 'none' : '';
+  document.getElementById('codeForm').style.display = isCode ? '' : 'none';
+  document.getElementById('loginSub').textContent = isCode
+    ? ('שלחנו קוד אימות' + (loginEmailMasked ? ' אל ' + loginEmailMasked : '') + '. הזינו אותו כדי להיכנס.')
+    : 'הזינו שם משתמש וסיסמה כדי להמשיך';
+  const card = document.querySelector('.login-card');
+  card.classList.remove('step-swap'); void card.offsetWidth; card.classList.add('step-swap');
+  if(isCode){ otpReset(); startResendTimer(45); setTimeout(()=> otpBoxes[0].focus(), 80); }
 }
 
 function applyRoleUI(){
@@ -1679,65 +2074,118 @@ function applyRoleUI(){
   } else {
     pill.style.display = 'none';
   }
-  const addPaymentBtn = document.getElementById('openModalBtn');
-  if(addPaymentBtn) addPaymentBtn.style.display = isAdmin ? '' : 'none';
+  ['exportBtn','logBtn','mobilePreviewBtn'].forEach(id=>{ const el = document.getElementById(id); if(el) el.style.display = isAdminUser() ? '' : 'none'; });
   // מרנדרים מחדש את טבלאות התכנון כדי שעמודת העובד תהפוך לניתנת-ללחיצה (או לא) בהתאם להרשאה
   if(typeof renderPlanningTable === 'function' && planningData.length) renderPlanningTable();
   if(document.getElementById('planningModalOverlay').classList.contains('open')) renderPlanningFullTable();
 }
 
-// אם פעולת כתיבה נדחתה ע"י השרת בגלל טוקן לא תקף/פג-תוקף, מתנתקים ומחזירים
-// למסך ההתחברות כדי שהמשתמש יתחבר מחדש ויקבל טוקן טרי.
 function forceReloginDueToAuthError(){
   currentUser = null;
   clearSession();
-  applyRoleUI();
-  showLoginScreen();
-  showToast('ההתחברות פגה - נא להתחבר מחדש', 'error');
+  location.reload();
 }
 
-document.getElementById('loginForm').addEventListener('submit', async (e)=>{
-  e.preventDefault();
+async function postAuth(body){
+  const res = await fetch(API_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(body)
+  });
+  return res.json();
+}
+
+async function finishLogin(user){
+  currentUser = user;
+  saveSession(currentUser);
+  hideLoginScreen();
+  applyRoleUI();
+  showToast('התחברת בהצלחה, ' + currentUser.username, 'success');
+  await loadData(); // רק עכשיו, אחרי שהתחברו, נטענים הנתונים
+}
+
+// שלב 1: שם משתמש + סיסמה -> השרת שולח קוד למייל
+async function submitCredentials(resend){
   const username = document.getElementById('loginUsername').value;
   const password = document.getElementById('loginPassword').value;
   const msg = document.getElementById('loginMsg');
   const btn = document.getElementById('loginSubmitBtn');
   msg.textContent = '';
-  btn.disabled = true; btn.textContent = 'מתחבר…';
-
+  btn.disabled = true; btn.textContent = 'שולח קוד…'; btn.classList.add('busy');
   try{
     if(!API_URL){
-      // מצב הדגמה בלבד - בדיקה מקומית מול רשימת ההדגמה (אין שרת אמיתי לפנות אליו)
       const uname = (username||'').trim(), pass = (password||'').trim();
       const user = DEMO_AUTH.find(u => u.username === uname && u.password === pass);
       if(!user){ msg.textContent = 'שם משתמש או סיסמה שגויים.'; return; }
-      currentUser = { username: user.username, role: user.role, token: 'demo' };
+      loginChallenge = 'demo:' + user.username + ':' + user.role;
+      loginEmailMasked = '(מצב הדגמה: הקוד הוא 123456)';
     } else {
-      const res = await fetch(API_URL, {
-        method:'POST',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({ action:'login', username, password })
-      });
-      const json = await res.json();
+      const json = await postAuth({ action:'login', username, password, resend: !!resend });
       if(!json.success){ msg.textContent = json.error || 'שם משתמש או סיסמה שגויים.'; return; }
-      currentUser = { username: json.username, role: json.role, token: json.token };
+      loginChallenge = json.challenge;
+      loginEmailMasked = json.emailMasked || '';
     }
-    saveSession(currentUser);
-    hideLoginScreen();
-    applyRoleUI();
-    showToast('התחברת בהצלחה, ' + currentUser.username, 'success');
+    showLoginStep('code');
   }catch(err){
     msg.textContent = 'שגיאת חיבור לשרת. נסו שוב.';
   }finally{
-    btn.disabled = false; btn.textContent = 'התחברות';
+    btn.disabled = false; btn.textContent = 'המשך'; btn.classList.remove('busy');
   }
+}
+document.getElementById('loginForm').addEventListener('submit', (e)=>{ e.preventDefault(); submitCredentials(false); });
+
+// שלב 2: קוד האימות -> טוקן
+document.getElementById('codeForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const code = document.getElementById('loginCode').value.replace(/\D/g,'');
+  const msg = document.getElementById('codeMsg');
+  if(code.length !== 6){ msg.textContent = 'יש להזין את כל 6 הספרות.'; otpFail(); return; }
+  const btn = document.getElementById('codeSubmitBtn');
+  msg.textContent = '';
+  btn.disabled = true; btn.textContent = 'מאמת…'; btn.classList.add('busy');
+  try{
+    if(!API_URL){
+      if(code !== '123456'){ msg.textContent = 'קוד שגוי.'; otpFail(); return; }
+      const [, u, r] = loginChallenge.split(':');
+      await otpSuccess();
+      await finishLogin({ username:u, role:r, token:'demo', day: israelDayKey() });
+      return;
+    }
+    const json = await postAuth({ action:'verifyCode', challenge: loginChallenge, code });
+    if(!json.success){
+      msg.textContent = json.error || 'קוד שגוי.';
+      otpFail();
+      if(json.expired){ setTimeout(()=> showLoginStep('credentials'), 1500); }
+      return;
+    }
+    await otpSuccess();
+    await finishLogin({ username: json.username, role: json.role, token: json.token, day: json.day || israelDayKey() });
+  }catch(err){
+    msg.textContent = 'שגיאת חיבור לשרת. נסו שוב.';
+  }finally{
+    btn.disabled = false; btn.textContent = 'אימות וכניסה'; btn.classList.remove('busy');
+  }
+});
+document.getElementById('codeBackLink').addEventListener('click', ()=>{
+  document.getElementById('codeForm').reset();
+  document.getElementById('codeMsg').textContent = '';
+  showLoginStep('credentials');
+});
+document.getElementById('codeResendLink').addEventListener('click', async ()=>{
+  const msg = document.getElementById('codeMsg');
+  if(document.getElementById('codeResendLink').classList.contains('link-disabled')) return;
+  if(!API_URL){ msg.textContent = 'במצב הדגמה הקוד הוא 123456'; return; }
+  try{
+    const json = await postAuth({ action:'login', username: document.getElementById('loginUsername').value, password: document.getElementById('loginPassword').value, resend:true });
+    if(json.success){ loginChallenge = json.challenge; msg.textContent = 'נשלח קוד חדש.'; otpReset(); otpBoxes[0].focus(); startResendTimer(45); }
+    else msg.textContent = json.error || 'לא ניתן לשלוח כעת.';
+  }catch(e){ msg.textContent = 'שגיאת חיבור לשרת.'; }
 });
 
 document.getElementById('logoutLink').addEventListener('click', ()=>{
   currentUser = null;
   clearSession();
-  applyRoleUI();
-  showLoginScreen();
+  location.reload();
 });
 
 /* ---- שינוי סטטוס עובד (פעיל/לא פעיל) — זמין לאדמין בלבד, בלחיצה על שם העובד ---- */
@@ -1821,43 +2269,200 @@ document.getElementById('empStatusSetActive').addEventListener('click', ()=> sub
 document.getElementById('empStatusSetInactive').addEventListener('click', ()=> submitEmployeeStatus('לא פעיל'));
 
 /* ============================ מסננים ============================ */
-function populateFilterOptions(){
-  const fill = (id, values) => {
-    const el = document.getElementById(id);
-    const current = el.value;
-    el.innerHTML = '<option value="">הכל</option>' + values.sort().map(v=>`<option value="${v}">${v}</option>`).join('');
-    if(values.includes(current)) el.value = current;
+const MS_IDS = ['fCompany','fEndClient','fApprover','fEmployee','fTenderType'];
+const MS_LABELS = { fCompany:'חברה', fEndClient:'לקוח קצה', fApprover:'מאשר', fEmployee:'עובד', fTenderType:'סוג מכרז' };
+
+/* רכיב בחירה מרובה: ממשק פשוט עם תיבות סימון, חיפוש בתוך הרשימה, "בחר הכל" ו"נקה" */
+function msInit(id){
+  const root = document.getElementById(id);
+  root.classList.add('ms');
+  root.innerHTML = '<button type="button" class="ms-btn" aria-haspopup="listbox"><span class="ms-chips"><span class="ms-placeholder">הכל</span></span><span class="ms-caret">▾</span></button>' +
+    '<div class="ms-panel"><input type="text" class="ms-search" placeholder="חיפוש…">' +
+    '<div class="ms-actions"><button type="button" data-a="all">בחר הכל</button><span class="ms-count"></span><button type="button" data-a="none">נקה</button></div>' +
+    '<div class="ms-list"></div></div>';
+  root._sel = new Set(); root._opts = [];
+  root.querySelector('.ms-btn').addEventListener('click', ()=>{
+    const wasOpen = root.classList.contains('open');
+    document.querySelectorAll('.ms.open').forEach(m=>m.classList.remove('open'));
+    if(!wasOpen){ root.classList.add('open'); const si = root.querySelector('.ms-search'); si.value=''; msRenderList(root); }
+  });
+  root.querySelector('.ms-search').addEventListener('input', ()=> msRenderList(root));
+  root.querySelector('.ms-actions').addEventListener('click', (e)=>{
+    const a = e.target.dataset.a; if(!a) return;
+    if(a === 'all') root._opts.forEach(v=>root._sel.add(v)); else root._sel.clear();
+    msRenderList(root); msUpdateLabel(root); applyFiltersAndRender();
+  });
+  root.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ root.classList.remove('open'); root.querySelector('.ms-btn').focus(); } });
+  msUpdateLabel(root);
+}
+function msRenderList(root){
+  const q = root.querySelector('.ms-search').value.trim().toLowerCase();
+  const list = root.querySelector('.ms-list');
+  list.innerHTML = '';
+  const opts = root._opts.filter(v=> !q || String(v).toLowerCase().includes(q));
+  if(!opts.length){ list.innerHTML = '<div class="ms-empty">אין אפשרויות</div>'; return; }
+  opts.forEach(v=>{
+    const row = document.createElement('label'); row.className = 'ms-item' + (root._sel.has(v) ? ' sel' : '');
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = root._sel.has(v);
+    cb.addEventListener('change', ()=>{
+      if(cb.checked) root._sel.add(v); else root._sel.delete(v);
+      row.classList.toggle('sel', cb.checked);
+      msUpdateLabel(root); applyFiltersAndRender();
+    });
+    const box = document.createElement('span'); box.className = 'ms-box';
+    box.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    const t = document.createElement('span'); t.textContent = v;
+    row.appendChild(cb); row.appendChild(box); row.appendChild(t); list.appendChild(row);
+  });
+}
+function msUpdateLabel(root){
+  const vals = [...root._sel];
+  const chips = root.querySelector('.ms-chips');
+  chips.innerHTML = '';
+  if(!vals.length){ chips.innerHTML = '<span class="ms-placeholder">הכל</span>'; }
+  else {
+    vals.slice(0,2).forEach(v=>{ const c = document.createElement('span'); c.className = 'ms-chip'; c.textContent = v; chips.appendChild(c); });
+    if(vals.length > 2){ const m = document.createElement('span'); m.className = 'ms-chip more'; m.textContent = '+' + (vals.length - 2); chips.appendChild(m); }
+  }
+  const cnt = root.querySelector('.ms-count');
+  if(cnt) cnt.textContent = vals.length ? (vals.length + ' נבחרו') : (root._opts.length + ' אפשרויות');
+}
+function msSetOptions(id, values){
+  const root = document.getElementById(id);
+  root._opts = [...values].sort((a,b)=> String(a).localeCompare(String(b),'he'));
+  [...root._sel].forEach(v=>{ if(!root._opts.includes(v)) root._sel.delete(v); });
+  msUpdateLabel(root);
+}
+function msGet(id){ return [...document.getElementById(id)._sel]; }
+function msClear(id){ const r = document.getElementById(id); r._sel.clear(); msUpdateLabel(r); }
+document.addEventListener('click', (e)=>{ if(!e.target.closest('.ms')) document.querySelectorAll('.ms.open').forEach(m=>m.classList.remove('open')); });
+MS_IDS.forEach(msInit);
+
+// בחירת חודש+שנה (במקום תאריך מדויק)
+function initRangeSelects(){
+  ['fFromMonth','fToMonth'].forEach(id=>{
+    document.getElementById(id).innerHTML = '<option value="">חודש</option>' + HEB_MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('');
+  });
+}
+const CAL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>';
+function mpYears(root){ return [...document.getElementById(root.dataset.y).options].map(o=>+o.value).filter(Boolean); }
+function mpInit(root){
+  root.innerHTML = '<button type="button" class="ms-btn mp-btn empty"><span class="mp-ico">' + CAL_SVG + '</span><span class="ms-label">בחירת חודש</span><span class="ms-caret">▾</span></button><div class="ms-panel mp-panel"></div>';
+  root._vy = 0;
+  root.querySelector('.mp-btn').addEventListener('click', ()=>{
+    const was = root.classList.contains('open');
+    document.querySelectorAll('.ms.open,.mp.open').forEach(m=>m.classList.remove('open'));
+    if(!was){
+      const ys = mpYears(root), cur = +document.getElementById(root.dataset.y).value;
+      root._vy = cur || (ys.length ? ys[ys.length-1] : new Date().getFullYear());
+      mpRenderPanel(root); root.classList.add('open'); root.classList.add('ms');
+    }
+  });
+  root.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') root.classList.remove('open'); });
+  root.classList.add('ms');
+  mpRefresh(root);
+}
+function mpSet(root, month, year){
+  document.getElementById(root.dataset.m).value = month ? String(month) : '';
+  document.getElementById(root.dataset.y).value = year ? String(year) : '';
+  mpRefresh(root); applyFiltersAndRender();
+}
+function mpRenderPanel(root){
+  const panel = root.querySelector('.mp-panel');
+  const ys = mpYears(root);
+  const minY = ys.length ? Math.min(...ys) : root._vy - 5, maxY = ys.length ? Math.max(...ys) : root._vy + 5;
+  const selY = +document.getElementById(root.dataset.y).value, selM = +document.getElementById(root.dataset.m).value;
+  const now = new Date();
+  panel.innerHTML = '<div class="mp-head"><button type="button" class="mp-nav" data-d="-1" aria-label="שנה קודמת">›</button><span class="mp-year">' + root._vy + '</span><button type="button" class="mp-nav" data-d="1" aria-label="שנה הבאה">‹</button></div>' +
+    '<div class="mp-grid">' + HEB_MONTHS.map((m,i)=>{
+      const isSel = selY === root._vy && selM === i+1;
+      const isCur = now.getFullYear() === root._vy && now.getMonth() === i;
+      return '<button type="button" class="mp-m' + (isSel?' sel':'') + (isCur?' cur':'') + '" data-m="' + (i+1) + '">' + m + '</button>';
+    }).join('') + '</div>' +
+    '<div class="mp-foot"><button type="button" data-a="year">כל שנת ' + root._vy + '</button><button type="button" data-a="clear">נקה</button></div>';
+  panel.querySelector('[data-d="1"]').disabled = root._vy >= maxY;
+  panel.querySelector('[data-d="-1"]').disabled = root._vy <= minY;
+  panel.onclick = (e)=>{
+    const t = e.target.closest('button'); if(!t) return;
+    if(t.dataset.d){ root._vy += +t.dataset.d; mpRenderPanel(root); return; }
+    if(t.dataset.m){ mpSet(root, +t.dataset.m, root._vy); root.classList.remove('open'); return; }
+    if(t.dataset.a === 'year'){ mpSet(root, 0, root._vy); root.classList.remove('open'); }
+    if(t.dataset.a === 'clear'){ mpSet(root, 0, 0); root.classList.remove('open'); }
   };
-  fill('fCompany', uniq(companiesData.map(c=>c.company)));
-  fill('fEndClient', uniq(companiesData.map(c=>c.endClient)));
-  fill('fApprover', uniq(companiesData.map(c=>c.approver)));
-  fill('fEmployee', uniq(companiesData.map(c=>c.employee)));
-  fill('fTenderType', uniq(companiesData.map(c=>c.tenderType)));
+}
+function mpRefresh(root){
+  const y = +document.getElementById(root.dataset.y).value, m = +document.getElementById(root.dataset.m).value;
+  const btn = root.querySelector('.mp-btn');
+  btn.classList.toggle('empty', !y);
+  root.querySelector('.ms-label').textContent = y ? ((m ? HEB_MONTHS[m-1] + ' ' : 'כל שנת ') + y) : 'בחירת חודש';
+}
+function mpRefreshAll(){ document.querySelectorAll('.mp').forEach(mpRefresh); }
+function populateYearSelects(){
+  const years = new Set();
+  companiesData.forEach(c=>{ const m = String(c.date||'').match(/^(\d{4})/); if(m) years.add(+m[1]); });
+  planningData.forEach(p=>{ if(p.year) years.add(+p.year); });
+  const list = [...years].sort((a,b)=>a-b);
+  ['fFromYear','fToYear'].forEach(id=>{
+    const el = document.getElementById(id); const cur = el.value;
+    el.innerHTML = '<option value="">שנה</option>' + list.map(y=>`<option value="${y}">${y}</option>`).join('');
+    if(list.map(String).includes(cur)) el.value = cur;
+  });
+}
+
+function populateFilterOptions(){
+  if(!document.getElementById('fFromMonth').options.length){ initRangeSelects(); document.querySelectorAll('.mp').forEach(mpInit); }
+  msSetOptions('fCompany', uniq(companiesData.map(c=>c.company)));
+  msSetOptions('fEndClient', uniq(companiesData.map(c=>c.endClient)));
+  msSetOptions('fApprover', uniq(companiesData.map(c=>c.approver)));
+  msSetOptions('fEmployee', uniq(companiesData.map(c=>c.employee)));
+  msSetOptions('fTenderType', uniq(companiesData.map(c=>c.tenderType)));
+  populateYearSelects();
 }
 
 function getFilters(){
+  const fy = parseInt(document.getElementById('fFromYear').value,10) || 0;
+  const fm = parseInt(document.getElementById('fFromMonth').value,10) || 0;
+  const ty = parseInt(document.getElementById('fToYear').value,10) || 0;
+  const tm = parseInt(document.getElementById('fToMonth').value,10) || 0;
   return {
-    dateFrom: document.getElementById('fDateFrom').value,
-    dateTo: document.getElementById('fDateTo').value,
-    company: document.getElementById('fCompany').value,
-    endClient: document.getElementById('fEndClient').value,
-    approver: document.getElementById('fApprover').value,
-    employee: document.getElementById('fEmployee').value,
-    tenderType: document.getElementById('fTenderType').value,
+    fromYear: fy, fromMonth: fm, toYear: ty, toMonth: tm,
+    fromIdx: fy ? fy*12 + (fm || 1) : null,
+    toIdx: ty ? ty*12 + (tm || 12) : null,
+    company: msGet('fCompany'),
+    endClient: msGet('fEndClient'),
+    approver: msGet('fApprover'),
+    employee: msGet('fEmployee'),
+    tenderType: msGet('fTenderType'),
     search: document.getElementById('searchBox').value.trim().toLowerCase(),
   };
 }
+const inSel = (arr, v) => !arr.length || arr.includes(v);
+function dateIdx(d){ const m = String(d||'').match(/^(\d{4})-(\d{2})/); return m ? (+m[1])*12 + (+m[2]) : null; }
+
+// סינון שורות תכנון לפי המסננים (שנה בתכנון נבחנת מול טווח השנים שנבחר)
+function filterPlanRows(rows, f, withTender){
+  return rows.filter(p=>{
+    if(!inSel(f.company, p.company) || !inSel(f.endClient, p.endClient) || !inSel(f.approver, p.approver) || !inSel(f.employee, p.employee)) return false;
+    if(withTender && !inSel(f.tenderType, p.tenderType)) return false;
+    if(p.year){
+      if(f.fromYear && p.year < f.fromYear) return false;
+      if(f.toYear && p.year > f.toYear) return false;
+    }
+    return true;
+  });
+}
 
 function applyFiltersAndRender(){
+  mpRefreshAll();
   const f = getFilters();
   filteredCompanies = companiesData.filter(c=>{
-    if(f.dateFrom && c.date && c.date < f.dateFrom) return false;
-    if(f.dateTo && c.date && c.date > f.dateTo) return false;
-    if(f.company && c.company !== f.company) return false;
-    if(f.endClient && c.endClient !== f.endClient) return false;
-    if(f.approver && c.approver !== f.approver) return false;
-    if(f.employee && c.employee !== f.employee) return false;
-    if(f.tenderType && c.tenderType !== f.tenderType) return false;
+    const idx = dateIdx(c.date);
+    if(idx !== null){
+      if(f.fromIdx !== null && idx < f.fromIdx) return false;
+      if(f.toIdx !== null && idx > f.toIdx) return false;
+    }
+    if(!inSel(f.company, c.company) || !inSel(f.endClient, c.endClient) || !inSel(f.approver, c.approver) ||
+       !inSel(f.employee, c.employee) || !inSel(f.tenderType, c.tenderType)) return false;
     if(f.search){
       const hay = [c.company,c.tenderType,c.endClient,c.approver,c.employee].join(' ').toLowerCase();
       if(!hay.includes(f.search)) return false;
@@ -1871,51 +2476,52 @@ function applyFiltersAndRender(){
   renderCharts();
   renderPlanningTable();
   renderDetailTable();
+  renderRanking();
+  renderEmptyState();
+  renderAlertStrip();
+}
+
+function resetAllFilters(){
+  MS_IDS.forEach(msClear);
+  ['fFromMonth','fFromYear','fToMonth','fToYear'].forEach(id=> document.getElementById(id).value = '');
+  document.getElementById('searchBox').value = '';
+  applyFiltersAndRender();
 }
 
 function renderFilterChips(f){
   const container = document.getElementById('filterChips');
-  const chipDefs = [
-    { key:'fDateFrom', label:'מתאריך', value:f.dateFrom },
-    { key:'fDateTo', label:'עד תאריך', value:f.dateTo },
-    { key:'fCompany', label:'חברה', value:f.company },
-    { key:'fEndClient', label:'לקוח קצה', value:f.endClient },
-    { key:'fApprover', label:'מאשר', value:f.approver },
-    { key:'fEmployee', label:'עובד', value:f.employee },
-    { key:'fTenderType', label:'סוג מכרז', value:f.tenderType },
-    { key:'searchBox', label:'חיפוש', value:f.search },
-  ].filter(c=>c.value);
+  const chips = [];
+  if(f.fromYear) chips.push({ clear:'from', text:'מ-' + (f.fromMonth ? HEB_MONTHS[f.fromMonth-1] + ' ' : '') + f.fromYear });
+  if(f.toYear) chips.push({ clear:'to', text:'עד ' + (f.toMonth ? HEB_MONTHS[f.toMonth-1] + ' ' : '') + f.toYear });
+  MS_IDS.forEach(id=>{
+    msGet(id).forEach(v=> chips.push({ clear:id, val:v, text: MS_LABELS[id] + ': ' + v }));
+  });
+  if(f.search) chips.push({ clear:'searchBox', text:'חיפוש: ' + f.search });
 
-  if(chipDefs.length === 0){ container.style.display = 'none'; container.innerHTML = ''; return; }
+  if(!chips.length){ container.style.display = 'none'; container.innerHTML = ''; return; }
   container.style.display = 'flex';
-  container.innerHTML = chipDefs.map(c=>
-    `<span class="filter-chip" data-clear="${c.key}">${c.label}: ${c.value}<button aria-label="הסר סינון">✕</button></span>`
-  ).join('') + `<button class="filter-chip-clear-all" id="clearAllChipsBtn">נקה הכל</button>`;
-
-  container.querySelectorAll('.filter-chip button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const key = btn.closest('.filter-chip').dataset.clear;
-      document.getElementById(key).value = '';
-      if(key === 'searchBox') currentPage = 1;
+  container.innerHTML = '';
+  chips.forEach(c=>{
+    const span = document.createElement('span'); span.className = 'filter-chip';
+    span.appendChild(document.createTextNode(c.text));
+    const b = document.createElement('button'); b.setAttribute('aria-label','הסר סינון'); b.textContent = '✕';
+    b.addEventListener('click', ()=>{
+      if(c.clear === 'from'){ document.getElementById('fFromMonth').value=''; document.getElementById('fFromYear').value=''; }
+      else if(c.clear === 'to'){ document.getElementById('fToMonth').value=''; document.getElementById('fToYear').value=''; }
+      else if(c.clear === 'searchBox'){ document.getElementById('searchBox').value=''; currentPage = 1; }
+      else { const r = document.getElementById(c.clear); r._sel.delete(c.val); msUpdateLabel(r); }
       applyFiltersAndRender();
     });
+    span.appendChild(b); container.appendChild(span);
   });
-  document.getElementById('clearAllChipsBtn').addEventListener('click', ()=>{
-    document.querySelectorAll('.filters input, .filters select').forEach(el=> el.value = '');
-    document.getElementById('searchBox').value = '';
-    applyFiltersAndRender();
-  });
+  const all = document.createElement('button'); all.className = 'filter-chip-clear-all'; all.textContent = 'נקה הכל';
+  all.addEventListener('click', resetAllFilters);
+  container.appendChild(all);
 }
 
-document.querySelectorAll('#fDateFrom,#fDateTo,#fCompany,#fEndClient,#fApprover,#fEmployee,#fTenderType').forEach(el=>{
-  el.addEventListener('change', applyFiltersAndRender);
-});
+document.querySelectorAll('#fFromMonth,#fFromYear,#fToMonth,#fToYear').forEach(el=> el.addEventListener('change', applyFiltersAndRender));
 document.getElementById('searchBox').addEventListener('input', ()=>{ currentPage=1; applyFiltersAndRender(); });
-document.getElementById('clearFilters').addEventListener('click', ()=>{
-  document.querySelectorAll('.filters input, .filters select').forEach(el=> el.value = '');
-  document.getElementById('searchBox').value = '';
-  applyFiltersAndRender();
-});
+document.getElementById('clearFilters').addEventListener('click', resetAllFilters);
 
 /* ============================ KPI ============================ */
 const KPI_ICONS = {
@@ -2239,7 +2845,7 @@ function barChart(canvasId, entries, color, valueFormatter, onBarClick){
       plugins:{ legend:{display:false},
         tooltip:{ callbacks:{ label:(c)=> valueFormatter(c.raw) + (onBarClick ? '  ·  לחצו לפירוט' : '') } } },
       scales:{
-        x:{ grid:{color:'#EEF3FA'}, border:{display:false}, ticks:{ callback:(v)=>valueFormatter(v), font:{family:MONO_FONT, size:10.5} } },
+        x:{ grid:{color:chartGrid()}, border:{display:false}, ticks:{ callback:(v)=>valueFormatter(v), font:{family:MONO_FONT, size:10.5} } },
         y:{ grid:{display:false}, border:{display:false} }
       }
     }
@@ -2266,12 +2872,7 @@ function renderCharts(){
 function renderBudgetCharts(){
   const valFn = budgetMode === 'monthly' ? p=>p.monthlyBudget : p=>p.annualBudget;
   const valKey = budgetMode === 'monthly' ? 'monthlyBudget' : 'annualBudget';
-  let plan = planningData;
-  const f = getFilters();
-  if(f.company) plan = plan.filter(p=>p.company===f.company);
-  if(f.endClient) plan = plan.filter(p=>p.endClient===f.endClient);
-  if(f.approver) plan = plan.filter(p=>p.approver===f.approver);
-  if(f.employee) plan = plan.filter(p=>p.employee===f.employee);
+  const plan = filterPlanRows(planningData, getFilters(), false);
   barChart('chartBudgetByClient', sortedEntries(groupSum(plan, p=>p.endClient, valFn)), '#2F6FED', fmt,
     (label)=>openBudgetCategoryModal('endClient', label, valKey, 'מסגרת — ' + label));
   barChart('chartBudgetByApprover', sortedEntries(groupSum(plan, p=>p.approver, valFn)), '#6C4CE0', fmt,
@@ -2286,10 +2887,30 @@ function monthKey(dateStr){
   const m = s.match(/^(\d{4})-(\d{2})/);
   return m ? (m[1]+'-'+m[2]) : null;
 }
+let trendMode = 'month'; // 'month' | 'year'
+function periodKey(dateStr){
+  if(trendMode === 'year'){ const m = String(dateStr||'').match(/^(\d{4})/); return m ? m[1] : null; }
+  return monthKey(dateStr);
+}
+function setTrendMode(mode){
+  trendMode = mode;
+  document.getElementById('trendMonthBtn').classList.toggle('on', mode === 'month');
+  document.getElementById('trendYearBtn').classList.toggle('on', mode === 'year');
+  document.getElementById('trendTitle').textContent = 'מגמת רווח והפסד לפי ' + (mode === 'year' ? 'שנים' : 'חודשים');
+  renderMonthlyTrend();
+}
+document.getElementById('trendMonthBtn').addEventListener('click', ()=> setTrendMode('month'));
+document.getElementById('trendYearBtn').addEventListener('click', ()=> setTrendMode('year'));
+function detectOutliers(vals){
+  const n = vals.length; if(n < 4) return vals.map(()=>false);
+  const mean = vals.reduce((a,b)=>a+b,0)/n;
+  const sd = Math.sqrt(vals.reduce((a,b)=>a+(b-mean)*(b-mean),0)/n);
+  return vals.map(v=> sd > 0 && Math.abs(v-mean) > 1.5*sd);
+}
 function renderMonthlyTrend(){
   const map = new Map();
   filteredCompanies.forEach(c=>{
-    const k = monthKey(c.date);
+    const k = periodKey(c.date);
     if(!k) return;
     if(!map.has(k)) map.set(k, {billing:0, profit:0});
     const o = map.get(k);
@@ -2316,7 +2937,7 @@ function renderMonthlyTrend(){
   }
   canvasEl.style.display = 'block';
 
-  const labels = months.map(m=>{ const [y,mo]=m.split('-'); return HEB_MONTHS[parseInt(mo,10)-1] + ' ' + y.slice(2); });
+  const labels = months.map(m=>{ if(trendMode === 'year') return m; const [y,mo]=m.split('-'); return HEB_MONTHS[parseInt(mo,10)-1] + ' ' + y.slice(2); });
   const profitData = months.map(m=>map.get(m).profit);
   const billingData = months.map(m=>map.get(m).billing);
 
@@ -2336,6 +2957,9 @@ function renderMonthlyTrend(){
     badgeEl.innerHTML = '';
   }
 
+  const outl = detectOutliers(profitData);
+  const nOut = outl.filter(Boolean).length;
+  if(nOut) badgeEl.innerHTML += `<span class="trend-badge down" title="נקודות שחורגות מהממוצע ביותר מ-1.5 סטיות תקן">⚠ ${nOut} ${trendMode === 'year' ? 'שנים' : 'חודשים'} חריגים</span>`;
   const ctx = canvasEl.getContext('2d');
   const avgBilling = billingData.length ? billingData.reduce((a,b)=>a+b,0) / billingData.length : 0;
   const avgProfit = profitData.length ? profitData.reduce((a,b)=>a+b,0) / profitData.length : 0;
@@ -2350,7 +2974,7 @@ function renderMonthlyTrend(){
           pointHoverRadius:6, pointHoverBorderWidth:2, borderWidth:2.5 },
         { label:'רווח / הפסד גולמי', data:profitData, borderColor:'#0E9488',
           backgroundColor:(context)=>{ const {chart}=context; return chart.chartArea ? makeAreaGradient(chart.ctx, chart.chartArea, '#0E9488') : 'transparent'; },
-          fill:true, tension:.35, pointRadius:4, pointBackgroundColor:'#0E9488', pointBorderColor:'#fff', pointBorderWidth:1.5,
+          fill:true, tension:.35, pointRadius:outl.map(o=>o?8:4), pointBackgroundColor:profitData.map((v,i)=> outl[i] ? (v < avgProfit ? '#E5484D' : '#D6A02E') : '#0E9488'), pointBorderColor:'#fff', pointBorderWidth:1.5,
           pointHoverRadius:7, pointHoverBorderWidth:2, borderWidth:3 },
       ]
     },
@@ -2371,11 +2995,12 @@ function renderMonthlyTrend(){
       onHover:(evt, els)=>{ evt.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
       plugins:{
         legend:{ display:true, position:'top', align:'end', labels:{boxWidth:10, boxHeight:10, usePointStyle:true, font:{size:11.5} } },
-        tooltip:{ mode:'index', intersect:false, callbacks:{ label:(c)=> c.dataset.label + ': ' + fmt(c.raw) } }
+        tooltip:{ mode:'index', intersect:false, callbacks:{ label:(c)=> c.dataset.label + ': ' + fmt(c.raw),
+          afterBody:(items)=>{ const i = items[0].dataIndex; return outl[i] ? ['⚠ חריג: ' + (profitData[i] < avgProfit ? 'נמוך' : 'גבוה') + ' משמעותית מהממוצע'] : []; } } }
       },
       scales:{
         x:{ grid:{display:false}, border:{display:false} },
-        y:{ grid:{color:'#EEF3FA'}, border:{display:false}, ticks:{ callback:(v)=>fmt(v), font:{family:MONO_FONT, size:10.5} } }
+        y:{ grid:{color:chartGrid()}, border:{display:false}, ticks:{ callback:(v)=>fmt(v), font:{family:MONO_FONT, size:10.5} } }
       }
     }
   });
@@ -2392,16 +3017,40 @@ function formatCell(val, type){
   return val ?? '';
 }
 
+let detailModalState = null; // {title, subtitle, columns, rows, ..., sortKey, sortDir}
 function renderDetailModal(title, subtitle, columns, rows, summaryLabel, summaryValue, summaryType){
+  detailModalState = { columns, rows, sortKey:null, sortDir:1 };
   document.getElementById('detailModalTitle').textContent = title;
   document.getElementById('detailModalSub').textContent = subtitle;
   document.getElementById('detailModalSummaryLabel').textContent = summaryLabel;
   document.getElementById('detailModalSummaryValue').textContent = summaryType === 'percent' ? pct(summaryValue) : fmt(summaryValue);
-  document.getElementById('detailModalThead').innerHTML = '<tr>' + columns.map(c=>`<th class="${c.type!=='text'?'num':''}">${c.label}</th>`).join('') + '</tr>';
+  paintDetailModalTable();
+  document.getElementById('detailModalOverlay').classList.add('open');
+}
+function paintDetailModalTable(){
+  const st = detailModalState; if(!st) return;
+  const { columns } = st;
+  let rows = st.rows;
+  if(st.sortKey){
+    const k = st.sortKey, d = st.sortDir;
+    rows = [...rows].sort((a,b)=>{
+      const va = a[k], vb = b[k];
+      const na = typeof va === 'number', nb = typeof vb === 'number';
+      if(na && nb) return (va-vb)*d;
+      return String(va ?? '').localeCompare(String(vb ?? ''),'he',{numeric:true}) * d;
+    });
+  }
+  const thead = document.getElementById('detailModalThead');
+  thead.innerHTML = '<tr>' + columns.map(c=>`<th data-key="${c.key}" class="${c.type!=='text'?'num':''} ${st.sortKey===c.key?'sorted':''}" style="cursor:pointer;">${c.label}<span class="arrow">${st.sortKey===c.key ? (st.sortDir===1?'▲':'▼') : '▾'}</span></th>`).join('') + '</tr>';
+  thead.querySelectorAll('th').forEach(th=> th.addEventListener('click', ()=>{
+    st.sortDir = (st.sortKey === th.dataset.key) ? -st.sortDir : 1;
+    st.sortKey = th.dataset.key;
+    paintDetailModalTable();
+  }));
   document.getElementById('detailModalTbody').innerHTML = rows.length
     ? rows.map(r=>'<tr>' + columns.map(c=>`<td class="${c.type!=='text'?'num':''}">${formatCell(r[c.key], c.type)}</td>`).join('') + '</tr>').join('')
     : `<tr><td colspan="${columns.length}" style="text-align:center;color:var(--text-dim);padding:20px;">אין נתונים תואמים</td></tr>`;
-  document.getElementById('detailModalOverlay').classList.add('open');
+  labelCells('detailModalTable');
 }
 
 function openTableModal(title, rows, columns, sumKey, sumType, isAverage){
@@ -2430,6 +3079,7 @@ function openMetricModal(metricKey){
   } else if(metricKey === 'activeEmployees'){
     const rows = planningData.filter(p=>p.status && p.status.indexOf('לא')===-1);
     openTableModal('עובדים פעילים', rows, [
+      {key:'year', label:'שנה', type:'text'},
       {key:'employee', label:'עובד', type:'text'},
       {key:'company', label:'חברה', type:'text'},
       {key:'endClient', label:'לקוח קצה', type:'text'},
@@ -2454,14 +3104,10 @@ function openCategoryModal(field, value, valueKey, title){
 }
 
 function openBudgetCategoryModal(field, value, valueKey, title){
-  let plan = planningData;
-  const f = getFilters();
-  if(f.company) plan = plan.filter(p=>p.company===f.company);
-  if(f.endClient) plan = plan.filter(p=>p.endClient===f.endClient);
-  if(f.approver) plan = plan.filter(p=>p.approver===f.approver);
-  if(f.employee) plan = plan.filter(p=>p.employee===f.employee);
+  const plan = filterPlanRows(planningData, getFilters(), false);
   const rows = plan.filter(p => (p[field] || 'לא ידוע') === value);
   const columns = [
+    {key:'year', label:'שנה', type:'text'},
     {key:'employee', label:'עובד', type:'text'},
     {key:'company', label:'חברה', type:'text'},
     {key:'endClient', label:'לקוח קצה', type:'text'},
@@ -2472,8 +3118,9 @@ function openBudgetCategoryModal(field, value, valueKey, title){
 }
 
 function openMonthModal(monthKeyVal, monthLabel){
+  const isYear = String(monthKeyVal).length === 4;
   const rows = filteredCompanies
-    .filter(r => monthKey(r.date) === monthKeyVal)
+    .filter(r => (isYear ? String(r.date||'').slice(0,4) : monthKey(r.date)) === monthKeyVal)
     .map(r => ({...r, marginPct: r.clientBilling ? (r.grossProfit/r.clientBilling*100) : 0}));
   const columns = [
     {key:'date', label:'תאריך', type:'text'},
@@ -2484,7 +3131,7 @@ function openMonthModal(monthKeyVal, monthLabel){
     {key:'grossProfit', label:'רווח גולמי', type:'currency'},
     {key:'marginPct', label:'% רווח', type:'percent'},
   ];
-  openTableModal('רשומות חודש ' + monthLabel, rows, columns, 'grossProfit', 'currency');
+  openTableModal((isYear ? 'רשומות שנת ' : 'רשומות חודש ') + monthLabel, rows, columns, 'grossProfit', 'currency');
 }
 
 document.getElementById('detailModalCloseBtn').addEventListener('click', ()=> document.getElementById('detailModalOverlay').classList.remove('open'));
@@ -2494,14 +3141,7 @@ document.getElementById('detailModalOverlay').addEventListener('click', (e)=>{ i
 let planningSort = { key:'employee', dir:1 };
 
 function getFilteredPlanning(){
-  let plan = planningData;
-  const f = getFilters();
-  if(f.company) plan = plan.filter(p=>p.company===f.company);
-  if(f.endClient) plan = plan.filter(p=>p.endClient===f.endClient);
-  if(f.approver) plan = plan.filter(p=>p.approver===f.approver);
-  if(f.employee) plan = plan.filter(p=>p.employee===f.employee);
-  if(f.tenderType) plan = plan.filter(p=>p.tenderType===f.tenderType);
-  return plan;
+  return filterPlanRows(planningData, getFilters(), true);
 }
 
 function openPlanningModal(){
@@ -2566,7 +3206,7 @@ function renderPlanningFullTable(){
   const base = getFilteredPlanning();
   let rows = base.filter(p=>{
     if(!search) return true;
-    const hay = [p.company,p.tenderType,p.endClient,p.approver,p.employee,p.status].join(' ').toLowerCase();
+    const hay = [p.year,p.company,p.tenderType,p.endClient,p.approver,p.employee,p.status].join(' ').toLowerCase();
     return hay.includes(search);
   });
   const { key, dir } = planningSort;
@@ -2582,6 +3222,7 @@ function renderPlanningFullTable(){
     const rowClass = r.remaining < 0 ? 'row-bad' : (r.utilization >= 90 ? 'row-warn' : '');
     return `
     <tr class="${rowClass}">
+      <td>${r.year||''}</td>
       <td>${r.company||''}</td>
       <td>${r.tenderType||''}</td>
       <td>${r.endClient||''}</td>
@@ -2595,10 +3236,11 @@ function renderPlanningFullTable(){
       <td class="num">${fmt2(r.remainder)}</td>
       <td class="num">${pct(r.profitPercent)}</td>
     </tr>`;
-  }).join('') || `<tr><td colspan="12" style="text-align:center;color:var(--text-dim);padding:20px;">אין נתוני תכנון תואמים</td></tr>`;
+  }).join('') || `<tr><td colspan="13" style="text-align:center;color:var(--text-dim);padding:20px;">אין נתוני תכנון תואמים</td></tr>`;
 
   bindEmpCellClicks('planningFullTbody');
   updateSortIndicators('planningFullTable', planningSort);
+  labelCells('planningFullTable');
 }
 
 document.querySelectorAll('#planningFullTable thead th').forEach(th=>{
@@ -2644,19 +3286,16 @@ function utilBarHtml(utilization, remaining){
 
 function renderPlanningTable(){
   const f = getFilters();
-  // remaining/utilization/actualPaidThisYear כבר מגיעים מחושבים מה-Apps Script (או מהתחליף
-  // המקומי במצב הדגמה) על planningData - כאן רק מוסיפים "שולם בפועל (בתקופה)" שכן תלוי
-  // במסנני התאריך שנבחרו בדפדפן, ולכן חייב להישאר מחושב מקומית כדי שהסינון יישאר מיידי.
-  const paidByEmployee = groupSum(filteredCompanies, c=>c.employee, c=>c.employeePayment);
+  // "שולם בפועל (בתקופה)" נגזר מהרשומות המסוננות (לפי תקופה) - לכל שורת חוזה לפי העובד והשנה שלה.
+  const yearOf = (d)=>{ const m = String(d||'').match(/^(\d{4})/); return m ? +m[1] : 0; };
+  const paidByEmpYear = groupSum(filteredCompanies, c=> c.employee + '|' + yearOf(c.date), c=>c.employeePayment);
+  const curYear = new Date().getFullYear();
   let rows = planningData.map(p=>{
-    const actualPaid = paidByEmployee.get(p.employee) || 0;
-    return {...p, actualPaid};
+    const actualPaid = paidByEmpYear.get(p.employee + '|' + (p.year || curYear)) || 0;
+    const fc = forecastFor({...p, actualPaid});
+    return {...p, actualPaid, fc, forecastSort: fc ? fc.sort : -1};
   });
-  if(f.company) rows = rows.filter(r=>r.company===f.company);
-  if(f.endClient) rows = rows.filter(r=>r.endClient===f.endClient);
-  if(f.approver) rows = rows.filter(r=>r.approver===f.approver);
-  if(f.employee) rows = rows.filter(r=>r.employee===f.employee);
-  if(f.tenderType) rows = rows.filter(r=>r.tenderType===f.tenderType);
+  rows = filterPlanRows(rows, f, true);
 
   const { key, dir } = mainPlanningSort;
   rows.sort((a,b)=>{
@@ -2669,6 +3308,7 @@ function renderPlanningTable(){
     const rowClass = r.remaining < 0 ? 'row-bad' : (r.utilization >= 90 ? 'row-warn' : '');
     return `
     <tr class="${rowClass}">
+      <td>${r.year||''}</td>
       <td>${empCellHtml(r)}</td>
       <td>${r.company||''}</td>
       <td>${r.endClient||''}</td>
@@ -2679,8 +3319,10 @@ function renderPlanningTable(){
       <td class="num">${fmt2(r.actualPaid)}</td>
       <td class="num ${r.remaining<0?'profit-neg':'profit-pos'}">${fmt2(r.remaining)}</td>
       <td class="num">${utilBarHtml(r.utilization, r.remaining)}</td>
+      <td class="num">${r.fc ? `<span class="fc ${r.fc.cls}" title="${escHtml(r.fc.tip)}">${escHtml(r.fc.text)}</span>` : '<span class="fc na">—</span>'}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="10" style="text-align:center;color:var(--text-dim);padding:20px;">אין נתונים</td></tr>';
+  }).join('') || '<tr><td colspan="12" style="text-align:center;color:var(--text-dim);padding:20px;">אין נתונים</td></tr>';
+  labelCells('planningTable');
 
   bindEmpCellClicks('planningTbody');
   updateSortIndicators('planningTable', mainPlanningSort);
@@ -2722,7 +3364,7 @@ function renderInsightsBlock(elId, data){
 
 /* ============================ טבלת פירוט ============================ */
 function renderDetailTable(){
-  let rows = filteredCompanies.map(c=>({...c, marginPct: c.clientBilling ? (c.grossProfit/c.clientBilling*100) : 0}));
+  let rows = filteredCompanies.map(c=>({...c, year: yearOfDate(c.date) || '', marginPct: c.clientBilling ? (c.grossProfit/c.clientBilling*100) : 0}));
   const {key, dir} = sortState;
   rows.sort((a,b)=>{
     const va=a[key], vb=b[key];
@@ -2741,6 +3383,7 @@ function renderDetailTable(){
     return `
     <tr class="${rowClass}">
       <td>${r.date||''}</td>
+      <td>${r.year||''}</td>
       <td>${r.company||''}</td>
       <td>${r.tenderType||''}</td>
       <td>${r.endClient||''}</td>
@@ -2752,7 +3395,8 @@ function renderDetailTable(){
       <td class="num ${r.grossProfit<0?'profit-neg':'profit-pos'}">${fmt2(r.grossProfit)}</td>
       <td class="num ${r.marginPct<0?'profit-neg':'profit-pos'}">${pct(r.marginPct)}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="11" style="text-align:center;color:var(--text-dim);padding:20px;">אין רשומות התואמות את הסינון</td></tr>';
+  }).join('') || '<tr><td colspan="12" style="text-align:center;color:var(--text-dim);padding:20px;">אין רשומות התואמות את הסינון</td></tr>';
+  labelCells('detailTable');
 
   document.getElementById('pagerInfo').textContent = `עמוד ${currentPage} מתוך ${totalPages} (${rows.length} רשומות)`;
   document.getElementById('prevPage').disabled = currentPage<=1;
@@ -2772,130 +3416,6 @@ document.querySelectorAll('#detailTable thead th').forEach(th=>{
 });
 
 /* ============================ מודל הוספת תשלום ============================ */
-function populateEmployeeSelect(){
-  const sel = document.getElementById('pEmployee');
-  const employees = uniq(planningData.map(p=>p.employee)).sort();
-  sel.innerHTML = '<option value="">בחר עובד…</option>' + employees.map(e=>`<option value="${e}">${e}</option>`).join('');
-}
-
-document.getElementById('openModalBtn').addEventListener('click', openModal);
-document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
-document.getElementById('cancelBtn').addEventListener('click', closeModal);
-document.getElementById('modalOverlay').addEventListener('click', (e)=>{ if(e.target.id==='modalOverlay') closeModal(); });
-
-function openModal(){
-  document.getElementById('paymentForm').reset();
-  document.getElementById('pCompany').value='';
-  document.getElementById('pTenderType').value='';
-  document.getElementById('pEndClient').value='';
-  document.getElementById('pApprover').value='';
-  document.getElementById('pGrossProfitDisplay').textContent = '₪0.00';
-  document.getElementById('pOverrideProfit').checked = false;
-  document.getElementById('pGrossProfitManual').style.display = 'none';
-  document.getElementById('formMsg').textContent = '';
-  document.getElementById('formMsg').className = 'form-msg';
-  document.getElementById('pDate').value = new Date().toISOString().slice(0,10);
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
-
-document.getElementById('pEmployee').addEventListener('change', (e)=>{
-  const emp = planningData.find(p=>p.employee === e.target.value);
-  document.getElementById('pCompany').value = emp ? emp.company : '';
-  document.getElementById('pTenderType').value = emp ? emp.tenderType : '';
-  document.getElementById('pEndClient').value = emp ? emp.endClient : '';
-  document.getElementById('pApprover').value = emp ? emp.approver : '';
-});
-
-function recomputeGrossProfit(){
-  if(document.getElementById('pOverrideProfit').checked) return;
-  const deal = parseFloat(document.getElementById('pDealInvoice').value) || 0;
-  const paid = parseFloat(document.getElementById('pEmployeePayment').value) || 0;
-  const gp = deal - paid;
-  document.getElementById('pGrossProfitDisplay').textContent = fmt2(gp);
-  document.getElementById('pGrossProfitManual').value = gp.toFixed(2);
-}
-['pDealInvoice','pEmployeePayment'].forEach(id=>{
-  document.getElementById(id).addEventListener('input', recomputeGrossProfit);
-});
-document.getElementById('pOverrideProfit').addEventListener('change', (e)=>{
-  const manual = document.getElementById('pGrossProfitManual');
-  manual.style.display = e.target.checked ? 'block' : 'none';
-  if(e.target.checked){
-    manual.value = manual.value || document.getElementById('pGrossProfitDisplay').textContent.replace(/[^\d.-]/g,'');
-    manual.focus();
-  } else {
-    recomputeGrossProfit();
-  }
-});
-document.getElementById('pGrossProfitManual').addEventListener('input', (e)=>{
-  document.getElementById('pGrossProfitDisplay').textContent = fmt2(parseFloat(e.target.value)||0);
-});
-
-document.getElementById('paymentForm').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const msg = document.getElementById('formMsg');
-  msg.textContent=''; msg.className='form-msg';
-
-  const payload = {
-    action: 'addPayment',
-    token: currentUser && currentUser.token,
-    date: document.getElementById('pDate').value,
-    employee: document.getElementById('pEmployee').value,
-    company: document.getElementById('pCompany').value,
-    tenderType: document.getElementById('pTenderType').value,
-    endClient: document.getElementById('pEndClient').value,
-    approver: document.getElementById('pApprover').value,
-    clientBilling: parseFloat(document.getElementById('pClientBilling').value),
-    dealInvoice: parseFloat(document.getElementById('pDealInvoice').value),
-    employeePayment: parseFloat(document.getElementById('pEmployeePayment').value),
-    grossProfit: document.getElementById('pOverrideProfit').checked
-      ? parseFloat(document.getElementById('pGrossProfitManual').value)
-      : (parseFloat(document.getElementById('pDealInvoice').value)||0) - (parseFloat(document.getElementById('pEmployeePayment').value)||0),
-  };
-
-  if(!payload.employee || !payload.date || isNaN(payload.clientBilling) || isNaN(payload.dealInvoice) || isNaN(payload.employeePayment)){
-    msg.textContent = 'נא למלא את כל שדות החובה עם ערכים מספריים תקינים.';
-    msg.className = 'form-msg error';
-    return;
-  }
-
-  const btn = document.getElementById('submitPaymentBtn');
-  btn.disabled = true; btn.textContent = 'שומר…';
-
-  if(!API_URL){
-    // מצב הדגמה — הוספה מקומית בלבד (לא נשמר בקובץ אמיתי)
-    companiesData.push({...payload, rowIndex: companiesData.length+2});
-    btn.disabled = false; btn.textContent = 'הוסף תשלום לעובד';
-    showToast('נוסף למצב הדגמה (לא נשמר בגיליון האמיתי — יש לחבר API_URL)', 'success');
-    populateFilterOptions();
-    applyFiltersAndRender();
-    closeModal();
-    return;
-  }
-
-  try{
-    const res = await fetch(API_URL, {
-      method:'POST',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify(payload)
-    });
-    const json = await res.json();
-    if(!json.success){
-      if(json.authError){ closeModal(); forceReloginDueToAuthError(); return; }
-      throw new Error(json.error || 'שגיאה לא ידועה');
-    }
-    showToast('התשלום נשמר בהצלחה בגיליון', 'success');
-    closeModal();
-    await loadData();
-  }catch(err){
-    msg.textContent = 'שגיאה בשמירה: ' + err.message;
-    msg.className = 'form-msg error';
-  }finally{
-    btn.disabled = false; btn.textContent = 'הוסף תשלום לעובד';
-  }
-});
-
 /* ============================ מסמכים משפטיים (נגישות / תקנון / תנאי שימוש / פרטיות) ============================ */
 const LEGAL_CONTENT = {
   accessibility: {
@@ -3142,6 +3662,374 @@ document.addEventListener('fullscreenchange', async ()=>{
     await releaseWakeLock();
   }
 });
+
+
+/* ============================ v3: עזרים כלליים ============================ */
+function escHtml(v){ return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function isAdminUser(){ return !!currentUser && String(currentUser.username||'').trim().toLowerCase() === 'admin'; } // רק המשתמש בשם admin (לא הרשאת אדמין)
+function idxLabel(i){ const y = Math.floor((i-1)/12), m = (i-1)%12; return HEB_MONTHS[m].slice(0,3) + '׳ ' + String(y).slice(2); }
+function yearOfDate(d){ const m = String(d||'').match(/^(\d{4})/); return m ? +m[1] : 0; }
+
+/* ============================ v3: מצב כהה / בהיר ============================ */
+function isDark(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
+function chartGrid(){ return isDark() ? '#26354F' : '#EEF3FA'; }
+function applyChartTheme(){
+  Chart.defaults.color = isDark() ? '#A3B4D1' : '#5E7089';
+}
+function applyTheme(t, persist){
+  document.documentElement.setAttribute('data-theme', t);
+  if(persist){ try{ localStorage.setItem('yeromTheme', t); }catch(e){} }
+  const b = document.getElementById('themeBtn');
+  if(b){ b.textContent = t === 'dark' ? '☀' : '☾'; b.title = t === 'dark' ? 'מעבר למצב בהיר' : 'מעבר למצב כהה'; b.setAttribute('aria-label', b.title); }
+  applyChartTheme();
+  if(companiesData.length || planningData.length){
+    renderCharts(); renderBudgetCharts(); renderMonthlyTrend();
+    if(document.getElementById('planningModalOverlay').classList.contains('open')) renderPlanningCharts(getFilteredPlanning());
+  }
+}
+document.getElementById('themeBtn').addEventListener('click', ()=> applyTheme(isDark() ? 'light' : 'dark', true));
+(function(){
+  let saved = null; try{ saved = localStorage.getItem('yeromTheme'); }catch(e){}
+  applyTheme(isDark() ? 'dark' : 'light', false);
+  if(!saved && window.matchMedia){
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = (e)=>{ let s=null; try{ s = localStorage.getItem('yeromTheme'); }catch(_){} if(!s) applyTheme(e.matches ? 'dark' : 'light', false); };
+    if(mq.addEventListener) mq.addEventListener('change', onChange);
+  }
+})();
+
+/* ============================ v3: "עודכן לפני…" + מצב רענון ============================ */
+let lastLoadedAt = 0;
+function updateAgo(){
+  const el = document.getElementById('updatedAgo'); if(!el) return;
+  if(isLoadingData){ el.textContent = 'מרענן…'; return; }
+  if(!lastLoadedAt){ el.textContent = ''; return; }
+  const min = Math.floor((Date.now() - lastLoadedAt) / 60000);
+  el.textContent = min < 1 ? 'עודכן ממש עכשיו' : (min === 1 ? 'עודכן לפני דקה' : (min < 60 ? 'עודכן לפני ' + min + ' דקות' : 'עודכן לפני ' + Math.floor(min/60) + ' שעות'));
+}
+setInterval(updateAgo, 20000);
+
+/* ============================ v3: מצב ריק ============================ */
+function renderEmptyState(){
+  const el = document.getElementById('emptyState');
+  if(!el) return;
+  if(!companiesData.length){
+    el.innerHTML = '<div class="es-ico">📭</div><div class="es-t">אין עדיין נתוני חיוב בגיליון</div><div class="es-s">כשיתווספו שורות בלשונית "חיוב חודשי" הן יופיעו כאן אחרי הרענון.</div>';
+    el.style.display = 'block';
+  } else if(!filteredCompanies.length){
+    el.innerHTML = '<div class="es-ico">🔍</div><div class="es-t">לא נמצאו רשומות שתואמות לסינון</div><div class="es-s">נסו להרחיב את טווח התאריכים או להסיר חלק מהמסננים.</div><button class="btn primary" id="emptyResetBtn">אפס סינון</button>';
+    el.style.display = 'block';
+    document.getElementById('emptyResetBtn').addEventListener('click', resetAllFilters);
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+/* ============================ v3: התראות חריגה על המסך ============================ */
+function currentYearPlanningClient(){
+  const cy = new Date().getFullYear();
+  const cur = planningData.filter(p=> !p.year || p.year === cy);
+  if(cur.length) return cur;
+  const maxY = Math.max(0, ...planningData.map(p=>p.year||0));
+  return planningData.filter(p=> p.year === maxY);
+}
+function isActiveRow(r){ return !!r.status && String(r.status).indexOf('לא') === -1; }
+function renderAlertStrip(){
+  const el = document.getElementById('alertStrip'); if(!el) return;
+  const rows = currentYearPlanningClient().filter(r=> isActiveRow(r) && r.annualBudget > 0);
+  const over = rows.filter(r=> r.remaining < 0);
+  const near = rows.filter(r=> r.remaining >= 0 && r.utilization >= 90);
+  if(!over.length && !near.length){ el.style.display = 'none'; return; }
+  const names = (list)=>{ const n = list.slice(0,3).map(r=>escHtml(r.employee)).join(', '); return n + (list.length > 3 ? ' ועוד ' + (list.length-3) : ''); };
+  let html = '';
+  if(over.length) html += `<span class="al-item over">⚠ <b>${over.length}</b> חרגו מהמסגרת השנתית: ${names(over)}</span>`;
+  if(near.length) html += `<span class="al-item near">● <b>${near.length}</b> קרובים למגבלה (90%+): ${names(near)}</span>`;
+  html += '<span class="al-sp"></span><button type="button" id="alertShowBtn">הצג בטבלת התכנון</button>';
+  el.innerHTML = html;
+  el.style.display = 'flex';
+  document.getElementById('alertShowBtn').addEventListener('click', ()=>{
+    mainPlanningSort = { key:'utilization', dir:-1 };
+    renderPlanningTable();
+    document.getElementById('planningTable').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start' });
+  });
+}
+
+/* ============================ v3: השוואה לתקופה קודמת (כרטיסי KPI) ============================ */
+function matchNonDate(c, f){
+  if(!inSel(f.company, c.company) || !inSel(f.endClient, c.endClient) || !inSel(f.approver, c.approver) ||
+     !inSel(f.employee, c.employee) || !inSel(f.tenderType, c.tenderType)) return false;
+  if(f.search){
+    const hay = [c.company,c.tenderType,c.endClient,c.approver,c.employee].join(' ').toLowerCase();
+    if(!hay.includes(f.search)) return false;
+  }
+  return true;
+}
+function aggRange(f, a, b){
+  const o = { clientBilling:0, dealInvoice:0, employeePayment:0, grossProfit:0, n:0 };
+  companiesData.forEach(c=>{
+    const i = dateIdx(c.date);
+    if(i === null || i < a || i > b || !matchNonDate(c, f)) return;
+    o.clientBilling += c.clientBilling||0; o.dealInvoice += c.dealInvoice||0;
+    o.employeePayment += c.employeePayment||0; o.grossProfit += c.grossProfit||0; o.n++;
+  });
+  return o;
+}
+/* ============================ v3: דירוג רווחיות ============================ */
+let rankDim = 'employee';
+const RANK_DIMS = { employee:{ label:'עובד', title:'רווח גולמי לפי עובד' }, endClient:{ label:'לקוח קצה', title:'רווח גולמי לפי לקוח קצה' }, company:{ label:'חברה', title:'רווח גולמי לפי חברה' } };
+function renderRanking(){
+  const grid = document.getElementById('rankGrid'); if(!grid) return;
+  document.querySelectorAll('#rankTabs button').forEach(b=> b.classList.toggle('on', b.dataset.dim === rankDim));
+  const profit = groupSum(filteredCompanies, c=>c[rankDim] || 'לא ידוע', c=>c.grossProfit);
+  const bill = groupSum(filteredCompanies, c=>c[rankDim] || 'לא ידוע', c=>c.clientBilling);
+  const items = [...profit.entries()].map(([k,v])=>({ name:k, profit:v, margin: bill.get(k) ? v / bill.get(k) * 100 : 0 })).sort((a,b)=> b.profit - a.profit);
+  if(!items.length){ grid.className = 'rank-grid one'; grid.innerHTML = '<div class="chart-empty">אין נתונים להצגה</div>'; return; }
+  const maxAbs = Math.max(...items.map(i=>Math.abs(i.profit))) || 1;
+  const row = (it, rank)=> `<div class="rank-row" data-name="${escHtml(it.name)}" title="לחצו לפירוט">
+      <span class="rk">${rank}</span><span class="nm">${escHtml(it.name)}</span>
+      <span class="bar"><i style="width:${Math.max(3, Math.abs(it.profit)/maxAbs*100)}%;background:${it.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)'};"></i></span>
+      <span class="val ${it.profit<0?'profit-neg':''}">${fmt(it.profit)}<small>${pct(it.margin)} מהחיוב</small></span></div>`;
+  if(items.length <= 8){
+    grid.className = 'rank-grid one';
+    grid.innerHTML = '<div class="rank-col">' + items.map((it,i)=>row(it,i+1)).join('') + '</div>';
+  } else {
+    const top = items.slice(0,5), bottom = items.slice(-5).reverse();
+    grid.className = 'rank-grid';
+    grid.innerHTML = '<div class="rank-col"><h4>🔝 מושכים את הרווח למעלה</h4>' + top.map((it,i)=>row(it,i+1)).join('') + '</div>'
+      + '<div class="rank-col"><h4>🔻 מושכים את הרווח למטה</h4>' + bottom.map((it,i)=>row(it, items.length - i)).join('') + '</div>';
+  }
+  grid.querySelectorAll('.rank-row').forEach(el=> el.addEventListener('click', ()=> openCategoryModal(rankDim, el.dataset.name, 'grossProfit', RANK_DIMS[rankDim].title + ' — ' + el.dataset.name)));
+}
+document.querySelectorAll('#rankTabs button').forEach(b=> b.addEventListener('click', ()=>{ rankDim = b.dataset.dim; renderRanking(); }));
+
+/* ============================ v3: תחזית סוף שנה לכל עובד ============================ */
+function forecastFor(r){
+  const now = new Date(), cy = now.getFullYear();
+  if((r.year || cy) !== cy) return null;
+  if(!isActiveRow(r) || !(r.annualBudget > 0)) return null;
+  const paid = r.actualPaidThisYear != null ? r.actualPaidThisYear : (r.actualPaid || 0);
+  if(r.remaining < 0) return { text:'חרג מהמסגרת', cls:'bad', sort:999, tip:'התשלומים כבר עלו על המסגרת השנתית' };
+  const elapsed = Math.max(1, now.getMonth() + 1);
+  const pace = paid / elapsed;
+  if(!(pace > 0)) return { text:'אין תשלומים השנה', cls:'na', sort:0, tip:'לא נרשמו תשלומים בשנה הנוכחית' };
+  const projPct = pace * 12 / r.annualBudget * 100;
+  const monthsLeft = r.remaining / pace;
+  const exhaust = new Date(now.getTime() + monthsLeft * 30.44 * 86400000);
+  const tip = 'קצב ממוצע ' + fmt(pace) + ' לחודש (' + elapsed + ' חודשים מתחילת השנה) · תחזית ניצול בסוף השנה ' + pct(projPct);
+  if(exhaust.getFullYear() === cy){
+    const left = Math.max(0, Math.round(monthsLeft * 10) / 10);
+    return { text:'צפוי לסיים ב' + HEB_MONTHS[exhaust.getMonth()], cls: left <= 2 ? 'bad' : 'warn', sort: projPct, tip: tip + ' · נותרו כ-' + left + ' חודשים' };
+  }
+  return { text:'תחזית ' + pct(projPct) + ' בסוף השנה', cls:'ok', sort: projPct, tip };
+}
+
+/* ============================ v3: טבלאות ככרטיסים במובייל ============================ */
+function labelCells(tableId){
+  const t = document.getElementById(tableId); if(!t) return;
+  t.classList.add('card-table');
+  const labels = [...t.querySelectorAll('thead th')].map(th=>{ const c = th.cloneNode(true); c.querySelectorAll('.arrow').forEach(x=>x.remove()); return c.textContent.trim(); });
+  t.querySelectorAll('tbody tr').forEach(tr=>{
+    [...tr.children].forEach((td,i)=>{ if(!td.hasAttribute('colspan') && labels[i]) td.setAttribute('data-label', labels[i]); });
+  });
+}
+function buildMobileSort(tableId){
+  const t = document.getElementById(tableId); if(!t || t.dataset.msort) return;
+  t.dataset.msort = '1';
+  const sel = document.createElement('select');
+  sel.className = 'm-sort'; sel.setAttribute('aria-label', 'מיון');
+  sel.innerHTML = '<option value="">מיון לפי…</option>' + [...t.querySelectorAll('thead th[data-key]')].map(th=>`<option value="${th.dataset.key}">${escHtml(th.textContent.replace(/[▲▼↑↓]/g,'').trim())}</option>`).join('');
+  sel.addEventListener('change', ()=>{
+    const th = t.querySelector('thead th[data-key="' + sel.value + '"]');
+    if(th) th.click();
+    sel.value = '';
+  });
+  const scroller = t.closest('.table-scroll') || t;
+  scroller.parentNode.insertBefore(sel, scroller);
+}
+['planningTable','detailTable','planningFullTable'].forEach(buildMobileSort);
+
+/* ============================ v3: ייצוא Excel (xlsx) — בלי ספריות חיצוניות ============================ */
+const _crcTable = (()=>{ const t = new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = c&1 ? 0xEDB88320 ^ (c>>>1) : c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(bytes){ let c = 0xFFFFFFFF; for(let i=0;i<bytes.length;i++) c = _crcTable[(c ^ bytes[i]) & 0xFF] ^ (c>>>8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function zipStore(files){ // files: [{name, data:Uint8Array}] — ללא דחיסה
+  const enc = new TextEncoder(); const chunks = []; const central = []; let offset = 0;
+  const u16 = n=>[n&255,(n>>8)&255], u32 = n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>>24)&255];
+  files.forEach(f=>{
+    const name = enc.encode(f.name), crc = crc32(f.data), size = f.data.length;
+    const local = new Uint8Array([0x50,0x4b,3,4, ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(crc), ...u32(size), ...u32(size), ...u16(name.length), ...u16(0)]);
+    chunks.push(local, name, f.data);
+    central.push(new Uint8Array([0x50,0x4b,1,2, ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(crc), ...u32(size), ...u32(size), ...u16(name.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(offset)]), name);
+    offset += local.length + name.length + size;
+  });
+  let cdSize = 0; central.forEach(c=> cdSize += c.length);
+  const end = new Uint8Array([0x50,0x4b,5,6, 0,0,0,0, ...u16(files.length), ...u16(files.length), ...u32(cdSize), ...u32(offset), 0,0]);
+  return new Blob([...chunks, ...central, end], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+function xlsxCol(n){ let s=''; n++; while(n>0){ const m=(n-1)%26; s = String.fromCharCode(65+m) + s; n = Math.floor((n-1)/26); } return s; }
+function xmlEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,''); }
+// תא: מספר רגיל, {t:'money'|'pct'|'date'|'bold'|'head'|'boldmoney', v}, או טקסט
+function xlsxSheetXml(rows, widths){
+  const cols = widths ? '<cols>' + widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('') + '</cols>' : '';
+  let x = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView rightToLeft="1" workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' + cols + '<sheetData>';
+  rows.forEach((row, ri)=>{
+    x += `<row r="${ri+1}">`;
+    row.forEach((cell, ci)=>{
+      const ref = xlsxCol(ci) + (ri+1);
+      let v = cell, style = 0;
+      if(cell && typeof cell === 'object'){ v = cell.v; style = { head:1, money:2, pct:3, date:4, bold:5, boldmoney:6 }[cell.t] || 0; }
+      if(v === null || v === undefined || v === '') x += `<c r="${ref}" s="${style}"/>`;
+      else if(typeof v === 'number' && isFinite(v)) x += `<c r="${ref}" s="${style}"><v>${style ? Math.round(v*100)/100 : v}</v></c>`;
+      else x += `<c r="${ref}" s="${style}" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(v)}</t></is></c>`;
+    });
+    x += '</row>';
+  });
+  return x + '</sheetData></worksheet>';
+}
+function makeXlsx(sheets){ // sheets: [{name, rows, widths}]
+  const enc = new TextEncoder();
+  const files = [];
+  files.push({ name:'[Content_Types].xml', data: enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' + sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('') + '</Types>') });
+  files.push({ name:'_rels/.rels', data: enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>') });
+  files.push({ name:'xl/workbook.xml', data: enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' + sheets.map((s,i)=>`<sheet name="${xmlEsc(s.name.slice(0,31))}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('') + '</sheets></workbook>') });
+  files.push({ name:'xl/_rels/workbook.xml.rels', data: enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('') + `<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`) });
+  files.push({ name:'xl/styles.xml', data: enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="2"><numFmt numFmtId="164" formatCode="&quot;₪&quot;#,##0.00"/><numFmt numFmtId="165" formatCode="0.0&quot;%&quot;"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><name val="Arial"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE6F2"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="7"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"><alignment horizontal="center"/></xf><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="14" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="1" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>') });
+  sheets.forEach((s,i)=> files.push({ name:`xl/worksheets/sheet${i+1}.xml`, data: enc.encode(xlsxSheetXml(s.rows, s.widths)) }));
+  return zipStore(files);
+}
+function downloadBlob(blob, filename){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+function excelDateSerial(s){
+  const m = String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})/); if(!m) return s || '';
+  return Math.round((Date.UTC(+m[1], +m[2]-1, +m[3]) - Date.UTC(1899,11,30)) / 86400000);
+}
+function buildExportSheets(){
+  const H = (t)=>({ t:'head', v:t });
+  const rows1 = [[H('תאריך'),H('חברה'),H('סוג מכרז'),H('לקוח קצה'),H('מאשר'),H('שם עובד'),H('חיוב לקוח כולל מע״מ'),H('חשבונית עסקה'),H('תשלום לעובד'),H('רווח גולמי'),H('% רווח')]];
+  const sorted = [...filteredCompanies].sort((a,b)=> String(a.date||'').localeCompare(String(b.date||'')));
+  sorted.forEach(c=> rows1.push([ {t:'date', v:excelDateSerial(c.date)}, c.company, c.tenderType, c.endClient, c.approver, c.employee,
+    {t:'money',v:c.clientBilling}, {t:'money',v:c.dealInvoice}, {t:'money',v:c.employeePayment}, {t:'money',v:c.grossProfit},
+    {t:'pct', v: c.clientBilling ? c.grossProfit / c.clientBilling * 100 : 0} ]));
+  const tb = sum(sorted,c=>c.clientBilling), td = sum(sorted,c=>c.dealInvoice), tp = sum(sorted,c=>c.employeePayment), tg = sum(sorted,c=>c.grossProfit);
+  rows1.push([{t:'bold',v:'סה״כ'},'','','','','',{t:'boldmoney',v:tb},{t:'boldmoney',v:td},{t:'boldmoney',v:tp},{t:'boldmoney',v:tg},{t:'pct',v: tb ? tg/tb*100 : 0}]);
+  const rows2 = [[H('שנה'),H('שם עובד'),H('חברה'),H('לקוח קצה'),H('מאשר'),H('סטטוס'),H('מסגרת שנתית'),H('מסגרת חודשית'),H('שולם בפועל השנה'),H('יתרה למסגרת'),H('% ניצול')]];
+  filterPlanRows(planningData, getFilters(), true).forEach(p=> rows2.push([ p.year||'', p.employee, p.company, p.endClient, p.approver, p.status,
+    {t:'money',v:p.annualBudget}, {t:'money',v:p.monthlyBudget}, {t:'money',v:p.actualPaidThisYear||0}, {t:'money',v:p.remaining}, {t:'pct',v:p.utilization} ]));
+  return { count: sorted.length, sheets: [
+    { name:'חיוב חודשי (מסונן)', rows:rows1, widths:[12,18,14,18,14,16,18,16,16,16,10] },
+    { name:'תכנון מול ביצוע', rows:rows2, widths:[8,16,18,18,14,10,16,16,18,16,10] }
+  ] };
+}
+function exportExcel(){
+  if(!isAdminUser()) return;
+  const b = buildExportSheets();
+  downloadBlob(makeXlsx(b.sheets), 'yerom_export_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  showToast('הקובץ ירד: ' + b.count + ' רשומות חיוב', 'success');
+}
+
+/* ============================ v3: דוח חודשי מסכם (PDF דרך הדפסה) ============================ */
+function monthChoices(){
+  const set = new Set(); companiesData.forEach(c=>{ const i = dateIdx(c.date); if(i !== null) set.add(i); });
+  return [...set].sort((a,b)=>b-a);
+}
+function fullMonthLabel(i){ const y = Math.floor((i-1)/12), m = (i-1)%12; return HEB_MONTHS[m] + ' ' + y; }
+function buildMonthlyReportHtml(monthIdx){
+  const f0 = { company:[], endClient:[], approver:[], employee:[], tenderType:[], search:'' };
+  const cur = aggRange(f0, monthIdx, monthIdx), prev = aggRange(f0, monthIdx-1, monthIdx-1), yoy = aggRange(f0, monthIdx-12, monthIdx-12);
+  const rowsM = companiesData.filter(c=> dateIdx(c.date) === monthIdx);
+  const dl = (a,b)=>{ if(!b.n) return '—'; const d = b.v ? (a.v-b.v)/Math.abs(b.v)*100 : 0; return (d>0?'▲ ':d<0?'▼ ':'') + Math.abs(d).toLocaleString('he-IL',{maximumFractionDigits:1}) + '%'; };
+  const mg = o => o.clientBilling ? o.grossProfit/o.clientBilling*100 : 0;
+  const kp = [
+    ['חיוב לקוחות כולל מע״מ','clientBilling'], ['חשבונית עסקה (אחרי מס)','dealInvoice'], ['שולם לעובדים','employeePayment'], ['רווח גולמי','grossProfit']
+  ].map(([l,k])=>`<tr><td>${l}</td><td class="n">${fmt(cur[k])}</td><td class="n">${dl({v:cur[k]},{v:prev[k],n:prev.n})}</td><td class="n">${dl({v:cur[k]},{v:yoy[k],n:yoy.n})}</td></tr>`).join('')
+    + `<tr><td>אחוז רווח</td><td class="n">${pct(mg(cur))}</td><td class="n">${prev.n ? (mg(cur)-mg(prev)>=0?'▲ ':'▼ ') + Math.abs(mg(cur)-mg(prev)).toFixed(1) + ' נק׳' : '—'}</td><td class="n">${yoy.n ? (mg(cur)-mg(yoy)>=0?'▲ ':'▼ ') + Math.abs(mg(cur)-mg(yoy)).toFixed(1) + ' נק׳' : '—'}</td></tr>`;
+  const top = (field, valKey, n)=>{ const m = groupSum(rowsM, c=>c[field]||'לא ידוע', c=>c[valKey]); return [...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,n); };
+  const tbl = (title, entries)=> `<h3>${title}</h3><table class="t"><tbody>` + (entries.map(([k,v],i)=>`<tr><td>${i+1}. ${escHtml(k)}</td><td class="n">${fmt(v)}</td></tr>`).join('') || '<tr><td>אין נתונים</td><td></td></tr>') + '</tbody></table>';
+  const alerts = currentYearPlanningClient().filter(r=>isActiveRow(r)&&r.annualBudget>0&&(r.remaining<0||r.utilization>=90)).sort((a,b)=>b.utilization-a.utilization);
+  const alertsHtml = alerts.length ? '<h3>עובדים קרובים למגבלה או בחריגה (מצב נוכחי)</h3><table class="t"><thead><tr><th>עובד</th><th>מסגרת שנתית</th><th>יתרה</th><th>ניצול</th></tr></thead><tbody>' + alerts.map(r=>`<tr><td>${escHtml(r.employee)}</td><td class="n">${fmt(r.annualBudget)}</td><td class="n" style="color:${r.remaining<0?'#C0392B':'inherit'}">${fmt(r.remaining)}</td><td class="n">${pct(r.utilization)}</td></tr>`).join('') + '</tbody></table>' : '';
+  return `<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>דוח חודשי — ${fullMonthLabel(monthIdx)}</title><style>
+    @page{size:A4;margin:14mm} *{box-sizing:border-box} body{font-family:Heebo,Arial,sans-serif;color:#122142;font-size:12.5px;margin:0}
+    h1{font-size:22px;margin:0 0 2px;color:#17337A} .sub{color:#54688C;margin-bottom:18px} h3{font-size:14px;margin:18px 0 6px;color:#17337A}
+    table.t{width:100%;border-collapse:collapse} .t th,.t td{border:1px solid #D8E3F3;padding:6px 9px;text-align:right} .t th{background:#EAF1FB} .t td.n{text-align:left;direction:ltr;white-space:nowrap}
+    .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 20px} .foot{margin-top:22px;color:#8DA0BE;font-size:10.5px}
+  </style></head><body>
+    <h1>י.מ ירום ישראל בע״מ</h1><div class="sub">דוח חודשי מסכם — ${fullMonthLabel(monthIdx)} · ${cur.n} רשומות חיוב</div>
+    <h3>סיכום החודש</h3><table class="t"><thead><tr><th>מדד</th><th>${idxLabel(monthIdx)}</th><th>מול ${idxLabel(monthIdx-1)}</th><th>מול ${idxLabel(monthIdx-12)}</th></tr></thead><tbody>${kp}</tbody></table>
+    <div class="cols"><div>${tbl('רווח גולמי לפי עובד (5 ראשונים)', top('employee','grossProfit',5))}</div><div>${tbl('חיוב לפי לקוח קצה (5 ראשונים)', top('endClient','clientBilling',5))}</div></div>
+    ${alertsHtml}
+    <div class="foot">הופק ${new Date().toLocaleString('he-IL')}${currentUser ? ' · ' + escHtml(currentUser.username) : ''} · הנתונים כוללים את כלל הרשומות בחודש, ללא תלות בסינון שבמסך.</div>
+  </body></html>`;
+}
+function printHtmlViaFrame(html){
+  const fr = document.createElement('iframe');
+  fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+  document.body.appendChild(fr);
+  fr.contentDocument.open(); fr.contentDocument.write(html); fr.contentDocument.close();
+  setTimeout(()=>{ try{ fr.contentWindow.focus(); fr.contentWindow.print(); }catch(e){ showToast('לא ניתן לפתוח הדפסה בדפדפן הזה', 'error'); } setTimeout(()=>fr.remove(), 60000); }, 350);
+}
+function openExportModal(){
+  if(!isAdminUser()) return;
+  const months = monthChoices();
+  const sel = document.getElementById('expMonthSel');
+  sel.innerHTML = months.map(i=>`<option value="${i}">${fullMonthLabel(i)}</option>`).join('') || '<option value="">אין חודשים</option>';
+  document.getElementById('exportOverlay').classList.add('open');
+}
+function closeExportModal(){ document.getElementById('exportOverlay').classList.remove('open'); }
+document.getElementById('exportBtn').addEventListener('click', openExportModal);
+document.getElementById('exportCloseBtn').addEventListener('click', closeExportModal);
+document.getElementById('exportOverlay').addEventListener('click', e=>{ if(e.target.id === 'exportOverlay') closeExportModal(); });
+document.getElementById('expExcelBtn').addEventListener('click', ()=>{ exportExcel(); closeExportModal(); });
+document.getElementById('expPdfBtn').addEventListener('click', ()=>{
+  if(!isAdminUser()) return;
+  const v = +document.getElementById('expMonthSel').value; if(!v){ showToast('אין נתונים להפקת דוח', 'error'); return; }
+  closeExportModal(); printHtmlViaFrame(buildMonthlyReportHtml(v));
+});
+
+/* ============================ v3: יומן כניסות (אדמין בלבד; נאכף גם בשרת לפי הרשאות) ============================ */
+let logRows = [];
+function renderLogTable(){
+  const q = (document.getElementById('logSearch').value || '').trim().toLowerCase();
+  const rows = logRows.filter(r=> !q || (r.time+' '+r.user+' '+r.action+' '+r.details).toLowerCase().includes(q));
+  const cls = (a)=> /שגוי/.test(a) ? 'bad' : (/התחברות|הצפנ/.test(a) ? 'ok' : '');
+  document.getElementById('logSub').textContent = rows.length + ' אירועים אחרונים' + (q ? ' (מסונן)' : '');
+  document.getElementById('logTbody').innerHTML = rows.map(r=>`<tr><td>${escHtml(r.time)}</td><td>${escHtml(r.user)}</td><td><span class="log-act ${cls(r.action)}">${escHtml(r.action)}</span></td><td>${escHtml(r.details)}</td></tr>`).join('')
+    || '<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:20px;">אין אירועים</td></tr>';
+  labelCells('logTable');
+}
+async function openLogModal(){
+  if(!isAdminUser()) return;
+  document.getElementById('logSearch').value = '';
+  document.getElementById('logOverlay').classList.add('open');
+  document.getElementById('logSub').textContent = 'טוען…';
+  document.getElementById('logTbody').innerHTML = '';
+  if(!API_URL){
+    const d = (m)=> new Date(Date.now() - m*60000).toLocaleString('he-IL');
+    logRows = [
+      { time:d(5), user:'admin', action:'התחברות', details:'הרשאה: admin' },
+      { time:d(6), user:'admin', action:'נשלח קוד אימות', details:'נשלח אל ad***@gmail.com' },
+      { time:d(95), user:'יניב מימון', action:'קוד אימות שגוי', details:'ניסיון 1' },
+      { time:d(97), user:'יניב מימון', action:'נשלח קוד אימות', details:'נשלח אל ya***@gmail.com' }
+    ];
+    renderLogTable(); return;
+  }
+  try{
+    const json = await postAuth({ action:'getLog', token: currentUser && currentUser.token });
+    if(!json.success){
+      if(json.authError){ document.getElementById('logOverlay').classList.remove('open'); forceReloginDueToAuthError(); return; }
+      throw new Error(json.error || 'שגיאה');
+    }
+    logRows = json.rows || []; renderLogTable();
+  }catch(err){
+    document.getElementById('logSub').textContent = 'שגיאה בטעינת היומן: ' + err.message;
+  }
+}
+document.getElementById('logBtn').addEventListener('click', openLogModal);
+document.getElementById('logCloseBtn').addEventListener('click', ()=> document.getElementById('logOverlay').classList.remove('open'));
+document.getElementById('logOverlay').addEventListener('click', e=>{ if(e.target.id === 'logOverlay') document.getElementById('logOverlay').classList.remove('open'); });
+document.getElementById('logSearch').addEventListener('input', renderLogTable);
 
 /* ============================ אתחול ============================ */
 startHintLoop();
