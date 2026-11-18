@@ -49,7 +49,9 @@
     --glass-blur-sm:blur(10px) saturate(160%);
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;overflow-x:hidden;}
+  html,body{margin:0;padding:0;}
+  html{overflow-x:hidden;}
+  body{overflow-x:clip;} /* clip (ולא hidden) כדי ש-position:sticky של הכותרת יעבוד */
   body{
     background:
       radial-gradient(1000px 620px at 90% -6%, #C9E0FF 0%, transparent 58%),
@@ -206,13 +208,20 @@
     padding:10px 12px;margin:8px 0 0;font-family:var(--font-mono);font-size:11.5px;color:#6B2216;
     white-space:pre-wrap;word-break:break-word;max-height:160px;overflow-y:auto;
   }
-  .layout{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start;min-width:0;}
+  .layout{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;min-width:0;}
   @media (max-width:1100px){ .layout{grid-template-columns:1fr;} }
   .main-col{min-width:0;}
 
   /* ============ כרטיסי KPI ============ */
   .kpi-grid{
     display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:16px;
+  }
+  @media (min-width:1301px){ #kpiGrid{grid-template-columns:repeat(4,1fr);} }
+  /* 7 כרטיסים: 4 בשורה הראשונה ו-3 רחבים בשנייה, בלי חור בסוף */
+  @media (min-width:1301px){
+    #kpiGrid:has(.kpi:nth-child(7):last-child){grid-template-columns:repeat(12,1fr);}
+    #kpiGrid:has(.kpi:nth-child(7):last-child) .kpi{grid-column:span 3;}
+    #kpiGrid:has(.kpi:nth-child(7):last-child) .kpi:nth-child(n+5){grid-column:span 4;}
   }
   @media (max-width:1300px){ .kpi-grid{grid-template-columns:repeat(3,1fr);} }
   @media (max-width:640px){ .kpi-grid{grid-template-columns:repeat(2,1fr);} }
@@ -405,6 +414,11 @@
   /* ============ כרטיסי תרשימים ============ */
   .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
   @media (max-width:900px){ .charts-grid{grid-template-columns:1fr;} }
+  .charts-grid.wide{grid-template-columns:1fr;gap:18px;}
+  .charts-grid.wide .chart-card{padding:18px 20px 16px;}
+  .charts-grid.wide .chart-card h3{font-size:16px;margin-bottom:6px;}
+  .chart-meta{font-size:12px;color:var(--text-dim);margin:0 0 10px;display:flex;flex-wrap:wrap;gap:4px 14px;}
+  .chart-meta b{color:var(--text-muted);font-weight:700;font-family:var(--font-mono);}
   .chart-card{
     background:var(--glass-bg);
     border:1px solid var(--glass-border);border-radius:16px;
@@ -797,6 +811,14 @@
   @keyframes pulseDot{ 0%{box-shadow:0 0 0 0 var(--accent-green-soft);} 70%{box-shadow:0 0 0 7px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
   @keyframes modalPop{ from{opacity:0; transform:translateY(16px) scale(.97);} to{opacity:1; transform:translateY(0) scale(1);} }
   @keyframes spin{ to{ transform:rotate(360deg); } }
+  #dataBusy{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}
+  body.busy-ui #dataBusy{display:flex;}
+  #dataBusy .box{display:flex;flex-direction:column;align-items:center;gap:14px;padding:26px 38px;border-radius:22px;background:var(--card-solid,#fff);box-shadow:0 18px 50px rgba(20,40,90,.22);font-weight:700;}
+  #dataBusy .ring{width:46px;height:46px;border-radius:50%;border:4px solid rgba(47,111,237,.2);border-top-color:#2F6FED;animation:spin .8s linear infinite;}
+  #dataBusy{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}
+  body.busy-ui #dataBusy{display:flex;}
+  #dataBusy .box{display:flex;flex-direction:column;align-items:center;gap:14px;padding:26px 38px;border-radius:22px;background:var(--card-solid,#fff);box-shadow:0 18px 50px rgba(20,40,90,.22);font-weight:700;}
+  #dataBusy .ring{width:46px;height:46px;border-radius:50%;border:4px solid rgba(47,111,237,.2);border-top-color:#2F6FED;animation:spin .8s linear infinite;}
 
   .wrap > *{ animation:fadeInUp .55s cubic-bezier(.2,.7,.3,1) both; }
   .wrap > *:nth-child(1){animation-delay:.02s;}
@@ -952,7 +974,7 @@
 
   /* ============ v3: דירוג רווחיות ============ */
   .rank-card h3{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-  .rank-tabs{display:flex;gap:4px;}
+  .rank-tabs{display:flex;gap:4px;flex-wrap:wrap;}
   .rank-tabs button{font-family:inherit;font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--glass-bg);color:var(--text-muted);cursor:pointer;}
   .rank-tabs button.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;font-weight:700;}
   .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;margin-top:6px;}
@@ -1006,6 +1028,253 @@
   }
 
 
+  .vat-bar{display:flex;align-items:center;gap:12px;margin:0 0 12px;flex-wrap:wrap;}
+  .vat-title{font-weight:700;font-size:13px;color:var(--text-muted);}
+  .vat-switch{position:relative;display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;min-width:78px;height:32px;padding:0 12px 0 34px;border-radius:999px;
+    border:1px solid var(--glass-border);background:var(--surface-2);color:var(--text-muted);font-weight:800;font-size:12px;letter-spacing:.5px;cursor:pointer;transition:background .2s,color .2s,border-color .2s;}
+  .vat-switch .vat-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s;}
+  .vat-switch.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;padding:0 34px 0 12px;justify-content:flex-end;}
+  .vat-switch.on .vat-knob{transform:translateX(46px);}
+  .vat-switch:focus-visible{outline:2px solid var(--accent-blue);outline-offset:2px;}
+  .xv-switch{position:relative;display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;min-width:78px;height:32px;padding:0 12px 0 34px;border-radius:999px;
+    border:1px solid var(--glass-border);background:var(--surface-2);color:var(--text-muted);font-weight:800;font-size:12px;letter-spacing:.5px;cursor:pointer;transition:background .2s,color .2s,border-color .2s;}
+  .xv-switch .vat-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s;}
+  .xv-switch.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;padding:0 34px 0 12px;justify-content:flex-end;}
+  .xv-switch.on .vat-knob{transform:translateX(46px);}
+  .xv-switch:focus-visible{outline:2px solid var(--accent-blue);outline-offset:2px;}
+  .vat-note{font-size:12px;color:var(--text-dim);}
+  .emp-filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;}
+  .emp-filter-btn{padding:7px 16px;font-size:13px;border-radius:999px;}
+  .emp-filter-btn.on{background:var(--accent-blue);color:#fff;border-color:var(--accent-blue);box-shadow:0 4px 12px rgba(47,111,237,.35);}
+  /* ============ הדף הראשי — אותה שפה עיצובית כמו עמוד הגרפים ============ */
+  .cv-ic.sm{width:36px;height:36px;border-radius:12px;box-shadow:0 6px 14px color-mix(in srgb, var(--c) 40%, transparent);}
+  .cv-ic.sm svg{width:18px;height:18px;}
+  .mv-hero{margin-bottom:20px;}
+  .mv-chips{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .mv-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:12.5px;color:#fff;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    animation:cvPop .5s cubic-bezier(.2,.9,.3,1) backwards;animation-delay:calc(var(--i,0)*60ms);}
+  .mv-chip b{font-weight:600;color:#9CC4FF;}
+  .mv-chip i{font-style:normal;font-family:var(--font-mono);font-weight:700;}
+  #mainView .kpi{border-radius:20px;padding:16px 18px 15px;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--kpi-accent) 11%, transparent) 0%, transparent 55%), var(--glass-bg);
+    animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
+  #mainView .kpi:nth-child(2){animation-delay:.05s;} #mainView .kpi:nth-child(3){animation-delay:.1s;} #mainView .kpi:nth-child(4){animation-delay:.15s;}
+  #mainView .kpi:nth-child(5){animation-delay:.2s;} #mainView .kpi:nth-child(6){animation-delay:.25s;} #mainView .kpi:nth-child(7){animation-delay:.3s;}
+  #mainView .kpi::before{width:5px;background:linear-gradient(180deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 40%, transparent));}
+  #mainView .kpi-icon{width:42px;height:42px;border-radius:14px;color:#fff;
+    background:linear-gradient(135deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 55%, #000));
+    box-shadow:0 8px 18px color-mix(in srgb, var(--kpi-accent) 42%, transparent);}
+  #mainView .kpi-icon svg{width:21px;height:21px;}
+  #mainView .kpi .label{font-size:12.5px;margin-bottom:6px;}
+  #mainView .kpi .value{font-size:27px;letter-spacing:-.3px;}
+  #mainView .kpi .sub{font-size:11.5px;}
+  #mainView .bridge-card, #mainView .table-card, #mainView .chart-card{border-radius:22px;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--c, var(--accent-blue)) 6%, transparent) 0%, transparent 38%), var(--glass-bg);
+    animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
+  #mainView .bridge-card{--c:#2F6FED;padding:20px 24px 18px;}
+  #mainView .table-card{--c:#6C4CE0;padding:18px 22px;}
+  #mainView .chart-card{padding:20px 24px 18px;}
+  #mainView .rank-card{--c:#0E9488;}
+  #mainView .bridge-card::before, #mainView .table-card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;
+    background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));opacity:.95;z-index:1;}
+  #mainView .table-card{position:relative;}
+  #mainView .bridge-card h2{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:800;margin:0 0 4px;}
+  #mainView .bridge-card .desc{margin:0 0 18px;padding-inline-start:48px;}
+  #mainView .chart-card h3, #mainView .table-card h3{font-size:17px;font-weight:800;}
+  #mainView .table-card h3.cv-h3-main{display:flex;align-items:center;gap:12px;}
+  #mainView .chart-card > h3{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+  #mainView .section-label{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text);margin:30px 4px 16px;gap:12px;}
+  #mainView .section-label .dot{width:12px;height:12px;border-radius:4px;box-shadow:0 0 0 4px color-mix(in srgb, currentColor 0%, transparent);}
+  #mainView .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--glass-border),transparent);}
+  @media (max-width:640px){ #mainView .kpi .value{font-size:22px;} #mainView .bridge-card .desc{padding-inline-start:0;} }
+  /* ============ עמוד הגרפים ============ */
+  .cv-hero{position:relative;overflow:hidden;border-radius:24px;padding:26px 28px 22px;margin-bottom:18px;color:#fff;
+    background:radial-gradient(900px 300px at 85% -20%, rgba(94,170,255,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(108,76,224,.5), transparent 60%), linear-gradient(120deg,#0B1B4D 0%,#14307E 55%,#1B3FA3 100%);
+    box-shadow:0 24px 50px rgba(10,20,54,.30), inset 0 1px 0 rgba(255,255,255,.12);}
+  .cv-hero::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.10) 1px, transparent 1.4px);background-size:22px 22px;mask-image:linear-gradient(120deg,#000 0%,transparent 70%);-webkit-mask-image:linear-gradient(120deg,#000 0%,transparent 70%);}
+  .cv-hero-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+  .cv-eyebrow{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:1.4px;color:#9CC4FF;margin-bottom:6px;}
+  .cv-hero h2{font-family:var(--font-display);font-size:30px;line-height:1.1;margin:0 0 8px;font-weight:800;color:#fff;}
+  .cv-hero p{margin:0;font-size:13.5px;color:rgba(255,255,255,.78);max-width:560px;}
+  .cv-hero .vat-bar{margin:0;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);}
+  .cv-hero .vat-title{color:#fff;}
+  .cv-hero .vat-note{color:rgba(255,255,255,.72);}
+  .cv-stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px;}
+  .cv-stat{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    animation:cvPop .55s cubic-bezier(.2,.9,.3,1) backwards;animation-delay:calc(var(--i,0)*70ms);}
+  .cv-stat span{display:block;font-size:11.5px;color:rgba(255,255,255,.72);margin-bottom:5px;font-weight:600;}
+  .cv-stat b{display:block;font-family:var(--font-mono);font-size:21px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+  .cv-stat small{display:block;margin-top:3px;font-size:11.5px;color:#9CC4FF;font-weight:600;}
+  @keyframes cvPop{from{opacity:0;transform:translateY(14px) scale(.96);}to{opacity:1;transform:none;}}
+  .cv-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:6px;border-radius:999px;background:var(--glass-bg);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);width:fit-content;max-width:100%;}
+  .cv-tabs button{border:none;background:transparent;color:var(--text-muted);font-weight:700;font-size:13px;padding:8px 18px;border-radius:999px;transition:all .2s;}
+  .cv-tabs button:hover{background:var(--accent-blue-soft);color:var(--accent-blue);}
+  .cv-tabs button.on{background:linear-gradient(135deg,var(--accent-blue),var(--accent-indigo));color:#fff;box-shadow:0 6px 16px rgba(47,111,237,.38);}
+  .cv-grid{gap:20px;}
+  .cv-grid [hidden]{display:none !important;}
+  .cv-group-head{display:flex;align-items:baseline;gap:12px;margin:10px 4px -4px;}
+  .cv-group-head b{font-family:var(--font-display);font-size:19px;font-weight:800;}
+  .cv-group-head span{font-size:12.5px;color:var(--text-dim);}
+  .cv-group-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--glass-border),transparent);align-self:center;}
+  .cv-grid .chart-card[data-group="profit"]{order:1;} .cv-grid .chart-card[data-group="salary"]{order:21;}
+  .cv-grid .chart-card[data-group="clients"]{order:31;} .cv-grid .chart-card[data-group="budget"]{order:41;}
+  .charts-grid.cv-grid .chart-card{padding:20px 24px 18px;border-radius:22px;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--c) 7%, transparent) 0%, transparent 38%), var(--glass-bg);
+    animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
+  #chartsView:not([hidden]) .cv-grid .chart-card:nth-of-type(2){animation-delay:.05s;} #chartsView:not([hidden]) .cv-grid .chart-card:nth-of-type(3){animation-delay:.1s;}
+  #chartsView:not([hidden]) .cv-grid .chart-card:nth-of-type(4){animation-delay:.15s;} #chartsView:not([hidden]) .cv-grid .chart-card:nth-of-type(5){animation-delay:.2s;}
+  @keyframes cvCard{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+  .cv-grid .chart-card::before{width:5px;background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));opacity:.95;}
+  .cv-h3{display:flex !important;align-items:center;justify-content:space-between;gap:12px;margin:0 0 8px !important;}
+  .cv-h3-main{display:flex;align-items:center;gap:14px;min-width:0;}
+  .cv-ic{width:44px;height:44px;border-radius:14px;flex:none;display:inline-flex;align-items:center;justify-content:center;color:#fff;
+    background:linear-gradient(135deg,var(--c),color-mix(in srgb, var(--c) 55%, #000));box-shadow:0 8px 18px color-mix(in srgb, var(--c) 45%, transparent);}
+  .cv-ic svg{width:22px;height:22px;}
+  .cv-title{display:flex;flex-direction:column;font-family:var(--font-display);font-size:17px;font-weight:800;line-height:1.25;}
+  .cv-title small{font-family:var(--font-body);font-size:12.5px;font-weight:500;color:var(--text-dim);margin-top:2px;}
+  .cv-grid .chart-meta{margin:10px 0 10px;padding:8px 12px;border-radius:12px;background:color-mix(in srgb, var(--c) 8%, transparent);border:1px dashed color-mix(in srgb, var(--c) 30%, transparent);}
+  @media (max-width:900px){ .cv-stats{grid-template-columns:repeat(2,1fr);} .cv-hero h2{font-size:24px;} .cv-hero{padding:20px 18px;} }
+  @media (max-width:520px){ .cv-title{font-size:15px;} .cv-ic{width:38px;height:38px;} .cv-tabs button{padding:7px 12px;font-size:12.5px;} }
+  /* ============ סרגל עליון קבוע + ניווט + פופ-אפ סינון ============ */
+  header.top{position:sticky;top:10px;z-index:90;transition:padding .25s ease, border-radius .25s ease, box-shadow .25s ease;}
+  header.top .top-left > div:last-child, header.top .eyebrow{transition:opacity .2s ease;}
+  header.top.compact{padding:9px 20px;border-radius:16px;box-shadow:0 12px 30px rgba(10,20,54,.38), inset 0 1px 0 rgba(255,255,255,.08);}
+  .top h1{white-space:nowrap;}
+  .top-left{flex:none;}
+  header.top .top-right{flex:1;min-width:0;justify-content:flex-end;flex-wrap:wrap;}
+  header.top.compact .eyebrow{display:none;}
+  header.top.compact .btn{padding:6px 11px;font-size:12px;}
+  header.top.compact #fullscreenLabel{display:none;}
+  header.top.compact .view-tabs button{padding:5px 13px;font-size:12.5px;}
+  header.top.compact h1{font-size:17px;}
+  header.top.compact .brand-mark{width:48px !important;height:45px !important;}
+  .view-tabs{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);}
+  .view-tabs button{display:inline-flex;align-items:center;gap:6px;border:none;background:transparent;color:rgba(255,255,255,.85);font-weight:700;font-size:13px;padding:7px 16px;border-radius:999px;transition:background .2s, color .2s, box-shadow .2s;}
+  .view-tabs button .icon{width:15px;height:15px;}
+  .view-tabs button:hover{background:rgba(255,255,255,.14);}
+  .view-tabs button.on{background:#fff;color:var(--accent-blue-deep);box-shadow:0 2px 10px rgba(0,0,0,.25);}
+  .filter-badge{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 5px;margin-inline-start:6px;border-radius:999px;background:var(--accent-red,#D65A45);color:#fff;font-size:11px;font-weight:800;box-shadow:0 0 0 2px rgba(255,255,255,.35);}
+  .filter-badge[hidden]{display:none;}
+  #chartsView[hidden], #mainView[hidden], #planningView[hidden], #expView[hidden], #catView[hidden]{display:none !important;}
+  #chartsView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
+  #mainView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
+  /* ============ עמוד התכנון ============ */
+  #planningView[hidden]{display:none !important;}
+  #planningView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
+  .cv-hero{--hero:1;}
+  #planningView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(14,148,136,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(47,111,237,.5), transparent 60%), linear-gradient(120deg,#0B1B44,#14306E);}
+  #planningView .kpi{border-radius:20px;padding:16px 18px 15px;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--kpi-accent) 11%, transparent) 0%, transparent 55%), var(--glass-bg);
+    animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
+  #planningView .kpi:nth-child(2){animation-delay:.05s;} #planningView .kpi:nth-child(3){animation-delay:.1s;} #planningView .kpi:nth-child(4){animation-delay:.15s;} #planningView .kpi:nth-child(5){animation-delay:.2s;} #planningView .kpi:nth-child(6){animation-delay:.25s;}
+  #planningView .kpi::before{width:5px;background:linear-gradient(180deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 40%, transparent));}
+  #planningView .kpi-icon{width:42px;height:42px;border-radius:14px;color:#fff;}
+  #planningView .kpi-icon svg{width:21px;height:21px;}
+  #planningView .kpi .label{font-size:12.5px;margin-bottom:6px;}
+  #planningView .kpi .value{font-size:27px;letter-spacing:-.3px;}
+  #planningView .table-card{position:relative;border-radius:22px;padding:18px 22px;--c:#6C4CE0;}
+  #planningView .table-card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;border-radius:22px 0 0 22px;background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));}
+  #planningView .table-card h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:12px;}
+  #planningView .cv-ic.sm{width:34px;height:34px;border-radius:11px;}
+  #planningView .cv-ic.sm svg{width:18px;height:18px;}
+  #planningView .cv-group-head.plain{margin:10px 4px 10px;}
+  @media (max-width:640px){ #planningView .kpi .value{font-size:22px;} }
+  /* ============ עמוד התכנון ============ */
+  #expView[hidden]{display:none !important;}
+  #expView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
+  .cv-hero{--hero:1;}
+  #expView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(14,148,136,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(47,111,237,.5), transparent 60%), linear-gradient(120deg,#0B1B44,#14306E);}
+  #expView .kpi{border-radius:20px;padding:16px 18px 15px;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--kpi-accent) 11%, transparent) 0%, transparent 55%), var(--glass-bg);
+    animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
+  #expView .kpi:nth-child(2){animation-delay:.05s;} #expView .kpi:nth-child(3){animation-delay:.1s;} #expView .kpi:nth-child(4){animation-delay:.15s;} #expView .kpi:nth-child(5){animation-delay:.2s;} #expView .kpi:nth-child(6){animation-delay:.25s;}
+  #expView .kpi::before{width:5px;background:linear-gradient(180deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 40%, transparent));}
+  #expView .kpi-icon{width:42px;height:42px;border-radius:14px;color:#fff;}
+  #expView .kpi-icon svg{width:21px;height:21px;}
+  #expView .kpi .label{font-size:12.5px;margin-bottom:6px;}
+  #expView .kpi .value{font-size:27px;letter-spacing:-.3px;}
+  #expView .table-card{position:relative;border-radius:22px;padding:18px 22px;--c:#6C4CE0;}
+  #expView .table-card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;border-radius:22px 0 0 22px;background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));}
+  #expView .table-card h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:12px;}
+  #expView .cv-ic.sm{width:34px;height:34px;border-radius:11px;}
+  #expView .cv-ic.sm svg{width:18px;height:18px;}
+  #expView .cv-group-head.plain{margin:10px 4px 10px;}
+  @media (max-width:640px){ #expView .kpi .value{font-size:22px;} }
+  /* ============ עמוד התכנון ============ */
+  #catView[hidden]{display:none !important;}
+  #catView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
+  .cv-hero{--hero:1;}
+  #catView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(14,148,136,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(47,111,237,.5), transparent 60%), linear-gradient(120deg,#0B1B44,#14306E);}
+  #catView .kpi{border-radius:20px;padding:16px 18px 15px;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--kpi-accent) 11%, transparent) 0%, transparent 55%), var(--glass-bg);
+    animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
+  #catView .kpi:nth-child(2){animation-delay:.05s;} #catView .kpi:nth-child(3){animation-delay:.1s;} #catView .kpi:nth-child(4){animation-delay:.15s;} #catView .kpi:nth-child(5){animation-delay:.2s;} #catView .kpi:nth-child(6){animation-delay:.25s;}
+  #catView .kpi::before{width:5px;background:linear-gradient(180deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 40%, transparent));}
+  #catView .kpi-icon{width:42px;height:42px;border-radius:14px;color:#fff;}
+  #catView .kpi-icon svg{width:21px;height:21px;}
+  #catView .kpi .label{font-size:12.5px;margin-bottom:6px;}
+  #catView .kpi .value{font-size:27px;letter-spacing:-.3px;}
+  #catView .table-card{position:relative;border-radius:22px;padding:18px 22px;--c:#6C4CE0;}
+  #catView .table-card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;border-radius:22px 0 0 22px;background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));}
+  #catView .table-card h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:12px;}
+  #catView .cv-ic.sm{width:34px;height:34px;border-radius:11px;}
+  #catView .cv-ic.sm svg{width:18px;height:18px;}
+  #catView .cv-group-head.plain{margin:10px 4px 10px;}
+  @media (max-width:640px){ #catView .kpi .value{font-size:22px;} }
+  #expGrid .chart-card[data-group="a"], #catGrid .chart-card[data-group="a"]{order:1;} #expGrid .chart-card[data-group="b"], #catGrid .chart-card[data-group="b"]{order:21;}
+  #expView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(214,90,69,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(108,76,224,.45), transparent 60%), linear-gradient(120deg,#2A1230,#4A1F3D);}
+  #catView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(108,76,224,.5), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(30,155,215,.45), transparent 60%), linear-gradient(120deg,#1A1646,#2C2470);}
+  .cv-hero .xv-switch{} .cv-hero .vat-bar .xv-switch{flex:none;}
+  .cv-tabs-mini{display:inline-flex;gap:6px;} .cv-tabs-mini .btn{padding:4px 12px;font-size:12px;} .cv-tabs-mini .btn.on{background:var(--accent-blue);color:#fff;border-color:var(--accent-blue);}
+  .pct-cell{display:flex;align-items:center;gap:10px;min-width:150px;} .pct-cell b{font-family:var(--font-mono);font-size:12.5px;min-width:48px;}
+  .pct-cell i{flex:1;height:8px;border-radius:99px;background:color-mix(in srgb,var(--c,#6C4CE0) 14%,transparent);overflow:hidden;} .pct-cell i u{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--c,#6C4CE0),color-mix(in srgb,var(--c,#6C4CE0) 55%,#fff));}
+  @keyframes viewIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  :root{--card-solid:#FFFFFF;}
+  html[data-theme="dark"]{--card-solid:#131E33;}
+  .filters-overlay{position:fixed;inset:0;z-index:300;display:none;align-items:flex-start;justify-content:center;padding:92px 16px 24px;overflow:auto;
+    background:rgba(10,20,54,.0);opacity:0;transition:opacity .28s ease, background .35s ease;}
+  .filters-overlay.show{display:flex;}
+  .filters-overlay.open{opacity:1;background:rgba(10,20,54,.46);backdrop-filter:blur(8px) saturate(140%);-webkit-backdrop-filter:blur(8px) saturate(140%);}
+  .filters-pop{position:relative;width:min(780px,100%);background:var(--card-solid);border:1px solid var(--glass-border);border-radius:22px;
+    box-shadow:0 40px 90px rgba(5,12,35,.5), 0 0 0 1px rgba(47,111,237,.18);padding:22px 24px 20px;
+    transform:translateY(-26px) scale(.82);opacity:0;filter:blur(8px);
+    transition:transform .5s cubic-bezier(.2,1.15,.3,1), opacity .3s ease, filter .35s ease;}
+  .filters-pop::before{content:'';position:absolute;inset:0 0 auto 0;height:4px;border-radius:22px 22px 0 0;background:linear-gradient(90deg,var(--accent-sky),var(--accent-blue),var(--accent-indigo));}
+  .filters-overlay.open .filters-pop{transform:none;opacity:1;filter:none;}
+  .fp-head{display:flex;align-items:center;justify-content:space-between;margin:2px 0 16px;}
+  .fp-head h3{display:flex;align-items:center;gap:10px;margin:0;font-family:var(--font-display);font-size:18px;}
+  .fp-head h3 .icon{width:20px;height:20px;color:var(--accent-blue);}
+  .fp-close{width:34px;height:34px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass-bg-soft);color:var(--text-muted);font-size:15px;transition:transform .2s, background .2s;}
+  .fp-close:hover{transform:rotate(90deg);background:var(--accent-blue-soft);}
+  .fp-body{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;}
+  .fp-body .field{margin-bottom:8px;}
+  .fp-body .fp-dates{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;}
+  .filters-overlay.open .fp-body .field{animation:fpField .5s cubic-bezier(.2,.9,.3,1) backwards;animation-delay:calc(var(--i, 0) * 50ms + 140ms);}
+  @keyframes fpField{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  /* שדה שהרשימה שלו פתוחה עולה מעל כל השדות שאחריו (אחרת הרשימה "נקברת" מתחת לשדות הבאים) */
+  .filters-pop .field{position:relative;}
+  .filters-pop .field:has(.ms.open){z-index:60;}
+  .filters-pop .ms.open{position:relative;z-index:80;}
+  .filters-pop .ms-panel{background:var(--card-solid);border:1px solid var(--glass-border);z-index:85;box-shadow:0 22px 50px rgba(10,20,54,.32);backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .filters-pop .mp-panel{min-width:300px;}
+  .filters-pop .mp-nav{width:36px;height:36px;font-size:20px;line-height:1;background:var(--glass-bg-soft);}
+  .filters-pop .mp-year{font-size:19px;}
+  .filters-pop .mp-m{padding:11px 2px;font-size:13.5px;background:var(--glass-bg-soft);}
+  .filters-pop .mp-foot button{font-size:12.5px;padding:5px 9px;}
+  .fp-foot{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:12px;padding-top:16px;border-top:1px solid var(--glass-border);}
+  .fp-apply{background:linear-gradient(135deg,var(--accent-blue),var(--accent-indigo));color:#fff;border-color:transparent;font-weight:800;padding:10px 26px;box-shadow:0 8px 20px rgba(47,111,237,.4);}
+  .fp-apply:hover{filter:brightness(1.08);transform:translateY(-1px);}
+  @media (max-width:640px){
+    .filters-overlay{padding:70px 10px 14px;}
+    .fp-body, .fp-body .fp-dates{grid-template-columns:1fr;}
+    .filters-pop{padding:18px 16px 16px;}
+    header.top{top:6px;}
+    header.top .top-right{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+    header.top .top-right > *{flex:none;}
+    header.top.compact .top-left > div:last-child{display:none;}
+  }
   /* ============ לוגו עגול (יחס הלוגו 243:228, העיגול מתאים לו בדיוק) ============ */
   :root{ --logo:url("data:image/webp;base64,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"); }
   .brand-mark, .login-card .brand-mark, .loading-mark{
@@ -1077,7 +1346,7 @@
    כבר בזמן שהדפדפן עדיין טוען וממיר את שאר הדף - כך הטעינה מרגישה מהירה יותר.
    כדי לחבר את הלוח לקובץ ה-Google Sheets שלכם, הדביקו כאן את כתובת ה-Web App
    שקיבלתם לאחר פריסת הקובץ Code.gs (ראו קובץ ההוראות המצורף). */
-window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbxUhMJl8FK8JvUhEC-8E-7RlXE5uxKs5Hsep5ojjTsiuglmHYOcDPacliRk93r3bU84/exec"; // <-- הדביקו כאן את כתובת ה-Web App
+window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbxC4Qej-Jx3nUAoK81s9VFQO38vVL-GNaL8aNxGPHxpFB07YVIVdUQH873w3Mcqy3Fc/exec"; // <-- הדביקו כאן את כתובת ה-Web App
 window.__DASHBOARD_PREFETCH__ = (function(){
   if(!window.__DASHBOARD_API_URL__) return null;
   var token = '';
@@ -1135,6 +1404,25 @@ window.__DASHBOARD_PREFETCH__ = (function(){
       </div>
     </div>
     <div class="top-right">
+      <nav class="view-tabs" id="viewTabs" role="tablist" aria-label="תצוגה">
+        <button type="button" role="tab" id="tabMain" class="on" aria-selected="true">ראשי</button>
+        <button type="button" role="tab" id="tabCharts" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>גרפים
+        </button>
+        <button type="button" role="tab" id="tabPlanning" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>תכנון
+        </button>
+        <button type="button" role="tab" id="tabExp" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2V2z"/><path d="M9 8h6M9 12h6"/></svg>הוצאות
+        </button>
+        <button type="button" role="tab" id="tabCat" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>פירוט הוצאות
+        </button>
+      </nav>
+      <button class="btn" id="openFiltersBtn" type="button" aria-haspopup="dialog" aria-controls="filtersOverlay">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>
+        סינון <span class="filter-badge" id="filterBadge" hidden>0</span>
+      </button>
       <div class="user-pill" id="userPill" style="display:none;">
         <b id="userPillName"></b>
         <span class="role-tag" id="userPillRole"></span>
@@ -1158,10 +1446,6 @@ window.__DASHBOARD_PREFETCH__ = (function(){
       <button class="btn ghost" id="fullscreenBtn" title="מסך מלא (המסך לא ייכבה כל עוד המצב פעיל)">
         <svg class="icon" id="fullscreenIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
         <span id="fullscreenLabel">מסך מלא</span>
-      </button>
-      <button class="btn" id="viewPlanningBtn">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        צפייה בתכנון
       </button>
       <button class="btn" id="mobilePreviewBtn" style="display:none;" title="תצוגה מקדימה במסך אייפון 15">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
@@ -1193,11 +1477,30 @@ window.__DASHBOARD_PREFETCH__ = (function(){
   <div class="alert-strip" id="alertStrip" style="display:none;" role="status"></div>
   <div class="empty-state" id="emptyState" style="display:none;"></div>
 
-  <div class="section-label"><span class="dot" style="background:var(--accent-blue);"></span>סקירה כללית</div>
+  <div id="mainView">
+  <div class="cv-hero mv-hero">
+    <div class="cv-hero-top">
+      <div class="cv-hero-text">
+        <span class="cv-eyebrow">סקירה כללית</span>
+        <h2>הלוח העסקי במבט אחד</h2>
+        <p>חיובים, שכר ורווחיות לפי הסינון הפעיל. לחיצה על כרטיס פותחת פירוט מלא.</p>
+      </div>
+      <div class="cv-hero-tools">
+        <div class="vat-bar" id="vatBar">
+    <span class="vat-title">מע״מ</span>
+    <button type="button" class="vat-switch on" id="vatToggle" role="switch" aria-checked="true" aria-label="הצגת סכומים כולל או ללא מע״מ">
+      <span class="vat-knob"></span><span class="vat-state" id="vatStateText">ON</span>
+    </button>
+    <span class="vat-note" id="vatNote">הסכומים מוצגים כולל מע״מ</span>
+  </div>
+      </div>
+    </div>
+    <div class="mv-chips" id="mvChips"></div>
+  </div>
   <div class="kpi-grid" id="kpiGrid"></div>
 
   <div class="bridge-card">
-    <h2>מסלול המרווח — מחיוב הלקוח לרווח הגולמי</h2>
+    <h2><span class="cv-ic sm" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span><span>מסלול המרווח — מחיוב הלקוח לרווח הגולמי</span></h2>
     <div class="desc">סכימת כל הרשומות המסוננות, שלב אחר שלב</div>
     <div id="bridgeContainer"></div>
   </div>
@@ -1209,7 +1512,7 @@ window.__DASHBOARD_PREFETCH__ = (function(){
 
       <div class="chart-card" style="margin-bottom:16px;">
         <h3 style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span><span class="chart-dot" style="background:var(--accent-blue);"></span><span id="trendTitle">מגמת רווח והפסד לפי חודשים</span></span>
+          <span class="cv-h3-main"><span class="cv-ic sm" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></span><span id="trendTitle">מגמת רווח והפסד לפי חודשים</span></span>
           <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <span class="trend-toggle" role="group" aria-label="תצוגת מגמה">
               <button class="btn ghost on" id="trendMonthBtn" style="padding:4px 10px;font-size:11px;">לפי חודשים</button>
@@ -1223,41 +1526,23 @@ window.__DASHBOARD_PREFETCH__ = (function(){
 
       <div class="chart-card rank-card" style="margin-bottom:16px;">
         <h3>
-          <span><span class="chart-dot" style="background:var(--accent-green);"></span>דירוג רווחיות — מי מושך את המספרים</span>
+          <span class="cv-h3-main"><span class="cv-ic sm" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><span>דירוג רווחיות — מי מושך את המספרים</span></span>
           <span class="rank-tabs" id="rankTabs" role="group" aria-label="חלוקה">
             <button type="button" data-dim="employee">עובדים</button>
+            <button type="button" data-dim="client">לקוחות</button>
             <button type="button" data-dim="endClient">לקוחות קצה</button>
+            <button type="button" data-dim="approver">מאשרים</button>
             <button type="button" data-dim="company">חברות</button>
           </span>
         </h3>
         <div class="rank-grid" id="rankGrid"></div>
       </div>
 
-      <div class="charts-grid">
-        <div class="chart-card"><h3><span class="chart-dot" style="background:var(--accent-green);"></span>רווח גולמי לפי עובד</h3><div class="canvas-wrap"><canvas id="chartProfitByEmployee"></canvas></div></div>
-        <div class="chart-card"><h3><span class="chart-dot" style="background:var(--accent-sky);"></span>אחוז רווח לפי עובד</h3><div class="canvas-wrap"><canvas id="chartMarginByEmployee"></canvas></div></div>
-        <div class="chart-card"><h3><span class="chart-dot" style="background:var(--accent-red);"></span>סה״כ תשלום לעובדים לפי שם</h3><div class="canvas-wrap"><canvas id="chartPaymentByEmployee"></canvas></div></div>
-        <div class="chart-card"><h3><span class="chart-dot" style="background:var(--accent-blue);"></span>סה״כ חיובי לקוח לפי לקוח קצה</h3><div class="canvas-wrap"><canvas id="chartBillingByClient"></canvas></div></div>
-        <div class="chart-card"><h3><span class="chart-dot" style="background:var(--accent-sky);"></span>אחוז רווח לפי לקוח קצה</h3><div class="canvas-wrap"><canvas id="chartMarginByClient"></canvas></div></div>
-        <div class="chart-card">
-          <h3 style="display:flex;align-items:center;justify-content:space-between;">
-            <span><span class="chart-dot" style="background:var(--accent-indigo);"></span>סה״כ מסגרת לפי לקוח קצה</span>
-            <span style="display:flex;gap:6px;">
-              <button class="btn ghost" id="budgetMonthlyBtn" style="padding:4px 10px;font-size:11px;">חודשי</button>
-              <button class="btn ghost" id="budgetAnnualBtn" style="padding:4px 10px;font-size:11px;">שנתי</button>
-            </span>
-          </h3>
-          <div class="canvas-wrap"><canvas id="chartBudgetByClient"></canvas></div>
-        </div>
-        <div class="chart-card"><h3><span class="chart-dot" style="background:var(--accent-indigo);"></span>סה״כ מסגרת לפי מאשר</h3><div class="canvas-wrap"><canvas id="chartBudgetByApprover"></canvas></div></div>
-        <div class="chart-card"><h3><span class="chart-dot" style="background:var(--accent-green);"></span>רווח גולמי לפי חברה מעסיקה</h3><div class="canvas-wrap"><canvas id="chartProfitByCompany"></canvas></div></div>
-      </div>
-
       <div class="section-label"><span class="dot" style="background:var(--accent-indigo);"></span>נתונים מפורטים</div>
 
       <div class="table-card">
         <div class="head-row">
-          <h3>תכנון מול ביצוע — לפי עובד</h3>
+          <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span>תכנון מול ביצוע — לפי עובד</span></h3>
         </div>
         <div class="table-scroll grid-scroll">
           <table id="planningTable">
@@ -1285,7 +1570,7 @@ window.__DASHBOARD_PREFETCH__ = (function(){
 
       <div class="table-card">
         <div class="head-row">
-          <h3>כל הרשומות — ירידה לפרטים</h3>
+          <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span>כל הרשומות — ירידה לפרטים</span></h3>
           <input class="search-box" id="searchBox" placeholder="חיפוש חופשי (עובד, לקוח, חברה...)">
         </div>
         <div class="table-scroll grid-scroll">
@@ -1296,12 +1581,14 @@ window.__DASHBOARD_PREFETCH__ = (function(){
                 <th data-key="year">שנה</th>
                 <th data-key="company">חברה</th>
                 <th data-key="tenderType">סוג מכרז</th>
+                <th data-key="client">לקוח</th>
                 <th data-key="endClient">לקוח קצה</th>
                 <th data-key="approver">מאשר</th>
                 <th data-key="employee">שם עובד</th>
+                <th data-key="empType">שכיר/עצמאי</th>
                 <th data-key="clientBilling" class="num">חיוב לקוח כולל מע״מ</th>
                 <th data-key="dealInvoice" class="num">חשבונית עסקה</th>
-                <th data-key="employeePayment" class="num">תשלום לעובד</th>
+                <th data-key="employeePayment" class="num" title="שכיר: כפול 1.18">שכר עבודה</th>
                 <th data-key="grossProfit" class="num">רווח גולמי</th>
                 <th data-key="marginPct" class="num">% רווח</th>
               </tr>
@@ -1319,23 +1606,251 @@ window.__DASHBOARD_PREFETCH__ = (function(){
 
     </div>
 
-    <aside class="filters">
-      <h3>סינון נתונים <button id="clearFilters">איפוס</button></h3>
-      <div class="field">
-        <div class="range-title">מחודש ושנה</div>
-        <div class="mp" id="fFromPicker" data-m="fFromMonth" data-y="fFromYear" style="margin-bottom:8px;"></div>
-        <div class="range-title">עד חודש ושנה</div>
-        <div class="mp" id="fToPicker" data-m="fToMonth" data-y="fToYear"></div>
-        <select id="fFromMonth" hidden></select><select id="fFromYear" hidden></select>
-        <select id="fToMonth" hidden></select><select id="fToYear" hidden></select>
-      </div>
-      <div class="field"><label>חברה מעסיקה</label><div id="fCompany"></div></div>
-      <div class="field"><label>לקוח קצה</label><div id="fEndClient"></div></div>
-      <div class="field"><label>מאשר</label><div id="fApprover"></div></div>
-      <div class="field"><label>שם עובד</label><div id="fEmployee"></div></div>
-      <div class="field"><label>סוג מכרז</label><div id="fTenderType"></div></div>
-    </aside>
+
   </div>
+
+  </div><!-- /mainView -->
+
+  <section id="chartsView" hidden aria-label="גרפים">
+    <div class="cv-hero">
+      <div class="cv-hero-top">
+        <div class="cv-hero-text">
+          <span class="cv-eyebrow">ניתוח חזותי</span>
+          <h2>מרכז הגרפים</h2>
+          <p>רווחיות, שכר, לקוחות ומסגרות — לפי הסינון הפעיל. לחיצה על עמודה פותחת פירוט.</p>
+        </div>
+        <div class="cv-hero-tools">
+          <div class="vat-bar">
+            <span class="vat-title">מע״מ</span>
+            <button type="button" class="vat-switch on" role="switch" aria-checked="true" aria-label="הצגת סכומים כולל או ללא מע״מ"><span class="vat-knob"></span><span class="vat-state">ON</span></button>
+            <span class="vat-note">הסכומים מוצגים כולל מע״מ</span>
+          </div>
+        </div>
+      </div>
+      <div class="cv-stats" id="cvStats"></div>
+    </div>
+    <div class="cv-tabs" id="cvTabs" role="tablist" aria-label="קבוצות גרפים">
+      <button type="button" class="on" data-group="all">הכל</button>
+      <button type="button" data-group="profit">רווחיות</button>
+      <button type="button" data-group="salary">שכר ועלויות</button>
+      <button type="button" data-group="clients">לקוחות</button>
+      <button type="button" data-group="budget">מסגרות</button>
+    </div>
+    <div class="charts-grid wide cv-grid" id="cvGrid">
+    <div class="cv-group-head" data-group="profit" style="order:0"><b>רווחיות</b><span>איפה נוצר הרווח</span></div>
+    <div class="cv-group-head" data-group="salary" style="order:20"><b>שכר ועלויות</b><span>כמה עולים העובדים</span></div>
+    <div class="cv-group-head" data-group="clients" style="order:30"><b>לקוחות</b><span>הכנסה ורווחיות לפי לקוח</span></div>
+    <div class="cv-group-head" data-group="budget" style="order:40"><b>מסגרות</b><span>תקציב לפי לקוח ומאשר</span></div>
+        <div class="chart-card" data-group="profit" style="--c:#0E9488;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></span><span class="cv-title">רווח גולמי לפי עובד<small>מי מייצר את הרווח הגבוה ביותר</small></span></span></h3><div class="canvas-wrap"><canvas id="chartProfitByEmployee"></canvas></div></div>
+        <div class="chart-card" data-group="profit" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M7.5 8a1.5 1.5 0 1 0 0-.01M16.5 17a1.5 1.5 0 1 0 0-.01"/></svg></span><span class="cv-title">אחוז רווח לפי עובד<small>איכות הרווח — כמה נשאר מכל שקל חיוב</small></span></span></h3><div class="canvas-wrap"><canvas id="chartMarginByEmployee"></canvas></div></div>
+        <div class="chart-card" data-group="salary" style="--c:#D65A45;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12H3zM3 11h18M16 15h2"/></svg></span><span class="cv-title">סה״כ שכר עבודה לפי שם<small>עלות העובדים (שכיר כולל תוספת מעסיק)</small></span></span></h3><div class="canvas-wrap"><canvas id="chartPaymentByEmployee"></canvas></div></div>
+        <div class="chart-card" data-group="clients" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11a4 4 0 1 0-8 0M4 21a8 8 0 0 1 16 0"/></svg></span><span class="cv-title">סה״כ חיובי לקוח לפי לקוח קצה<small>אילו לקוחות מביאים את ההכנסה</small></span></span></h3><div class="canvas-wrap"><canvas id="chartBillingByClient"></canvas></div></div>
+        <div class="chart-card" data-group="clients" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M7.5 8a1.5 1.5 0 1 0 0-.01M16.5 17a1.5 1.5 0 1 0 0-.01"/></svg></span><span class="cv-title">אחוז רווח לפי לקוח קצה<small>אילו לקוחות הכי רווחיים באחוזים</small></span></span></h3><div class="canvas-wrap"><canvas id="chartMarginByClient"></canvas></div></div>
+        <div class="chart-card" data-group="budget" style="--c:#6C4CE0;">
+          <h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3zM3 10h18M8 15h3"/></svg></span><span class="cv-title">סה״כ מסגרת לפי לקוח קצה<small>מסגרות התקציב שהוקצו</small></span></span><span style="display:flex;gap:6px;">
+              <button class="btn ghost" id="budgetMonthlyBtn" style="padding:4px 10px;font-size:11px;">חודשי</button>
+              <button class="btn ghost" id="budgetAnnualBtn" style="padding:4px 10px;font-size:11px;">שנתי</button>
+            </span>
+          </h3>
+          <div class="canvas-wrap"><canvas id="chartBudgetByClient"></canvas></div>
+        </div>
+        <div class="chart-card" data-group="budget" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span><span class="cv-title">סה״כ מסגרת לפי מאשר<small>מי מאשר את מירב המסגרות</small></span></span></h3><div class="canvas-wrap"><canvas id="chartBudgetByApprover"></canvas></div></div>
+        <div class="chart-card" data-group="profit" style="--c:#0E9488;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V8l8-5 8 5v13M9 21v-6h6v6"/></svg></span><span class="cv-title">רווח גולמי לפי חברה מעסיקה<small>התפלגות הרווח בין החברות</small></span></span></h3><div class="canvas-wrap"><canvas id="chartProfitByCompany"></canvas></div></div>
+      </div>
+  </section>
+
+  <section id="planningView" hidden aria-label="תכנון">
+    <div class="cv-hero">
+      <div class="cv-hero-top">
+        <div class="cv-hero-text">
+          <span class="cv-eyebrow">תכנון עתידי</span>
+          <h2>מרכז התכנון</h2>
+          <p>מסגרות, שכר מתוכנן ורווחיות צפויה — לפי הסינון הפעיל. לחיצה על עמודה מסננת את הטבלה.</p>
+        </div>
+        <div class="cv-hero-tools">
+                  </div>
+      </div>
+      <div class="cv-stats" id="pvStats"></div>
+    </div>
+    <div class="kpi-grid" id="planningKpiGrid" style="margin-bottom:18px;"></div>
+    <div class="charts-grid wide cv-grid" id="pvGrid">
+    <div class="cv-group-head" data-group="budget" style="order:0"><b>מסגרות</b><span>תקציב חודשי מתוכנן</span></div>
+        <div class="chart-card" data-group="budget" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">מסגרת חודשית לפי עובד<small>top 10 · לחיצה מסננת את הטבלה</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByEmployee"></canvas></div></div>
+        <div class="chart-card" data-group="budget" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">מסגרת חודשית לפי לקוח קצה<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByClient"></canvas></div></div>
+        <div class="chart-card" data-group="budget" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="cv-title">מסגרת חודשית לפי מאשר<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByApprover"></canvas></div></div>
+        <div class="chart-card" data-group="budget" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></span><span class="cv-title">מסגרת חודשית לפי חברה מעסיקה<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByCompany"></canvas></div></div>
+    <div class="cv-group-head" data-group="profit" style="order:20"><b>רווחיות</b><span>אחוז רווח צפוי</span></div>
+        <div class="chart-card" data-group="profit" style="--c:#0E9488;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg></span><span class="cv-title">אחוז רווח מתוכנן לפי עובד<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartMarginByEmployee"></canvas></div></div>
+    </div>
+    <div class="cv-group-head" style="margin:22px 4px 12px"><b>טבלת התכנון</b><span>כל הרשומות</span></div>
+    <div class="table-card" style="margin-bottom:0;">
+        <div class="head-row">
+          <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span id="planningModalSub">כל הרשומות בתכנון</span></h3>
+          <input class="search-box" id="planningSearchBox" placeholder="חיפוש (חברה, עובד, לקוח קצה...)">
+        </div>
+        <div class="table-scroll detail-table-wrap">
+          <table id="planningFullTable">
+            <thead>
+              <tr>
+                <th data-key="year">שנה</th>
+                <th data-key="company">חברה</th>
+                <th data-key="tenderType">סוג מכרז</th>
+                <th data-key="client">לקוח</th>
+                <th data-key="endClient">לקוח קצה</th>
+                <th data-key="approver">מאשר</th>
+                <th data-key="employee">שם עובד</th>
+                <th data-key="empType">שכיר/עצמאי</th>
+                <th data-key="status">סטטוס</th>
+                <th data-key="annualBudget" class="num">מסגרת שנתית</th>
+                <th data-key="monthlyBudget" class="num">מסגרת חודשית</th>
+                <th data-key="afterTax" class="num">אחרי מס כולל מע״מ</th>
+                <th data-key="employeePayment" class="num" title="שכיר: כפול 1.18">שכר עבודה</th>
+                <th data-key="remainder" class="num">יתרה</th>
+                <th data-key="profitPercent" class="num">אחוז רווח</th>
+              </tr>
+            </thead>
+            <tbody id="planningFullTbody"></tbody>
+          </table>
+        </div>
+      </div>
+  </section>
+
+  <section id="expView" hidden aria-label="הוצאות">
+    <div class="cv-hero">
+      <div class="cv-hero-top">
+        <div class="cv-hero-text">
+          <span class="cv-eyebrow">ניהול הוצאות</span>
+          <h2>מרכז ההוצאות</h2>
+          <p>הוצאות לפי חודש, שנה, ספק ותצורת תשלום — כולל או ללא מע״מ. כפתור הסינון למעלה מסנן לפי שנה, חודש, תצורת תשלום וספק.</p>
+        </div>
+        <div class="cv-hero-tools">
+          <div class="vat-bar">
+            <span class="vat-title">מע״מ</span>
+            <button type="button" class="xv-switch on" data-xk="exp" role="switch" aria-checked="true" aria-label="הצגת סכומים כולל או ללא מע״מ"><span class="vat-knob"></span><span class="vat-state">ON</span></button>
+            <span class="vat-note" data-xnote="exp">הסכומים מוצגים כולל מע״מ</span>
+          </div>
+        </div>
+      </div>
+      <div class="cv-stats" id="expStats"></div>
+    </div>
+    <div class="kpi-grid" id="expKpis" style="margin-bottom:18px;"></div>
+    <div class="charts-grid wide cv-grid" id="expGrid">
+    <div class="cv-group-head" style="order:0"><b>התפתחות</b><span>הוצאות לאורך זמן</span></div>
+      <div class="chart-card" data-group="a" style="--c:#D65A45;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="cv-title">הוצאות לפי תקופה<small><span id="expTrendSub">חודשי</span></small></span></span><span class="cv-tabs-mini"><button type="button" class="btn ghost on" data-xperiod="month">חודשי</button><button type="button" class="btn ghost" data-xperiod="year">שנתי</button></span></h3><div class="canvas-wrap"><canvas id="xChartTrend"></canvas></div></div>
+    <div class="cv-group-head" style="order:20"><b>פילוח</b><span>לפי תצורת תשלום וספק</span></div>
+      <div class="chart-card" data-group="b" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span class="cv-title">לפי תצורת תשלום<small>סה״כ הוצאה</small></span></span></h3><div class="canvas-wrap"><canvas id="xChartPay"></canvas></div></div>
+      <div class="chart-card" data-group="b" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">לפי ספק / מוצר<small>top 10 · לחיצה מסננת את הטבלה</small></span></span></h3><div class="canvas-wrap"><canvas id="xChartSupplier"></canvas></div></div>
+    </div>
+    <div class="cv-group-head" style="margin:22px 4px 12px"><b>טבלת הוצאות</b><span>כל הרשומות</span></div>
+    <div class="table-card" style="margin-bottom:0;">
+      <div class="head-row">
+        <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span id="expTableTitle">כל ההוצאות</span></h3>
+        <input class="search-box" id="expSearch" placeholder="חיפוש (ספק, חשבונית, תצורת תשלום...)">
+      </div>
+      <div class="table-scroll detail-table-wrap"><table id="expTable"><thead><tr>
+        <th>תאריך</th><th>ספק / מוצר</th><th>מס׳ חשבונית</th><th>תצורת תשלום</th><th class="num">תשלומים</th>
+        <th class="num">ללא מע״מ</th><th class="num">מע״מ מוכר</th><th class="num">כולל מע״מ</th><th class="num">% מהסה״כ</th>
+      </tr></thead><tbody id="expTbody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="catView" hidden aria-label="פירוט הוצאות">
+    <div class="cv-hero">
+      <div class="cv-hero-top">
+        <div class="cv-hero-text">
+          <span class="cv-eyebrow">פירוט לפי קטגוריה</span>
+          <h2>מרכז הקטגוריות</h2>
+          <p>סכומים לפי קטגוריה, אחוז מסך ההוצאות — כולל או ללא מע״מ. כפתור הסינון למעלה מסנן לפי קטגוריה ולקוח.</p>
+        </div>
+        <div class="cv-hero-tools">
+          <div class="vat-bar">
+            <span class="vat-title">מע״מ</span>
+            <button type="button" class="xv-switch on" data-xk="cat" role="switch" aria-checked="true" aria-label="הצגת סכומים כולל או ללא מע״מ"><span class="vat-knob"></span><span class="vat-state">ON</span></button>
+            <span class="vat-note" data-xnote="cat">הסכומים מוצגים כולל מע״מ</span>
+          </div>
+        </div>
+      </div>
+      <div class="cv-stats" id="catStats"></div>
+    </div>
+    <div class="kpi-grid" id="catKpis" style="margin-bottom:18px;"></div>
+    <div class="charts-grid wide cv-grid" id="catGrid">
+    <div class="cv-group-head" style="order:0"><b>קטגוריות</b><span>כמה כל קטגוריה מהסך</span></div>
+      <div class="chart-card" data-group="a" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span><span class="cv-title">סכום לפי קטגוריה<small>top 10 · לחיצה מסננת את הטבלה</small></span></span></h3><div class="canvas-wrap"><canvas id="xcChartCat"></canvas></div></div>
+      <div class="chart-card" data-group="a" style="--c:#0E9488;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg></span><span class="cv-title">אחוז מסך ההוצאות<small>התפלגות לפי קטגוריה</small></span></span></h3><div class="canvas-wrap"><canvas id="xcChartShare"></canvas></div></div>
+    <div class="cv-group-head" style="order:20" id="xcCustHead"><b>לקוחות</b><span>לפי שם הלקוח</span></div>
+      <div class="chart-card" id="xcCustCard" data-group="b" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">סכום לפי לקוח<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="xcChartCust"></canvas></div></div>
+    </div>
+    <div class="cv-group-head" style="margin:22px 4px 12px"><b>טבלאות</b><span>סיכום ופירוט</span></div>
+    <div class="table-card" style="margin-bottom:16px;">
+      <div class="head-row">
+        <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>סיכום לפי קטגוריה</span></h3>
+      </div>
+      <div class="table-scroll detail-table-wrap"><table id="catSumTable"><thead><tr>
+        <th>קטגוריה</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th><th class="num">כולל מע״מ</th><th>אחוז מסך ההוצאות</th>
+      </tr></thead><tbody id="catSumTbody"></tbody></table></div>
+    </div>
+    <div class="table-card" style="margin-bottom:0;">
+      <div class="head-row">
+        <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>כל השורות</span></h3>
+        <input class="search-box" id="catSearch" placeholder="חיפוש (קטגוריה, קוד, לקוח, תיאור...)">
+      </div>
+      <div class="table-scroll detail-table-wrap"><table id="catTable"><thead><tr>
+        <th>קטגוריה</th><th>קוד</th><th>תיאור</th><th>לקוח</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th><th class="num">כולל מע״מ</th>
+      </tr></thead><tbody id="catTbody"></tbody></table></div>
+    </div>
+  </section>
+
+  <div class="filters-overlay" id="filtersOverlay" aria-hidden="true">
+    <div class="filters-pop" id="filtersPop" role="dialog" aria-modal="true" aria-labelledby="filtersTitle">
+      <div class="fp-head">
+        <h3 id="filtersTitle"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>סינון נתונים</h3>
+        <button type="button" class="fp-close" id="filtersCloseBtn" aria-label="סגירה">✕</button>
+      </div>
+      <div class="fp-body">
+        <div class="field fp-dates">
+          <div><div class="range-title">מחודש ושנה</div><div class="mp" id="fFromPicker" data-m="fFromMonth" data-y="fFromYear"></div></div>
+          <div><div class="range-title">עד חודש ושנה</div><div class="mp" id="fToPicker" data-m="fToMonth" data-y="fToYear"></div></div>
+          <select id="fFromMonth" hidden></select><select id="fFromYear" hidden></select>
+          <select id="fToMonth" hidden></select><select id="fToYear" hidden></select>
+        </div>
+        <div class="field"><label>חברה מעסיקה</label><div id="fCompany"></div></div>
+        <div class="field"><label>לקוח</label><div id="fClient"></div></div>
+        <div class="field"><label>לקוח קצה</label><div id="fEndClient"></div></div>
+        <div class="field"><label>מאשר</label><div id="fApprover"></div></div>
+        <div class="field"><label>שם עובד</label><div id="fEmployee"></div></div>
+        <div class="field"><label>סוג מכרז</label><div id="fTenderType"></div></div>
+      </div>
+      <div class="fp-foot">
+        <button type="button" class="btn ghost" id="clearFilters">נקה סינונים</button>
+        <button type="button" class="btn fp-apply" id="applyFiltersBtn">הצג תוצאות</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-overlay" id="xf_exp" aria-hidden="true">
+    <div class="filters-pop" role="dialog" aria-modal="true" aria-label="סינון הוצאות">
+      <div class="fp-head"><h3><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>סינון הוצאות</h3><button type="button" class="fp-close" data-xclose="exp" aria-label="סגירה">✕</button></div>
+      <div class="fp-body">
+        <div class="field"><label>שנה</label><div id="xfExpYear"></div></div>
+        <div class="field"><label>חודש</label><div id="xfExpMonth"></div></div>
+        <div class="field"><label>תצורת תשלום</label><div id="xfExpPay"></div></div>
+        <div class="field"><label>ספק / מוצר</label><div id="xfExpSupplier"></div></div>
+      </div>
+      <div class="fp-foot"><button type="button" class="btn ghost" data-xclear="exp">נקה סינונים</button><button type="button" class="btn fp-apply" data-xclose="exp">הצג תוצאות</button></div>
+    </div>
+  </div>
+  <div class="filters-overlay" id="xf_cat" aria-hidden="true">
+    <div class="filters-pop" role="dialog" aria-modal="true" aria-label="סינון פירוט הוצאות">
+      <div class="fp-head"><h3><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>סינון פירוט הוצאות</h3><button type="button" class="fp-close" data-xclose="cat" aria-label="סגירה">✕</button></div>
+      <div class="fp-body">
+        <div class="field"><label>קטגוריה</label><div id="xfCatCategory"></div></div>
+        <div class="field"><label>לקוח</label><div id="xfCatCustomer"></div></div>
+      </div>
+      <div class="fp-foot"><button type="button" class="btn ghost" data-xclear="cat">נקה סינונים</button><button type="button" class="btn fp-apply" data-xclose="cat">הצג תוצאות</button></div>
+    </div>
+  </div>
+
+  <div id="dataBusy" role="status" aria-live="polite"><div class="box"><div class="ring"></div><span>טוען נתונים…</span></div></div>
 
   <footer class="page-footer">
     <div>עדכון אחרון: <span id="lastUpdated">—</span></div>
@@ -1421,6 +1936,7 @@ window.__DASHBOARD_PREFETCH__ = (function(){
       <button class="modal-close" id="detailModalCloseBtn">✕</button>
     </div>
     <div class="modal-body">
+      <div class="emp-filter-bar" id="detailModalTools" style="display:none;"></div>
       <div class="detail-summary">
         <span class="l" id="detailModalSummaryLabel">סה״כ</span>
         <span class="v num" id="detailModalSummaryValue">₪0</span>
@@ -1431,61 +1947,6 @@ window.__DASHBOARD_PREFETCH__ = (function(){
           <tbody id="detailModalTbody"></tbody>
         </table>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- מודל צפייה בתכנון עתידי -->
-<div class="modal-overlay" id="planningModalOverlay">
-  <div class="modal xwide">
-    <div class="modal-head">
-      <div>
-        <h2>תכנון עתידי — דשבורד</h2>
-        <div class="modal-sub" id="planningModalSub"></div>
-      </div>
-      <button class="modal-close" id="planningModalCloseBtn">✕</button>
-    </div>
-    <div class="modal-body">
-
-      <div class="kpi-grid" id="planningKpiGrid" style="margin-bottom:16px;"></div>
-
-      <div class="charts-grid" style="margin-bottom:16px;">
-        <div class="chart-card"><h3>מסגרת חודשית לפי עובד</h3><div class="canvas-wrap"><canvas id="planningChartBudgetByEmployee"></canvas></div></div>
-        <div class="chart-card"><h3>מסגרת חודשית לפי לקוח קצה</h3><div class="canvas-wrap"><canvas id="planningChartBudgetByClient"></canvas></div></div>
-        <div class="chart-card"><h3>מסגרת חודשית לפי מאשר</h3><div class="canvas-wrap"><canvas id="planningChartBudgetByApprover"></canvas></div></div>
-        <div class="chart-card"><h3>מסגרת חודשית לפי חברה מעסיקה</h3><div class="canvas-wrap"><canvas id="planningChartBudgetByCompany"></canvas></div></div>
-        <div class="chart-card" style="grid-column:1 / -1;"><h3>אחוז רווח מתוכנן לפי עובד</h3><div class="canvas-wrap"><canvas id="planningChartMarginByEmployee"></canvas></div></div>
-      </div>
-
-      <div class="table-card" style="box-shadow:none;border:1px solid var(--border-soft);padding:16px 18px;margin-bottom:0;">
-        <div class="head-row">
-          <h3>כל הרשומות בתכנון</h3>
-          <input class="search-box" id="planningSearchBox" placeholder="חיפוש (חברה, עובד, לקוח קצה...)">
-        </div>
-        <div class="table-scroll detail-table-wrap">
-          <table id="planningFullTable">
-            <thead>
-              <tr>
-                <th data-key="year">שנה</th>
-                <th data-key="company">חברה</th>
-                <th data-key="tenderType">סוג מכרז</th>
-                <th data-key="endClient">לקוח קצה</th>
-                <th data-key="approver">מאשר</th>
-                <th data-key="employee">שם עובד</th>
-                <th data-key="status">סטטוס</th>
-                <th data-key="annualBudget" class="num">מסגרת שנתית</th>
-                <th data-key="monthlyBudget" class="num">מסגרת חודשית</th>
-                <th data-key="afterTax" class="num">אחרי מס כולל מע״מ</th>
-                <th data-key="employeePayment" class="num">תשלום לעובד כולל מע״מ</th>
-                <th data-key="remainder" class="num">יתרה</th>
-                <th data-key="profitPercent" class="num">אחוז רווח</th>
-              </tr>
-            </thead>
-            <tbody id="planningFullTbody"></tbody>
-          </table>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
@@ -1573,6 +2034,25 @@ const DEMO_COMPANIES = [
   {date:"2026-02-01",company:"אלביט",tenderType:"שעות עבודה",endClient:"אגף",approver:"שחר",employee:"יעל",clientBilling:57500,dealInvoice:48875,employeePayment:19000,grossProfit:29875},
   {date:"2026-02-01",company:"NESS",tenderType:"תוצרים",endClient:"קריית התקשוב",approver:"דנה",employee:"דוד",clientBilling:39166.67,dealInvoice:33291.67,employeePayment:27000,grossProfit:6291.67},
 ];
+/* מצב הדגמה: משלימים לקוח, שכיר/עצמאי וחישובים באותה לוגיקה כמו בשרת
+   (שכיר: שכר עבודה x 1.18 | עצמאי: כמו שהוא | יתרה | אחוז רווח | רווח גולמי). */
+(function(){
+  const CLIENT_OF = {'הגנה':'משרד הביטחון','פד"ם':'משרד הביטחון','קריית התקשוב':'צה״ל','לוטם':'צה״ל','אגף':'משרד הביטחון'};
+  const TYPE_OF = {'גוזלנד':'שכיר','יניב':'עצמאי','עידו':'שכיר','שרון':'עצמאי','יעל':'שכיר','דוד':'עצמאי'};
+  const r2 = v => Math.round((Number(v)||0)*100)/100;
+  const factor = t => String(t||'').indexOf('שכיר') !== -1 ? 1.18 : 1;
+  DEMO_PLANNING.forEach(p=>{
+    p.client = CLIENT_OF[p.endClient] || ''; p.empType = TYPE_OF[p.employee] || 'עצמאי';
+    p.salary = p.employeePayment; p.employeePayment = r2(p.salary * factor(p.empType));
+    p.remainder = r2(p.afterTax - p.employeePayment);
+    p.profitPercent = p.afterTax ? p.remainder / p.afterTax * 100 : 0;
+  });
+  DEMO_COMPANIES.forEach(c=>{
+    c.client = CLIENT_OF[c.endClient] || ''; c.empType = TYPE_OF[c.employee] || 'עצמאי';
+    c.salary = c.employeePayment; c.employeePayment = r2(c.salary * factor(c.empType));
+    c.grossProfit = r2(c.dealInvoice - c.employeePayment);
+  });
+})();
 // רשימת התחברות לצורך מצב הדגמה בלבד — במצב חי הרשימה מגיעה מגליון "התחברות"
 const DEMO_AUTH = [
   {username:"admin", password:"77112", role:"admin"},
@@ -1662,11 +2142,66 @@ function computeDemoDetailInsights(companies){
   return {empty:false, good, watch, improve, bad};
 }
 
+/* ============================ מע״מ: כולל / ללא ============================
+ * כולל מע״מ: הנתונים כמו שהם.
+ * ללא מע״מ: חיוב לקוח, חשבונית עסקה, מסגרות ואחרי-מס מחולקים ב-1.18; שכר העבודה בלי תוספת ה-1.18 של השכירים
+ * (כלומר השכר כפי שהוזן בגיליון); הרווח הגולמי, היתרה, אחוזי הרווח, הניצול והתחזיות מחושבים מחדש על בסיס זה.
+ * כל הלוח (כרטיסים, גרפים, טבלאות, חלונות פירוט, ייצוא ודוח) קורא את companiesData / planningData ולכן עוקב אחרי המצב. */
+const VAT_RATE = 1.18;
+function rebuildVatView(){
+  if(vatOn){ companiesData = rawCompanies; planningData = rawPlanning; dashboardInsights = rawInsights; return; }
+  const r2 = v => Math.round((Number(v)||0)*100)/100;
+  const comps = rawCompanies.map(c=>{
+    const salary = (c.salary != null) ? Number(c.salary)||0 : (Number(c.employeePayment)||0);
+    const dealInvoice = (Number(c.dealInvoice)||0) / VAT_RATE;
+    return { ...c, clientBilling:(Number(c.clientBilling)||0)/VAT_RATE, dealInvoice, employeePayment:salary, grossProfit: r2(dealInvoice - salary) };
+  });
+  const plans = rawPlanning.map(p=>{
+    const salary = (p.salary != null) ? Number(p.salary)||0 : (Number(p.employeePayment)||0);
+    const afterTax = (Number(p.afterTax)||0) / VAT_RATE;
+    const remainder = r2(afterTax - salary);
+    return { ...p, annualBudget:(Number(p.annualBudget)||0)/VAT_RATE, monthlyBudget:(Number(p.monthlyBudget)||0)/VAT_RATE,
+      afterTax, employeePayment:salary, remainder, profitPercent: afterTax ? remainder/afterTax*100 : 0 };
+  });
+  companiesData = comps;
+  planningData = computeDemoPlanningRows(plans, comps); // מחשב מחדש שולם-בפועל / יתרה למסגרת / % ניצול
+  const cy = new Date().getFullYear();
+  let cur = planningData.filter(p=>!p.year || p.year===cy);
+  if(!cur.length){ const mx = Math.max(0, ...planningData.map(p=>p.year||0)); cur = planningData.filter(p=>p.year===mx); }
+  dashboardInsights = { planning: computeDemoPlanningInsights(cur), detail: computeDemoDetailInsights(comps) };
+}
+// מחליף בטקסטים שבדף "כולל מע״מ" ↔ "ללא מע״מ" בהתאם למצב
+function vt(str){ return vatOn ? String(str) : String(str).replace(/כולל מע״מ/g, 'ללא מע״מ'); }
+function applyVatLabels(root){
+  const from = vatOn ? /ללא מע״מ/g : /כולל מע״מ/g, to = vatOn ? 'כולל מע״מ' : 'ללא מע״מ';
+  const scope = root || document.body;
+  const w = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, { acceptNode:n=>
+    (n.nodeValue.indexOf('מע״מ') !== -1 && !(n.parentElement && n.parentElement.closest('.vat-bar,script,style,.legal-modal,#planningView,#expView,#catView'))) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+  const nodes = []; while(w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n=>{ const v = n.nodeValue.replace(from, to); if(v !== n.nodeValue) n.nodeValue = v; });
+  document.querySelectorAll('[title*="מע״מ"]').forEach(el=>{ if(el.closest('.vat-bar')) return; const t = el.getAttribute('title').replace(from, to); if(t !== el.getAttribute('title')) el.setAttribute('title', t); });
+}
+function refreshVatUi(){
+  const sws = document.querySelectorAll('.vat-switch'); if(!sws.length) return;
+  sws.forEach(sw=>{ sw.classList.toggle('on', vatOn); sw.setAttribute('aria-checked', vatOn ? 'true' : 'false'); const st = sw.querySelector('.vat-state'); if(st) st.textContent = vatOn ? 'ON' : 'OFF'; });
+  document.querySelectorAll('th[data-key="employeePayment"]:not(#planningFullTable th)').forEach(th=> th.title = vatOn ? 'שכיר: כפול 1.18' : 'שכיר: ללא תוספת 1.18');
+  document.querySelectorAll('.vat-note').forEach(n=> n.textContent = vatOn ? 'הסכומים מוצגים כולל מע״מ' : 'הסכומים מוצגים ללא מע״מ — חיוב וחשבונית ÷1.18, ושכר שכירים ללא תוספת 1.18');
+}
+document.querySelectorAll('.vat-switch').forEach(sw=>sw.addEventListener('click', ()=>{
+  vatOn = !vatOn; refreshVatUi(); rebuildVatView(); populateFilterOptions(); applyFiltersAndRender();
+  if(currentView === 'planning') renderPlanningDashboard();
+  showToast(vatOn ? 'מוצג כולל מע״מ' : 'מוצג ללא מע״מ', 'success');
+}));
+
 /* ============================ מצב גלובלי ============================ */
 let planningData = [];
 let companiesData = [];
 let filteredCompanies = [];
-let dashboardInsights = { planning: { empty: true }, detail: { empty: true } }; // מגיע מוכן מה-Apps Script
+let expRows = [], catRows = [];
+let rawPlanning = [], rawCompanies = [], rawInsights = { planning: { empty: true }, detail: { empty: true } }; // הנתונים כפי שהגיעו (כולל מע״מ)
+let vatOn = true; // true = כולל מע״מ (ברירת מחדל), false = ללא מע״מ
+let dashboardInsights = { planning: { empty: true }, detail: { empty: true } };
+refreshVatUi(); // מגיע מוכן מה-Apps Script
 let currentUser = null; // {username, role, token} של המשתמש המחובר כרגע
 let maintenanceActive = false; // true כשמתג הכיבוי (התחברות!A27=1) דלוק - המסך נשאר על "טוען" בלבד
 let silentlyRetrying = false; // true כשהייתה שגיאת חיבור - נשארים על מסך "טוען" ומנסים שוב בשקט, בלי לחשוף שגיאה
@@ -1733,6 +2268,7 @@ async function loadData(){
   if(isLoadingData) return;
   isLoadingData = true;
   document.body.classList.add('refreshing'); document.getElementById('refreshBtn').classList.add('spin'); updateAgo();
+  if(!lastLoadedAt || window.__manualRefresh) document.body.classList.add('busy-ui');
   document.getElementById('statusText').textContent = 'טוען…';
   document.getElementById('statusDot').className = 'status-dot';
   hideConnectionError();
@@ -1742,11 +2278,12 @@ async function loadData(){
       // מצב הדגמה בלבד (אין חיבור לגיליון): מחשבים כאן באופן מקומי תחליף זמני
       // לחישובי התכנון-מול-ביצוע ולהמלצות שבמצב חי מגיעים מוכנים מה-Apps Script.
       maintenanceActive = false;
-      planningData = computeDemoPlanningRows(DEMO_PLANNING, DEMO_COMPANIES);
-      companiesData = DEMO_COMPANIES;
-      dashboardInsights = {
-        planning: computeDemoPlanningInsights(planningData.filter(p=>!p.year || p.year===new Date().getFullYear())),
-        detail: computeDemoDetailInsights(companiesData)
+      rawPlanning = computeDemoPlanningRows(DEMO_PLANNING, DEMO_COMPANIES);
+      rawCompanies = DEMO_COMPANIES;
+      expRows = DEMO_EXPENSES; catRows = DEMO_EXP_DETAIL;
+      rawInsights = {
+        planning: computeDemoPlanningInsights(rawPlanning.filter(p=>!p.year || p.year===new Date().getFullYear())),
+        detail: computeDemoDetailInsights(rawCompanies)
       };
       document.getElementById('statusDot').className = 'status-dot demo';
       document.getElementById('statusText').textContent = 'מצב הדגמה';
@@ -1799,17 +2336,20 @@ async function loadData(){
         return;
       }
       maintenanceActive = false;
-      planningData = json.planning || [];
-      companiesData = json.companies || [];
-      dashboardInsights = json.insights || { planning:{empty:true}, detail:{empty:true} };
+      rawPlanning = json.planning || [];
+      rawCompanies = json.companies || [];
+      expRows = json.expenses || []; catRows = json.expenseDetail || [];
+      rawInsights = json.insights || { planning:{empty:true}, detail:{empty:true} };
       document.getElementById('statusDot').className = 'status-dot live';
       document.getElementById('statusText').textContent = 'מחובר לגיליון';
       document.getElementById('setupBanner').style.display = 'none';
     }
     document.getElementById('lastUpdated').textContent = new Date().toLocaleString('he-IL');
     lastLoadedAt = Date.now();
+    rebuildVatView();
     populateFilterOptions();
     applyFiltersAndRender();
+    xRefreshAll();
     applyAuthGate();
     silentlyRetrying = false;
     retryAttemptCount = 0;
@@ -1829,6 +2369,7 @@ async function loadData(){
     if(!maintenanceActive && !silentlyRetrying) hideLoadingScreen();
     isLoadingData = false;
     document.body.classList.remove('refreshing'); document.getElementById('refreshBtn').classList.remove('spin'); updateAgo();
+    if(!silentlyRetrying || lastLoadedAt){ document.body.classList.remove('busy-ui'); window.__manualRefresh = false; }
   }
 }
 
@@ -2077,7 +2618,7 @@ function applyRoleUI(){
   ['exportBtn','logBtn','mobilePreviewBtn'].forEach(id=>{ const el = document.getElementById(id); if(el) el.style.display = isAdminUser() ? '' : 'none'; });
   // מרנדרים מחדש את טבלאות התכנון כדי שעמודת העובד תהפוך לניתנת-ללחיצה (או לא) בהתאם להרשאה
   if(typeof renderPlanningTable === 'function' && planningData.length) renderPlanningTable();
-  if(document.getElementById('planningModalOverlay').classList.contains('open')) renderPlanningFullTable();
+  if(currentView === 'planning') renderPlanningDashboard();
 }
 
 function forceReloginDueToAuthError(){
@@ -2269,8 +2810,8 @@ document.getElementById('empStatusSetActive').addEventListener('click', ()=> sub
 document.getElementById('empStatusSetInactive').addEventListener('click', ()=> submitEmployeeStatus('לא פעיל'));
 
 /* ============================ מסננים ============================ */
-const MS_IDS = ['fCompany','fEndClient','fApprover','fEmployee','fTenderType'];
-const MS_LABELS = { fCompany:'חברה', fEndClient:'לקוח קצה', fApprover:'מאשר', fEmployee:'עובד', fTenderType:'סוג מכרז' };
+const MS_IDS = ['fCompany','fClient','fEndClient','fApprover','fEmployee','fTenderType'];
+const MS_LABELS = { fCompany:'חברה', fClient:'לקוח', fEndClient:'לקוח קצה', fApprover:'מאשר', fEmployee:'עובד', fTenderType:'סוג מכרז' };
 
 /* רכיב בחירה מרובה: ממשק פשוט עם תיבות סימון, חיפוש בתוך הרשימה, "בחר הכל" ו"נקה" */
 function msInit(id){
@@ -2290,7 +2831,7 @@ function msInit(id){
   root.querySelector('.ms-actions').addEventListener('click', (e)=>{
     const a = e.target.dataset.a; if(!a) return;
     if(a === 'all') root._opts.forEach(v=>root._sel.add(v)); else root._sel.clear();
-    msRenderList(root); msUpdateLabel(root); applyFiltersAndRender();
+    msRenderList(root); msUpdateLabel(root); (root._onChange || applyFiltersAndRender)();
   });
   root.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ root.classList.remove('open'); root.querySelector('.ms-btn').focus(); } });
   msUpdateLabel(root);
@@ -2307,7 +2848,7 @@ function msRenderList(root){
     cb.addEventListener('change', ()=>{
       if(cb.checked) root._sel.add(v); else root._sel.delete(v);
       row.classList.toggle('sel', cb.checked);
-      msUpdateLabel(root); applyFiltersAndRender();
+      msUpdateLabel(root); (root._onChange || applyFiltersAndRender)();
     });
     const box = document.createElement('span'); box.className = 'ms-box';
     box.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -2335,7 +2876,12 @@ function msSetOptions(id, values){
 }
 function msGet(id){ return [...document.getElementById(id)._sel]; }
 function msClear(id){ const r = document.getElementById(id); r._sel.clear(); msUpdateLabel(r); }
-document.addEventListener('click', (e)=>{ if(!e.target.closest('.ms')) document.querySelectorAll('.ms.open').forEach(m=>m.classList.remove('open')); });
+document.addEventListener('click', (e)=>{
+  // composedPath נקבע ברגע הלחיצה: גם כשהכפתור שנלחץ הוחלף ב-DOM (למשל חיצי השנה בבחירת תאריך) עדיין יודעים שהלחיצה הייתה בתוך הרכיב
+  const path = (e.composedPath && e.composedPath()) || [];
+  const inside = path.some(n=> n && n.classList && n.classList.contains('ms')) || (e.target.closest && e.target.closest('.ms'));
+  if(!inside) document.querySelectorAll('.ms.open').forEach(m=>m.classList.remove('open'));
+});
 MS_IDS.forEach(msInit);
 
 // בחירת חודש+שנה (במקום תאריך מדויק)
@@ -2354,7 +2900,8 @@ function mpInit(root){
     document.querySelectorAll('.ms.open,.mp.open').forEach(m=>m.classList.remove('open'));
     if(!was){
       const ys = mpYears(root), cur = +document.getElementById(root.dataset.y).value;
-      root._vy = cur || (ys.length ? ys[ys.length-1] : new Date().getFullYear());
+      const ny = new Date().getFullYear();
+      root._vy = cur || (ys.includes(ny) ? ny : (ys.length ? ys[ys.length-1] : ny));
       mpRenderPanel(root); root.classList.add('open'); root.classList.add('ms');
     }
   });
@@ -2401,6 +2948,11 @@ function populateYearSelects(){
   const years = new Set();
   companiesData.forEach(c=>{ const m = String(c.date||'').match(/^(\d{4})/); if(m) years.add(+m[1]); });
   planningData.forEach(p=>{ if(p.year) years.add(+p.year); });
+  // טווח שנים חופשי: מכסה את כל שנות הנתונים וגם כמה שנים אחורה וקדימה, כדי שאפשר יהיה לבחור כל תאריך
+  const nowY = new Date().getFullYear();
+  const lo = Math.min(nowY - 10, ...(years.size ? [...years] : [nowY]));
+  const hi = Math.max(nowY + 4, ...(years.size ? [...years] : [nowY]));
+  for(let y = lo; y <= hi; y++) years.add(y);
   const list = [...years].sort((a,b)=>a-b);
   ['fFromYear','fToYear'].forEach(id=>{
     const el = document.getElementById(id); const cur = el.value;
@@ -2412,6 +2964,7 @@ function populateYearSelects(){
 function populateFilterOptions(){
   if(!document.getElementById('fFromMonth').options.length){ initRangeSelects(); document.querySelectorAll('.mp').forEach(mpInit); }
   msSetOptions('fCompany', uniq(companiesData.map(c=>c.company)));
+  msSetOptions('fClient', uniq(companiesData.map(c=>c.client).concat(planningData.map(p=>p.client))));
   msSetOptions('fEndClient', uniq(companiesData.map(c=>c.endClient)));
   msSetOptions('fApprover', uniq(companiesData.map(c=>c.approver)));
   msSetOptions('fEmployee', uniq(companiesData.map(c=>c.employee)));
@@ -2429,6 +2982,7 @@ function getFilters(){
     fromIdx: fy ? fy*12 + (fm || 1) : null,
     toIdx: ty ? ty*12 + (tm || 12) : null,
     company: msGet('fCompany'),
+    client: msGet('fClient'),
     endClient: msGet('fEndClient'),
     approver: msGet('fApprover'),
     employee: msGet('fEmployee'),
@@ -2442,7 +2996,7 @@ function dateIdx(d){ const m = String(d||'').match(/^(\d{4})-(\d{2})/); return m
 // סינון שורות תכנון לפי המסננים (שנה בתכנון נבחנת מול טווח השנים שנבחר)
 function filterPlanRows(rows, f, withTender){
   return rows.filter(p=>{
-    if(!inSel(f.company, p.company) || !inSel(f.endClient, p.endClient) || !inSel(f.approver, p.approver) || !inSel(f.employee, p.employee)) return false;
+    if(!inSel(f.company, p.company) || !inSel(f.client, p.client) || !inSel(f.endClient, p.endClient) || !inSel(f.approver, p.approver) || !inSel(f.employee, p.employee)) return false;
     if(withTender && !inSel(f.tenderType, p.tenderType)) return false;
     if(p.year){
       if(f.fromYear && p.year < f.fromYear) return false;
@@ -2461,10 +3015,10 @@ function applyFiltersAndRender(){
       if(f.fromIdx !== null && idx < f.fromIdx) return false;
       if(f.toIdx !== null && idx > f.toIdx) return false;
     }
-    if(!inSel(f.company, c.company) || !inSel(f.endClient, c.endClient) || !inSel(f.approver, c.approver) ||
+    if(!inSel(f.company, c.company) || !inSel(f.client, c.client) || !inSel(f.endClient, c.endClient) || !inSel(f.approver, c.approver) ||
        !inSel(f.employee, c.employee) || !inSel(f.tenderType, c.tenderType)) return false;
     if(f.search){
-      const hay = [c.company,c.tenderType,c.endClient,c.approver,c.employee].join(' ').toLowerCase();
+      const hay = [c.company,c.tenderType,c.client,c.endClient,c.approver,c.employee].join(' ').toLowerCase();
       if(!hay.includes(f.search)) return false;
     }
     return true;
@@ -2475,10 +3029,14 @@ function applyFiltersAndRender(){
   renderBridge();
   renderCharts();
   renderPlanningTable();
+  if(!document.getElementById('planningView').hidden) renderPlanningDashboard();
   renderDetailTable();
   renderRanking();
   renderEmptyState();
   renderAlertStrip();
+  renderMainHero();
+  applyVatLabels();
+  updateFilterBadge();
 }
 
 function resetAllFilters(){
@@ -2522,9 +3080,104 @@ function renderFilterChips(f){
 document.querySelectorAll('#fFromMonth,#fFromYear,#fToMonth,#fToYear').forEach(el=> el.addEventListener('change', applyFiltersAndRender));
 document.getElementById('searchBox').addEventListener('input', ()=>{ currentPage=1; applyFiltersAndRender(); });
 document.getElementById('clearFilters').addEventListener('click', resetAllFilters);
+/* ============ ניווט: ראשי / גרפים + פופ-אפ סינון + כותרת קבועה ============ */
+let currentView = 'main';
+function setView(v){
+  currentView = v;
+  document.getElementById('mainView').hidden = v !== 'main';
+  document.getElementById('chartsView').hidden = v !== 'charts';
+  document.getElementById('planningView').hidden = v !== 'planning';
+  document.getElementById('expView').hidden = v !== 'exp';
+  document.getElementById('catView').hidden = v !== 'cat';
+  [['tabMain','main'],['tabCharts','charts'],['tabPlanning','planning'],['tabExp','exp'],['tabCat','cat']].forEach(([id,k])=>{ const b = document.getElementById(id); b.classList.toggle('on', v === k); b.setAttribute('aria-selected', v === k ? 'true' : 'false'); });
+  try{ history.replaceState(null, '', v === 'charts' ? '#charts' : v === 'planning' ? '#planning' : (v === 'exp' || v === 'cat') ? '#' + v : location.pathname + location.search); }catch(e){}
+  window.scrollTo({ top:0, behavior:'auto' });
+  // גרפים שנוצרו בזמן שהתצוגה הייתה מוסתרת צריכים לחשב גודל מחדש
+  requestAnimationFrame(()=>{
+    updateFilterBadge();
+    if(v === 'exp') renderExp(); else if(v === 'cat') renderCat();
+    else if(v === 'planning') renderPlanningDashboard();
+    else if(v === 'charts') renderGridCharts();      // מצייר מחדש כשהעמוד נראה: גודל נכון + אנימציית כניסה
+    else renderMonthlyTrend();
+    Object.keys(charts).forEach(k=>{ try{ charts[k] && charts[k].resize(); }catch(e){} });
+  });
+}
+document.getElementById('cvTabs').addEventListener('click', (e)=>{
+  const b = e.target.closest('button[data-group]'); if(!b) return;
+  const g = b.dataset.group;
+  document.querySelectorAll('#cvTabs button').forEach(x=> x.classList.toggle('on', x === b));
+  document.querySelectorAll('#cvGrid > [data-group]').forEach(el=>{ el.hidden = !(g === 'all' || el.dataset.group === g); });
+  requestAnimationFrame(()=> Object.keys(charts).forEach(k=>{ try{ charts[k] && charts[k].resize(); }catch(e){} }));
+});
+document.getElementById('tabMain').addEventListener('click', ()=> setView('main'));
+document.getElementById('tabCharts').addEventListener('click', ()=> setView('charts'));
+document.getElementById('tabPlanning').addEventListener('click', ()=> setView('planning'));
+document.getElementById('tabExp').addEventListener('click', ()=> setView('exp'));
+document.getElementById('tabCat').addEventListener('click', ()=> setView('cat'));
+if(location.hash === '#charts') setView('charts');
+else if(location.hash === '#planning') setView('planning');
+else if(location.hash === '#exp') setView('exp');
+else if(location.hash === '#cat') setView('cat');
+
+function periodLabel(f){
+  const m = (mo,y)=> (mo ? HEB_MONTHS[mo-1] + ' ' : '') + y;
+  if(!f.fromYear && !f.toYear) return 'כל התקופה';
+  if(f.fromYear && f.toYear) return (f.fromYear === f.toYear && !f.fromMonth && !f.toMonth) ? ('שנת ' + f.fromYear) : (m(f.fromMonth, f.fromYear) + ' – ' + m(f.toMonth, f.toYear));
+  return f.fromYear ? ('מ-' + m(f.fromMonth, f.fromYear)) : ('עד ' + m(f.toMonth, f.toYear));
+}
+function renderMainHero(){
+  const box = document.getElementById('mvChips'); if(!box) return;
+  const f = getFilters(), n = activeFilterCount();
+  const emps = new Set(filteredCompanies.map(c=>c.employee).filter(Boolean)).size;
+  const chip = (l,v,i)=> '<span class="mv-chip" style="--i:' + i + '"><b>' + l + '</b><i>' + escHtml(String(v)) + '</i></span>';
+  box.innerHTML = chip('תקופה', periodLabel(f), 0) + chip('רשומות', filteredCompanies.length.toLocaleString('he-IL'), 1)
+    + chip('עובדים', emps, 2) + chip('סינונים פעילים', n ? n : 'ללא', 3);
+}
+function activeFilterCount(){
+  const f = getFilters();
+  return ['company','client','endClient','approver','employee','tenderType'].filter(k=> f[k] && f[k].length).length + ((f.fromYear || f.toYear) ? 1 : 0);
+}
+function updateFilterBadge(){
+  const n = (typeof currentView !== 'undefined' && (currentView === 'exp' || currentView === 'cat')) ? xCount(currentView) : activeFilterCount(), b = document.getElementById('filterBadge');
+  if(!b) return; b.textContent = n; b.hidden = n === 0;
+  const ap = document.getElementById('applyFiltersBtn');
+  if(ap) ap.textContent = 'הצג ' + filteredCompanies.length.toLocaleString('he-IL') + ' רשומות';
+}
+let filtersLastFocus = null;
+function openFiltersPop(){
+  const ov = document.getElementById('filtersOverlay'), pop = document.getElementById('filtersPop'), btn = document.getElementById('openFiltersBtn');
+  filtersLastFocus = document.activeElement;
+  ov.classList.add('show'); ov.setAttribute('aria-hidden','false');
+  // הפופ-אפ "נפתח" מכיוון הכפתור
+  const br = btn.getBoundingClientRect(), pr = pop.getBoundingClientRect();
+  pop.style.transformOrigin = (br.left + br.width/2 - pr.left) + 'px ' + (br.top + br.height/2 - pr.top) + 'px';
+  pop.querySelectorAll('.fp-body .field').forEach((el,i)=> el.style.setProperty('--i', i));
+  requestAnimationFrame(()=> requestAnimationFrame(()=>{ ov.classList.add('open'); const f = pop.querySelector('.ms-btn, .mp-btn'); if(f) f.focus({preventScroll:true}); }));
+  updateFilterBadge();
+}
+function closeFiltersPop(){
+  const ov = document.getElementById('filtersOverlay'); if(!ov.classList.contains('show')) return;
+  ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
+  document.querySelectorAll('#filtersPop .ms.open').forEach(m=>m.classList.remove('open'));
+  setTimeout(()=>{ if(!ov.classList.contains('open')) ov.classList.remove('show'); }, 320);
+  if(filtersLastFocus && filtersLastFocus.focus) filtersLastFocus.focus({preventScroll:true});
+}
+document.getElementById('openFiltersBtn').addEventListener('click', ()=>{ if(currentView === 'exp' || currentView === 'cat') xfOpen(currentView); else openFiltersPop(); });
+document.getElementById('filtersCloseBtn').addEventListener('click', closeFiltersPop);
+document.getElementById('applyFiltersBtn').addEventListener('click', closeFiltersPop);
+document.getElementById('filtersOverlay').addEventListener('mousedown', (e)=>{ if(e.target.id === 'filtersOverlay') closeFiltersPop(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && document.getElementById('filtersOverlay').classList.contains('open') && !document.querySelector('#filtersPop .ms.open')) closeFiltersPop(); }, true); // capture: קודם נסגרת רשימה פתוחה, ורק Esc נוסף סוגר את הפופ-אפ
+
+(function(){
+  const top = document.querySelector('header.top'); let ticking = false;
+  const upd = ()=>{ ticking = false; top.classList.toggle('compact', window.scrollY > 70); };
+  window.addEventListener('scroll', ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(upd); } }, { passive:true });
+})();
+
 
 /* ============================ KPI ============================ */
 const KPI_ICONS = {
+  projects: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
   billing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2V2z"/><path d="M9 7h6M9 11h6"/></svg>',
   dealInvoice: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10M20 21V10M2 10l10-6 10 6"/><path d="M6 10v11M12 10v11M18 10v11"/></svg>',
   employeePayment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>',
@@ -2570,21 +3223,36 @@ function buildSparkline(values, hexColor){
     + '</svg>';
 }
 
+// פרויקט = שורה בגליון "נתוני פרויקט". סופרים שורות בשנה שנבחרה בסינון (או בטווח שנים); בלי סינון שנה - בשנה הנוכחית.
+function projectRows(){
+  const f = getFilters();
+  let rows = filterPlanRows(planningData, f, true), label = '';
+  if(f.fromYear || f.toYear){
+    label = (f.fromYear && f.toYear && f.fromYear !== f.toYear) ? ('בשנים ' + f.fromYear + '–' + f.toYear) : ('בשנת ' + (f.fromYear || f.toYear));
+  } else {
+    const cy = new Date().getFullYear();
+    const ys = planningData.map(p=>p.year).filter(Boolean);
+    const y = ys.includes(cy) ? cy : (ys.length ? Math.max(...ys) : 0);
+    if(y){ rows = rows.filter(p=>p.year === y); label = 'בשנת ' + y; }
+  }
+  return { rows, label };
+}
 function renderKPIs(){
   const totalBilling = sum(filteredCompanies, c=>c.clientBilling);
   const totalDeal = sum(filteredCompanies, c=>c.dealInvoice);
   const totalPaid = sum(filteredCompanies, c=>c.employeePayment);
   const totalProfit = sum(filteredCompanies, c=>c.grossProfit);
   const avgMargin = totalBilling ? (totalProfit/totalBilling*100) : 0;
-  const activeCount = uniq(planningData.filter(p=>p.status && p.status.indexOf('לא')===-1).map(p=>p.employee)).length;
+  const activeCount = uniq(planningData.map(p=>p.employee).filter(Boolean)).length;
 
   const cards = [
     {label:'סה״כ חיוב לקוחות כולל מע״מ', raw:totalBilling, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', hex:'#2F6FED', sub: filteredCompanies.length+' רשומות', metric:'billing', sparkKey:'clientBilling'},
     {label:'סה״כ חשבונית עסקה (אחרי מס)', raw:totalDeal, type:'currency', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', hex:'#6C4CE0', metric:'dealInvoice', sparkKey:'dealInvoice'},
-    {label:'סה״כ שולם לעובדים', raw:totalPaid, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', hex:'#D65A45', metric:'employeePayment', sparkKey:'employeePayment'},
+    {label:'שכר עבודה', sub:(vatOn ? 'שכיר כפול 1.18' : 'שכיר ללא תוספת 1.18'), raw:totalPaid, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', hex:'#D65A45', metric:'employeePayment', sparkKey:'employeePayment'},
     {label:'סה״כ רווח גולמי', raw:totalProfit, type:'currency', accent:'var(--accent-green)', soft:'var(--accent-green-soft)', hex:'#0E9488', metric:'grossProfit', sparkKey:'grossProfit'},
     {label:'אחוז רווח ממוצע', raw:avgMargin, type:'percent', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', hex:'#1E9BD7', metric:'margin', sparkKey:'margin'},
-    {label:'עובדים פעילים', raw:activeCount, type:'integer', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', hex:'#2F6FED', metric:'activeEmployees', sparkKey:null},
+    {label:'פרויקטים', raw:projectRows().rows.length, sub:projectRows().label, type:'integer', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', hex:'#6C4CE0', metric:'projects', sparkKey:null},
+    {label:'עובדים', raw:activeCount, type:'integer', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', hex:'#2F6FED', metric:'activeEmployees', sparkKey:null},
   ];
 
   document.getElementById('kpiGrid').innerHTML = cards.map(c=>{
@@ -2640,7 +3308,7 @@ function renderBridge(){
   const stages = [
     {label:'חיוב לקוח כולל מע״מ', value:totalBilling, color:'var(--accent-blue)', metric:'billing'},
     {label:'חשבונית עסקה (אחרי מס)', value:totalDeal, color:'var(--accent-indigo)', metric:'dealInvoice'},
-    {label:'תשלום לעובדים', value:totalPaid, color:'var(--accent-red)', metric:'employeePayment'},
+    {label:'שכר עבודה', value:totalPaid, color:'var(--accent-red)', metric:'employeePayment'},
     {label:'רווח גולמי', value:totalProfit, color:'var(--accent-green)', metric:'grossProfit'},
   ];
   document.getElementById('bridgeContainer').innerHTML = stages.map(s=>{
@@ -2802,12 +3470,36 @@ function makeAvgLinePlugin(getLines){
   };
 }
 
-function barChart(canvasId, entries, color, valueFormatter, onBarClick){
+/* תוויות ערך בקצה כל עמודה: כך רואים את המספר המדויק בלי לרחף עם העכבר */
+function makeValueLabelsPlugin(valueFormatter){
+  return {
+    id: 'valueLabels',
+    afterDatasetsDraw(chart){
+      const meta = chart.getDatasetMeta(0); if(!meta || !meta.data) return;
+      const {ctx} = chart, vals = chart.data.datasets[0].data;
+      ctx.save();
+      ctx.font = "700 12px " + MONO_FONT; ctx.textBaseline = 'middle';
+      meta.data.forEach((bar, i)=>{
+        const v = vals[i]; const {x,y} = bar.getProps(['x','y'], true);
+        const neg = v < 0;
+        ctx.fillStyle = neg ? '#D65A45' : (isDark() ? '#E6EDF7' : '#1C2B3D');
+        ctx.textAlign = neg ? 'right' : 'left';
+        ctx.fillText(valueFormatter(v), x + (neg ? -8 : 10), y);
+      });
+      ctx.restore();
+    }
+  };
+}
+
+const CHART_TOP_N = 10; // בגרפי הלוח הראשי מוצגים 10 הנתונים הגבוהים ביותר
+function barChart(canvasId, allEntries, color, valueFormatter, onBarClick){
   const canvasEl = document.getElementById(canvasId);
   const wrap = canvasEl.parentElement;
   if(charts[canvasId]){ charts[canvasId].destroy(); charts[canvasId] = null; }
   const existingEmpty = wrap.querySelector('.chart-empty');
   if(existingEmpty) existingEmpty.remove();
+  let entries = allEntries;
+  const oldMeta = wrap.parentElement.querySelector(':scope > .chart-meta'); if(oldMeta) oldMeta.remove();
   if(entries.length === 0){
     canvasEl.style.display = 'none';
     const emptyDiv = document.createElement('div');
@@ -2817,8 +3509,20 @@ function barChart(canvasId, entries, color, valueFormatter, onBarClick){
     return;
   }
   canvasEl.style.display = 'block';
+  const isAmount = valueFormatter === fmt;
+  const total = sum(entries, e=>e[1]);                 // סה״כ וממוצע - על כל הנתונים, לא רק על ה-10 המוצגים
+  const avgValue = entries.length ? total / entries.length : 0;
+  const totalCount = entries.length;
+  if(canvasEl.closest('.charts-grid.wide')) entries = entries.slice(0, CHART_TOP_N);
+  // גובה הגרף: לפחות כמו "מגמת רווח והפסד" (280px), וגדל עם מספר העמודות כדי שכל שם יהיה קריא
+  wrap.style.height = Math.max(280, entries.length * 34 + 76) + 'px';
+  // שורת סיכום קצרה מעל הגרף
+  const meta = document.createElement('div'); meta.className = 'chart-meta';
+  meta.innerHTML = '<span>' + (entries.length < totalCount ? 'טופ ' + entries.length + ' מתוך ' + totalCount : entries.length + ' פריטים') + '</span>' + (isAmount ? '<span>סה״כ <b>' + fmt(total) + '</b></span>' : '') + '<span>ממוצע <b>' + valueFormatter(avgValue) + '</b></span>'
+    + (onBarClick ? '<span>לחצו על עמודה לפירוט</span>' : '');
+  wrap.parentElement.insertBefore(meta, wrap);
+  const txt = isDark() ? '#C7D3E6' : '#33465F';
   const ctx = canvasEl.getContext('2d');
-  const avgValue = entries.length ? sum(entries, e=>e[1]) / entries.length : 0;
   charts[canvasId] = new Chart(ctx, {
     type:'bar',
     data:{
@@ -2829,34 +3533,52 @@ function barChart(canvasId, entries, color, valueFormatter, onBarClick){
           const {chart} = context;
           return chart.chartArea ? makeBarGradient(chart.ctx, chart.chartArea, color) : color;
         },
-        borderRadius:6, borderSkipped:false, maxBarThickness:24,
+        borderRadius:6, borderSkipped:false, maxBarThickness:26, barPercentage:.78, categoryPercentage:.9,
         hoverBackgroundColor: color
       }]
     },
-    plugins:[ makeAvgLinePlugin(()=> entries.length > 1 ? [{ axis:'x', value:avgValue, color:'#5E7089', label: valueFormatter(avgValue) }] : []), make3DBarPlugin(color) ],
+    plugins:[ makeAvgLinePlugin(()=> entries.length > 1 ? [{ axis:'x', value:avgValue, color:'#5E7089', label: valueFormatter(avgValue) }] : []), make3DBarPlugin(color), makeValueLabelsPlugin(valueFormatter) ],
     options:{
       indexAxis:'y',
       responsive:true, maintainAspectRatio:false,
-      layout:{ padding:{ top:14, right:10 } },
+      layout:{ padding:{ top:18, right:34, left:4, bottom:4 } },
       onClick: onBarClick ? (evt, els)=>{
         if(els.length){ onBarClick(entries[els[0].index][0]); }
       } : undefined,
       onHover: onBarClick ? (evt, els)=>{ evt.native.target.style.cursor = els.length ? 'pointer' : 'default'; } : undefined,
       plugins:{ legend:{display:false},
-        tooltip:{ callbacks:{ label:(c)=> valueFormatter(c.raw) + (onBarClick ? '  ·  לחצו לפירוט' : '') } } },
+        tooltip:{ rtl:true, textDirection:'rtl', padding:10, titleFont:{size:13, weight:'700'}, bodyFont:{size:12.5},
+          callbacks:{ label:(c)=> valueFormatter(c.raw) + (isAmount && total ? '  ·  ' + Math.round(c.raw/total*1000)/10 + '% מהסה״כ' : '') + (onBarClick ? '  ·  לחצו לפירוט' : '') } } },
       scales:{
-        x:{ grid:{color:chartGrid()}, border:{display:false}, ticks:{ callback:(v)=>valueFormatter(v), font:{family:MONO_FONT, size:10.5} } },
-        y:{ grid:{display:false}, border:{display:false} }
+        x:{ grace:'16%', grid:{color:chartGrid()}, border:{display:false}, ticks:{ color:txt, maxTicksLimit:7, callback:(v)=>valueFormatter(v), font:{family:MONO_FONT, size:11} } },
+        y:{ grid:{display:false}, border:{display:false}, ticks:{ color:txt, autoSkip:false, font:{size:12.5, weight:'600'} } }
       }
     }
   });
 }
 
+function renderChartsHero(){
+  const box = document.getElementById('cvStats'); if(!box) return;
+  const rows = filteredCompanies;
+  const profit = sum(rows, c=>c.grossProfit), bill = sum(rows, c=>c.clientBilling);
+  const byEmp = sortedEntries(groupSum(rows, c=>c.employee, c=>c.grossProfit));
+  const byCli = sortedEntries(groupSum(rows, c=>c.endClient, c=>c.clientBilling));
+  const card = (label, value, sub, i)=> '<div class="cv-stat" style="--i:' + i + '"><span>' + label + '</span><b>' + value + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
+  box.innerHTML = card('סה״כ רווח גולמי', fmt(profit), rows.length + ' רשומות', 0)
+    + card(vt('סה״כ חיוב לקוחות כולל מע״מ'), fmt(bill), '', 1)
+    + card('אחוז רווח ממוצע', bill ? pct(profit / bill * 100) : '—', 'מתוך החיוב', 2)
+    + card('עובד מוביל ברווח', byEmp.length ? escHtml(byEmp[0][0]) : '—', byEmp.length ? fmt(byEmp[0][1]) : '', 3);
+}
 function renderCharts(){
+  renderGridCharts();
+  renderMonthlyTrend();
+}
+function renderGridCharts(){
+  renderChartsHero();
   barChart('chartProfitByEmployee', sortedEntries(groupSum(filteredCompanies, c=>c.employee, c=>c.grossProfit)), '#0E9488', fmt,
     (label)=>openCategoryModal('employee', label, 'grossProfit', 'רווח גולמי — ' + label));
   barChart('chartPaymentByEmployee', sortedEntries(groupSum(filteredCompanies, c=>c.employee, c=>c.employeePayment)), '#D65A45', fmt,
-    (label)=>openCategoryModal('employee', label, 'employeePayment', 'תשלומים לעובד — ' + label));
+    (label)=>openCategoryModal('employee', label, 'employeePayment', 'שכר עבודה — ' + label));
   barChart('chartBillingByClient', sortedEntries(groupSum(filteredCompanies, c=>c.endClient, c=>c.clientBilling)), '#2F6FED', fmt,
     (label)=>openCategoryModal('endClient', label, 'clientBilling', 'חיובי לקוח — ' + label));
   barChart('chartMarginByEmployee', sortedEntries(groupRatioPct(filteredCompanies, c=>c.employee, c=>c.grossProfit, c=>c.clientBilling)), '#1E9BD7', pct,
@@ -2866,7 +3588,6 @@ function renderCharts(){
   barChart('chartProfitByCompany', sortedEntries(groupSum(filteredCompanies, c=>c.company, c=>c.grossProfit)), '#0E9488', fmt,
     (label)=>openCategoryModal('company', label, 'grossProfit', 'רווח גולמי — ' + label));
   renderBudgetCharts();
-  renderMonthlyTrend();
 }
 
 function renderBudgetCharts(){
@@ -3009,7 +3730,7 @@ document.getElementById('budgetMonthlyBtn').addEventListener('click', ()=>{ budg
 document.getElementById('budgetAnnualBtn').addEventListener('click', ()=>{ budgetMode='annual'; renderBudgetCharts(); });
 
 /* ============================ מודל פירוט נתון (KPI / גרפים / חודשים) ============================ */
-const COL_LABELS = {clientBilling:'חיוב לקוח', dealInvoice:'חשבונית עסקה', employeePayment:'תשלום לעובד', grossProfit:'רווח גולמי', marginPct:'% רווח', monthlyBudget:'מסגרת חודשית', annualBudget:'מסגרת שנתית'};
+const COL_LABELS = {clientBilling:'חיוב לקוח', dealInvoice:'חשבונית עסקה', employeePayment:'שכר עבודה', grossProfit:'רווח גולמי', marginPct:'% רווח', monthlyBudget:'מסגרת חודשית', annualBudget:'מסגרת שנתית'};
 
 function formatCell(val, type){
   if(type === 'currency') return fmt2(val);
@@ -3020,12 +3741,14 @@ function formatCell(val, type){
 let detailModalState = null; // {title, subtitle, columns, rows, ..., sortKey, sortDir}
 function renderDetailModal(title, subtitle, columns, rows, summaryLabel, summaryValue, summaryType){
   detailModalState = { columns, rows, sortKey:null, sortDir:1 };
+  const toolsEl = document.getElementById('detailModalTools'); if(toolsEl){ toolsEl.style.display = 'none'; toolsEl.innerHTML = ''; }
   document.getElementById('detailModalTitle').textContent = title;
   document.getElementById('detailModalSub').textContent = subtitle;
   document.getElementById('detailModalSummaryLabel').textContent = summaryLabel;
   document.getElementById('detailModalSummaryValue').textContent = summaryType === 'percent' ? pct(summaryValue) : fmt(summaryValue);
   paintDetailModalTable();
   document.getElementById('detailModalOverlay').classList.add('open');
+  applyVatLabels();
 }
 function paintDetailModalTable(){
   const st = detailModalState; if(!st) return;
@@ -3070,23 +3793,84 @@ function openMetricModal(metricKey){
   } else if(metricKey === 'dealInvoice'){
     openTableModal('פירוט חשבונית עסקה (אחרי מס)', filteredCompanies, [...baseCols, {key:'dealInvoice', label:'חשבונית עסקה', type:'currency'}], 'dealInvoice', 'currency');
   } else if(metricKey === 'employeePayment'){
-    openTableModal('פירוט תשלומים לעובדים', filteredCompanies, [...baseCols, {key:'employeePayment', label:'תשלום לעובד', type:'currency'}], 'employeePayment', 'currency');
+    openTableModal('פירוט שכר עבודה', filteredCompanies, [...baseCols, {key:'employeePayment', label:'שכר עבודה', type:'currency'}], 'employeePayment', 'currency');
   } else if(metricKey === 'grossProfit'){
     openTableModal('פירוט רווח גולמי', filteredCompanies, [...baseCols, {key:'grossProfit', label:'רווח גולמי', type:'currency'}], 'grossProfit', 'currency');
   } else if(metricKey === 'margin'){
     const rows = filteredCompanies.map(r=>({...r, marginPct: r.clientBilling ? (r.grossProfit/r.clientBilling*100) : 0}));
     openTableModal('אחוז רווח לכל רשומה', rows, [...baseCols, {key:'clientBilling', label:'חיוב לקוח', type:'currency'}, {key:'grossProfit', label:'רווח גולמי', type:'currency'}, {key:'marginPct', label:'% רווח', type:'percent'}], 'marginPct', 'percent', true);
-  } else if(metricKey === 'activeEmployees'){
-    const rows = planningData.filter(p=>p.status && p.status.indexOf('לא')===-1);
-    openTableModal('עובדים פעילים', rows, [
+  } else if(metricKey === 'projects'){
+    const pr = projectRows();
+    openTableModal('פרויקטים ' + pr.label, pr.rows, [
       {key:'year', label:'שנה', type:'text'},
       {key:'employee', label:'עובד', type:'text'},
       {key:'company', label:'חברה', type:'text'},
+      {key:'client', label:'לקוח', type:'text'},
       {key:'endClient', label:'לקוח קצה', type:'text'},
       {key:'approver', label:'מאשר', type:'text'},
-      {key:'monthlyBudget', label:'מסגרת חודשית', type:'currency'},
+      {key:'empType', label:'שכיר/עצמאי', type:'text'},
+      {key:'status', label:'סטטוס', type:'text'},
     ], null, null);
+    document.getElementById('detailModalSummaryLabel').textContent = 'מספר פרויקטים';
+    document.getElementById('detailModalSummaryValue').textContent = pr.rows.length.toLocaleString('he-IL');
+  } else if(metricKey === 'activeEmployees'){
+    openEmployeesModal();
   }
+}
+
+/* חלון "עובדים": כל העובדים + ארבעה כפתורי סינון (פעיל / לא פעיל / שכיר / עצמאי).
+   כפתור נלחץ שוב = מבטלים את הסינון. סטטוס וסוג העסקה משתלבים (וגם). */
+let empFilter = { status:'', type:'' };
+function latestEmployeeRows(){
+  const m = new Map();
+  planningData.forEach(p=>{
+    if(!p.employee) return;
+    const o = m.get(p.employee);
+    if(!o || (p.year||0) >= (o.year||0)) m.set(p.employee, p);
+  });
+  return [...m.values()];
+}
+function paintEmployeesModal(){
+  const all = latestEmployeeRows();
+  const rows = all.filter(p=>{
+    if(empFilter.status === 'active' && !isActiveRow(p)) return false;
+    if(empFilter.status === 'inactive' && isActiveRow(p)) return false;
+    if(empFilter.type && String(p.empType||'').indexOf(empFilter.type) === -1) return false;
+    return true;
+  });
+  detailModalState.rows = rows;
+  document.getElementById('detailModalSub').textContent = rows.length + ' מתוך ' + all.length + ' עובדים';
+  document.getElementById('detailModalSummaryValue').textContent = rows.length.toLocaleString('he-IL');
+  paintDetailModalTable();
+  const tools = document.getElementById('detailModalTools');
+  tools.querySelectorAll('button').forEach(btn=>{
+    const on = (btn.dataset.grp === 'status' ? empFilter.status : empFilter.type) === btn.dataset.val;
+    btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+function openEmployeesModal(){
+  empFilter = { status:'', type:'' };
+  renderDetailModal('עובדים', '', [
+    {key:'employee', label:'עובד', type:'text'},
+    {key:'year', label:'שנה', type:'text'},
+    {key:'company', label:'חברה', type:'text'},
+    {key:'client', label:'לקוח', type:'text'},
+    {key:'endClient', label:'לקוח קצה', type:'text'},
+    {key:'approver', label:'מאשר', type:'text'},
+    {key:'empType', label:'שכיר/עצמאי', type:'text'},
+    {key:'status', label:'סטטוס', type:'text'},
+    {key:'monthlyBudget', label:'מסגרת חודשית', type:'currency'},
+  ], [], 'מספר עובדים', 0, 'count');
+  const tools = document.getElementById('detailModalTools');
+  tools.style.display = 'flex';
+  tools.innerHTML = [['status','active','פעיל'],['status','inactive','לא פעיל'],['type','שכיר','שכיר'],['type','עצמאי','עצמאי']]
+    .map(([g,v,l])=>`<button type="button" class="btn ghost emp-filter-btn" data-grp="${g}" data-val="${v}" aria-pressed="false">${l}</button>`).join('');
+  tools.querySelectorAll('button').forEach(btn=>btn.addEventListener('click', ()=>{
+    const k = btn.dataset.grp;
+    empFilter[k] = empFilter[k] === btn.dataset.val ? '' : btn.dataset.val;
+    paintEmployeesModal();
+  }));
+  paintEmployeesModal();
 }
 
 function openCategoryModal(field, value, valueKey, title){
@@ -3137,21 +3921,237 @@ function openMonthModal(monthKeyVal, monthLabel){
 document.getElementById('detailModalCloseBtn').addEventListener('click', ()=> document.getElementById('detailModalOverlay').classList.remove('open'));
 document.getElementById('detailModalOverlay').addEventListener('click', (e)=>{ if(e.target.id==='detailModalOverlay') document.getElementById('detailModalOverlay').classList.remove('open'); });
 
+
+/* ============================ עמודי הוצאות ופירוט הוצאות ============================ */
+const DEMO_EXPENSES = [
+  {date:'2026-01-01',supplier:'פנגו',invoiceNo:'187463446',payType:'אשראי חברה',payments:1,incl:117.9,exVat:99.92,vat:17.98},
+  {date:'2026-01-04',supplier:'משה משה',invoiceNo:'10005',payType:'העברה בנקאית',payments:2,incl:35000,exVat:29661.02,vat:5338.98},
+  {date:'2026-01-05',supplier:'משה מיוסי',invoiceNo:'1007',payType:'העברה בנקאית',payments:4,incl:62959,exVat:53355.08,vat:9603.92},
+  {date:'2026-01-06',supplier:'יניב',invoiceNo:'20010',payType:'העברה בנקאית',payments:1,incl:36000,exVat:30508.47,vat:5491.53},
+  {date:'2026-02-03',supplier:'פנגו',invoiceNo:'188120012',payType:'אשראי חברה',payments:1,incl:240,exVat:203.39,vat:36.61},
+  {date:'2026-02-10',supplier:'משה משה',invoiceNo:'10031',payType:'העברה בנקאית',payments:1,incl:35000,exVat:29661.02,vat:5338.98},
+  {date:'2026-03-02',supplier:'חברת חשמל',invoiceNo:'55012',payType:'הוראת קבע',payments:1,incl:4180,exVat:3542.37,vat:637.63},
+  {date:'2026-03-15',supplier:'יניב',invoiceNo:'20044',payType:'העברה בנקאית',payments:1,incl:36000,exVat:30508.47,vat:5491.53},
+  {date:'2025-12-20',supplier:'חברת חשמל',invoiceNo:'54001',payType:'הוראת קבע',payments:1,incl:3900,exVat:3305.08,vat:594.92},
+  {date:'2025-11-08',supplier:'משה מיוסי',invoiceNo:'990',payType:'אשראי חברה',payments:3,incl:21000,exVat:17796.61,vat:3203.39}
+];
+const DEMO_EXP_DETAIL = [
+  {category:'משרד',code:'500170',incl:42500.06,exVat:36017,vat:6483.06,description:'ציוד משרדי ושכירות',customer:''},
+  {category:'שכר עבודה',code:'500171',incl:50006.04,exVat:42378,vat:7628.04,description:'שכר',customer:''},
+  {category:'כיבוד',code:'500172',incl:60180,exVat:51000,vat:9180,description:'כיבוד לאירועים',customer:'אגף'},
+  {category:'שיווק',code:'500173',incl:18000,exVat:15254.24,vat:2745.76,description:'פרסום',customer:'הגנה'}
+];
+const X = { exp:{ vat:true, period:'month' }, cat:{ vat:true } };
+const XF = {
+  exp:[['xfExpYear', r=>String(r.date||'').slice(0,4)],['xfExpMonth', r=>{const m=+String(r.date||'').slice(5,7); return m ? HEB_MONTHS[m-1] : '';}],['xfExpPay', r=>r.payType],['xfExpSupplier', r=>r.supplier]],
+  cat:[['xfCatCategory', r=>r.category],['xfCatCustomer', r=>r.customer]]
+};
+const xRows = k => k === 'exp' ? expRows : catRows;
+const xAmt = (k, r) => X[k].vat ? r.incl : r.exVat;
+function xFiltered(k){
+  const sels = XF[k].map(([id, fn])=>[msGet(id), fn]);
+  return xRows(k).filter(r=> sels.every(([sel, fn])=> !sel.length || sel.includes(fn(r))));
+}
+function xCount(k){ return XF[k].filter(([id])=> msGet(id).length).length; }
+function xPopulate(k){
+  XF[k].forEach(([id, fn])=>{
+    const vals = new Set(xRows(k).map(fn).filter(Boolean));
+    if(id === 'xfExpMonth') msSetOptions(id, HEB_MONTHS.filter(m=>vals.has(m))); else msSetOptions(id, vals);
+    if(id === 'xfExpMonth'){ const r = document.getElementById(id); r._opts = HEB_MONTHS.filter(m=>vals.has(m)); msUpdateLabel(r); }
+  });
+}
+function xRefreshAll(){ xPopulate('exp'); xPopulate('cat'); if(currentView === 'exp') renderExp(); else if(currentView === 'cat') renderCat(); }
+['exp','cat'].forEach(k=> XF[k].forEach(([id])=>{ msInit(id); document.getElementById(id)._onChange = ()=>{ xRender(k); updateFilterBadge(); }; }));
+function xRender(k){ if(k === 'exp') renderExp(); else renderCat(); }
+function xfOpen(k){
+  const ov = document.getElementById('xf_' + k), pop = ov.querySelector('.filters-pop'), btn = document.getElementById('openFiltersBtn');
+  ov.classList.add('show'); ov.setAttribute('aria-hidden','false');
+  const br = btn.getBoundingClientRect(), pr = pop.getBoundingClientRect();
+  pop.style.transformOrigin = (br.left + br.width/2 - pr.left) + 'px ' + (br.top + br.height/2 - pr.top) + 'px';
+  pop.querySelectorAll('.fp-body .field').forEach((el,i)=> el.style.setProperty('--i', i));
+  requestAnimationFrame(()=> requestAnimationFrame(()=> ov.classList.add('open')));
+}
+function xfClose(k){
+  const ov = document.getElementById('xf_' + k); if(!ov.classList.contains('show')) return;
+  ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
+  ov.querySelectorAll('.ms.open').forEach(m=>m.classList.remove('open'));
+  setTimeout(()=>{ if(!ov.classList.contains('open')) ov.classList.remove('show'); }, 320);
+}
+document.querySelectorAll('[data-xclose]').forEach(b=> b.addEventListener('click', ()=> xfClose(b.dataset.xclose)));
+document.querySelectorAll('[data-xclear]').forEach(b=> b.addEventListener('click', ()=>{ const k = b.dataset.xclear; XF[k].forEach(([id])=> msClear(id)); xRender(k); updateFilterBadge(); }));
+['exp','cat'].forEach(k=> document.getElementById('xf_' + k).addEventListener('mousedown', (e)=>{ if(e.target.id === 'xf_' + k) xfClose(k); }));
+document.addEventListener('keydown', (e)=>{ if(e.key !== 'Escape') return; ['exp','cat'].forEach(k=>{ const ov = document.getElementById('xf_' + k); if(ov.classList.contains('open') && !ov.querySelector('.ms.open')) xfClose(k); }); });
+document.querySelectorAll('.xv-switch').forEach(sw=> sw.addEventListener('click', ()=>{
+  const k = sw.dataset.xk; X[k].vat = !X[k].vat;
+  sw.classList.toggle('on', X[k].vat); sw.setAttribute('aria-checked', X[k].vat ? 'true' : 'false'); sw.querySelector('.vat-state').textContent = X[k].vat ? 'ON' : 'OFF';
+  document.querySelector('[data-xnote="' + k + '"]').textContent = X[k].vat ? 'הסכומים מוצגים כולל מע״מ' : 'הסכומים מוצגים ללא מע״מ';
+  xRender(k);
+}));
+document.querySelectorAll('[data-xperiod]').forEach(b=> b.addEventListener('click', ()=>{
+  X.exp.period = b.dataset.xperiod;
+  document.querySelectorAll('[data-xperiod]').forEach(x=> x.classList.toggle('on', x === b));
+  renderExp();
+}));
+const XPAL = ['#2F6FED','#6C4CE0','#0E9488','#D65A45','#1E9BD7','#E0A21B','#C2417C','#4F9D3A','#7A8AA6','#8A5A2B'];
+function xStats(id, cards){
+  document.getElementById(id).innerHTML = cards.map((c,i)=> '<div class="cv-stat" style="--i:' + i + '"><span>' + c[0] + '</span><b>' + c[1] + '</b>' + (c[2] ? '<small>' + c[2] + '</small>' : '') + '</div>').join('');
+}
+function xKpis(id, cards){
+  document.getElementById(id).innerHTML = cards.map(c=>`
+    <div class="kpi static" style="--kpi-accent:${c.accent};--kpi-accent-soft:${c.soft};">
+      <div class="kpi-top"><div class="kpi-icon">${KPI_ICONS[c.icon]}</div></div>
+      <div class="label">${c.label}</div>
+      <div class="value num" data-raw="${c.raw}" data-type="${c.type}">0</div>
+    </div>`).join('');
+  animateValuesIn('#' + id + ' .value');
+}
+function xEmpty(canvasId, show){
+  const cv = document.getElementById(canvasId), wrap = cv.parentElement;
+  const old = wrap.querySelector('.chart-empty'); if(old) old.remove();
+  cv.style.display = show ? 'none' : 'block';
+  if(show){ const d = document.createElement('div'); d.className = 'chart-empty'; d.textContent = 'אין נתונים להצגה'; wrap.appendChild(d); }
+}
+function xPctCell(p, c){ return '<div class="pct-cell" style="--c:' + c + '"><b>' + pct(p) + '</b><i><u style="width:' + Math.max(0, Math.min(100, p)) + '%"></u></i></div>'; }
+function xTrendChart(rows){
+  const id = 'xChartTrend';
+  if(charts[id]){ charts[id].destroy(); charts[id] = null; }
+  const map = new Map();
+  rows.forEach(r=>{
+    const d = String(r.date||''); const key = X.exp.period === 'year' ? d.slice(0,4) : d.slice(0,7);
+    if(!/^\d{4}/.test(key)) return;
+    map.set(key, (map.get(key)||0) + xAmt('exp', r));
+  });
+  const keys = [...map.keys()].sort();
+  xEmpty(id, !keys.length);
+  document.getElementById('expTrendSub').textContent = X.exp.period === 'year' ? 'שנתי' : 'חודשי';
+  if(!keys.length) return;
+  const labels = keys.map(k=> X.exp.period === 'year' ? k : HEB_MONTHS[+k.slice(5,7)-1] + ' ' + k.slice(2,4));
+  const vals = keys.map(k=> Math.round(map.get(k)*100)/100);
+  const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+  const txt = isDark() ? '#B9C6E4' : '#4A5878';
+  charts[id] = new Chart(document.getElementById(id).getContext('2d'), {
+    type:'bar',
+    data:{ labels, datasets:[{ label:'הוצאות', data:vals, backgroundColor:'#D65A45', borderRadius:8, maxBarThickness:56 },
+      { type:'line', label:'ממוצע', data:vals.map(()=>avg), borderColor:'#7A8AA6', borderDash:[6,5], borderWidth:1.5, pointRadius:0 }] },
+    options:{ responsive:true, maintainAspectRatio:false, animation:{ duration: prefersReducedMotion ? 0 : 700 },
+      plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=> c.dataset.label + ': ' + fmt(c.parsed.y) } } },
+      scales:{ x:{ ticks:{ color:txt }, grid:{ display:false } }, y:{ ticks:{ color:txt, callback:(v)=>fmt(v) }, grid:{ color: isDark() ? 'rgba(255,255,255,.08)' : 'rgba(20,40,90,.08)' } } } }
+  });
+}
+function renderExp(){
+  if(document.getElementById('expView').hidden && !arguments[0]) return;
+  const rows = xFiltered('exp'), amt = r=>xAmt('exp', r);
+  const total = sum(rows, amt), incl = sum(rows, r=>r.incl), ex = sum(rows, r=>r.exVat), vat = sum(rows, r=>r.vat);
+  const months = new Set(rows.map(r=>String(r.date||'').slice(0,7)).filter(Boolean)).size;
+  const bySup = sortedEntries(groupSum(rows, r=>r.supplier, amt));
+  xStats('expStats', [
+    ['סה״כ הוצאות ' + (X.exp.vat ? 'כולל מע״מ' : 'ללא מע״מ'), fmt(total), rows.length + ' הוצאות', 0],
+    ['מע״מ מוכר', fmt(vat), total ? '' : '', 1],
+    ['ממוצע חודשי', fmt(months ? total / months : 0), months + ' חודשים', 2],
+    ['ספק מוביל', bySup.length ? escHtml(bySup[0][0]) : '—', bySup.length ? fmt(bySup[0][1]) + ' · ' + pct(total ? bySup[0][1] / total * 100 : 0) : '', 3]
+  ]);
+  xKpis('expKpis', [
+    {label:'סה״כ כולל מע״מ', raw:incl, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'billing'},
+    {label:'סה״כ ללא מע״מ', raw:ex, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', icon:'dealInvoice'},
+    {label:'מע״מ מוכר (18%)', raw:vat, type:'currency', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', icon:'margin'},
+    {label:'מספר הוצאות', raw:rows.length, type:'integer', accent:'var(--accent-green)', soft:'var(--accent-green-soft)', icon:'projects'},
+    {label:'ממוצע להוצאה', raw:rows.length ? total / rows.length : 0, type:'currency', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', icon:'employeePayment'},
+    {label:'ממוצע חודשי', raw:months ? total / months : 0, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'grossProfit'}
+  ]);
+  xTrendChart(rows);
+  const setSearch = (label)=>{ const b = document.getElementById('expSearch'); b.value = label; renderExp(true); document.getElementById('expTable').scrollIntoView({behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start'}); };
+  barChart('xChartPay', sortedEntries(groupSum(rows, r=>r.payType || 'לא צוין', amt)), '#6C4CE0', fmt, setSearch);
+  barChart('xChartSupplier', sortedEntries(groupSum(rows, r=>r.supplier || 'לא צוין', amt)), '#1E9BD7', fmt, setSearch);
+  const q = (document.getElementById('expSearch').value || '').trim().toLowerCase();
+  const list = rows.filter(r=> !q || [r.date,r.supplier,r.invoiceNo,r.payType].join(' ').toLowerCase().includes(q)).sort((a,b)=> String(b.date).localeCompare(String(a.date)));
+  document.getElementById('expTableTitle').textContent = 'כל ההוצאות · ' + rows.length + (q ? ' · ' + list.length + ' תוצאות חיפוש' : '');
+  const shown = list.slice(0, 500);
+  document.getElementById('expTbody').innerHTML = shown.map(r=>{
+    const d = String(r.date||'').match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return '<tr><td>' + (d ? d[3] + '.' + d[2] + '.' + d[1] : escHtml(r.date)) + '</td><td>' + escHtml(r.supplier) + '</td><td>' + escHtml(r.invoiceNo) + '</td><td>' + escHtml(r.payType) + '</td>'
+      + '<td class="num">' + (r.payments || '') + '</td><td class="num">' + fmt(r.exVat) + '</td><td class="num">' + fmt(r.vat) + '</td><td class="num">' + fmt(r.incl) + '</td>'
+      + '<td>' + xPctCell(total ? amt(r) / total * 100 : 0, '#D65A45') + '</td></tr>';
+  }).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-dim);padding:22px;">אין הוצאות להצגה</td></tr>';
+  updateFilterBadge();
+}
+document.getElementById('expSearch').addEventListener('input', ()=> renderExp(true));
+function renderCat(){
+  if(document.getElementById('catView').hidden && !arguments[0]) return;
+  const rows = xFiltered('cat'), amt = r=>xAmt('cat', r);
+  const total = sum(rows, amt), incl = sum(rows, r=>r.incl), ex = sum(rows, r=>r.exVat), vat = sum(rows, r=>r.vat);
+  const byCat = sortedEntries(groupSum(rows, r=>r.category, amt));
+  xStats('catStats', [
+    ['סה״כ ' + (X.cat.vat ? 'כולל מע״מ' : 'ללא מע״מ'), fmt(total), rows.length + ' שורות', 0],
+    ['קטגוריות', byCat.length, '', 1],
+    ['קטגוריה מובילה', byCat.length ? escHtml(byCat[0][0]) : '—', byCat.length ? fmt(byCat[0][1]) : '', 2],
+    ['אחוז הקטגוריה המובילה', byCat.length && total ? pct(byCat[0][1] / total * 100) : '—', 'מסך ההוצאות', 3]
+  ]);
+  xKpis('catKpis', [
+    {label:'סה״כ כולל מע״מ', raw:incl, type:'currency', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', icon:'billing'},
+    {label:'סה״כ ללא מע״מ', raw:ex, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', icon:'dealInvoice'},
+    {label:'מע״מ (18%)', raw:vat, type:'currency', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', icon:'margin'},
+    {label:'קטגוריות', raw:byCat.length, type:'integer', accent:'var(--accent-green)', soft:'var(--accent-green-soft)', icon:'projects'},
+    {label:'מספר שורות', raw:rows.length, type:'integer', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', icon:'activeEmployees'},
+    {label:'ממוצע לקטגוריה', raw:byCat.length ? total / byCat.length : 0, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'employeePayment'}
+  ]);
+  const setSearch = (label)=>{ document.getElementById('catSearch').value = label; renderCat(true); document.getElementById('catTable').scrollIntoView({behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start'}); };
+  barChart('xcChartCat', byCat, '#6C4CE0', fmt, setSearch);
+  // התפלגות (דונאט)
+  const id = 'xcChartShare';
+  if(charts[id]){ charts[id].destroy(); charts[id] = null; }
+  xEmpty(id, !byCat.length);
+  if(byCat.length){
+    const txt = isDark() ? '#B9C6E4' : '#4A5878';
+    charts[id] = new Chart(document.getElementById(id).getContext('2d'), {
+      type:'doughnut',
+      data:{ labels:byCat.map(e=>e[0]), datasets:[{ data:byCat.map(e=>e[1]), backgroundColor:byCat.map((e,i)=>XPAL[i % XPAL.length]), borderWidth:2, borderColor: isDark() ? '#0F1B3D' : '#fff' }] },
+      options:{ responsive:true, maintainAspectRatio:false, cutout:'58%', animation:{ duration: prefersReducedMotion ? 0 : 700 },
+        plugins:{ legend:{ position:'bottom', labels:{ color:txt, boxWidth:12, padding:14 } },
+          tooltip:{ callbacks:{ label:(c)=> c.label + ': ' + fmt(c.parsed) + ' · ' + pct(total ? c.parsed / total * 100 : 0) } } } }
+    });
+  }
+  const byCust = sortedEntries(groupSum(rows.filter(r=>r.customer), r=>r.customer, amt));
+  document.getElementById('xcCustCard').hidden = !byCust.length; document.getElementById('xcCustHead').hidden = !byCust.length;
+  if(byCust.length) barChart('xcChartCust', byCust, '#1E9BD7', fmt, setSearch);
+  document.getElementById('catSumTbody').innerHTML = byCat.map(([name, v], i)=>{
+    const rs = rows.filter(r=>r.category === name);
+    return '<tr><td><b>' + escHtml(name) + '</b></td><td class="num">' + fmt(sum(rs, r=>r.exVat)) + '</td><td class="num">' + fmt(sum(rs, r=>r.vat)) + '</td><td class="num">' + fmt(sum(rs, r=>r.incl)) + '</td><td>' + xPctCell(total ? v / total * 100 : 0, XPAL[i % XPAL.length]) + '</td></tr>';
+  }).join('') + (byCat.length ? '<tr style="font-weight:800;"><td>סה״כ</td><td class="num">' + fmt(ex) + '</td><td class="num">' + fmt(vat) + '</td><td class="num">' + fmt(incl) + '</td><td>100%</td></tr>' : '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:22px;">אין נתונים להצגה</td></tr>');
+  const q = (document.getElementById('catSearch').value || '').trim().toLowerCase();
+  const list = rows.filter(r=> !q || [r.category,r.code,r.description,r.customer].join(' ').toLowerCase().includes(q));
+  document.getElementById('catTbody').innerHTML = list.slice(0, 500).map(r=> '<tr><td>' + escHtml(r.category) + '</td><td>' + escHtml(r.code) + '</td><td>' + escHtml(r.description) + '</td><td>' + escHtml(r.customer) + '</td><td class="num">' + fmt(r.exVat) + '</td><td class="num">' + fmt(r.vat) + '</td><td class="num">' + fmt(r.incl) + '</td></tr>').join('')
+    || '<tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:22px;">אין שורות להצגה</td></tr>';
+  updateFilterBadge();
+}
+document.getElementById('catSearch').addEventListener('input', ()=> renderCat(true));
+
 /* ============================ מודל צפייה בתכנון עתידי (דשבורד) ============================ */
 let planningSort = { key:'employee', dir:1 };
 
 function getFilteredPlanning(){
-  return filterPlanRows(planningData, getFilters(), true);
+  return filterPlanRows(rawPlanning, getFilters(), true); // עמוד התכנון תמיד כולל מע״מ
 }
 
 function openPlanningModal(){
   document.getElementById('planningSearchBox').value = '';
-  document.getElementById('planningModalOverlay').classList.add('open');
+  setView('planning');
   renderPlanningDashboard();
 }
 
+function renderPlanningHero(plan){
+  const box = document.getElementById('pvStats'); if(!box) return;
+  const monthly = sum(plan, p=>p.monthlyBudget), after = sum(plan, p=>p.afterTax);
+  const rem = sum(plan, p=>p.remainder);
+  const top = sortedEntries(groupSum(plan, p=>p.employee, p=>p.monthlyBudget));
+  const card = (label, value, sub, i)=> '<div class="cv-stat" style="--i:' + i + '"><span>' + label + '</span><b>' + value + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
+  box.innerHTML = card('רשומות בתכנון', plan.length.toLocaleString('he-IL'), new Set(plan.map(p=>p.employee).filter(Boolean)).size + ' עובדים', 0)
+    + card('מסגרת חודשית', fmt(monthly), '', 1)
+    + card('יתרה מתוכננת', fmt(rem), after ? pct(rem / after * 100) + ' מהסכום אחרי מס' : '', 2)
+    + card('עובד מוביל במסגרת', top.length ? escHtml(top[0][0]) : '—', top.length ? fmt(top[0][1]) : '', 3);
+}
 function renderPlanningDashboard(){
   const plan = getFilteredPlanning();
+  renderPlanningHero(plan);
   renderPlanningKPIs(plan);
   renderPlanningCharts(plan);
   renderPlanningFullTable();
@@ -3169,7 +4169,7 @@ function renderPlanningKPIs(plan){
     {label:'סה״כ מסגרת שנתית', raw:totalAnnual, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', icon:'dealInvoice'},
     {label:'סה״כ מסגרת חודשית', raw:totalMonthly, type:'currency', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', icon:'dealInvoice'},
     {label:'סה״כ אחרי מס כולל מע״מ', raw:totalAfterTax, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', icon:'billing'},
-    {label:'סה״כ תשלום לעובד מתוכנן', raw:totalPlannedPayment, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'employeePayment'},
+    {label:'שכר עבודה מתוכנן', raw:totalPlannedPayment, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'employeePayment'},
     {label:'אחוז רווח ממוצע מתוכנן', raw:avgMargin, type:'percent', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', icon:'margin'},
     {label:'עובדים פעילים בתכנון', raw:activeCount, type:'integer', accent:'var(--accent-green)', soft:'var(--accent-green-soft)', icon:'activeEmployees'},
   ];
@@ -3206,7 +4206,7 @@ function renderPlanningFullTable(){
   const base = getFilteredPlanning();
   let rows = base.filter(p=>{
     if(!search) return true;
-    const hay = [p.year,p.company,p.tenderType,p.endClient,p.approver,p.employee,p.status].join(' ').toLowerCase();
+    const hay = [p.year,p.company,p.tenderType,p.client,p.endClient,p.approver,p.employee,p.empType,p.status].join(' ').toLowerCase();
     return hay.includes(search);
   });
   const { key, dir } = planningSort;
@@ -3216,7 +4216,7 @@ function renderPlanningFullTable(){
     return String(va||'').localeCompare(String(vb||''),'he') * dir;
   });
 
-  document.getElementById('planningModalSub').textContent = base.length + ' עובדים בתכנון' + (search ? ` · ${rows.length} תוצאות חיפוש` : '');
+  document.getElementById('planningModalSub').textContent = 'כל הרשומות בתכנון · ' + base.length + (search ? ` · ${rows.length} תוצאות חיפוש` : '');
 
   document.getElementById('planningFullTbody').innerHTML = rows.map(r=>{
     const rowClass = r.remaining < 0 ? 'row-bad' : (r.utilization >= 90 ? 'row-warn' : '');
@@ -3225,9 +4225,11 @@ function renderPlanningFullTable(){
       <td>${r.year||''}</td>
       <td>${r.company||''}</td>
       <td>${r.tenderType||''}</td>
+      <td>${r.client||''}</td>
       <td>${r.endClient||''}</td>
       <td>${r.approver||''}</td>
       <td>${empCellHtml(r)}</td>
+      <td>${r.empType||''}</td>
       <td><span class="pill ${r.status && r.status.indexOf('לא')===-1 ? 'active':'inactive'}">${r.status||''}</span></td>
       <td class="num">${fmt2(r.annualBudget)}</td>
       <td class="num">${fmt2(r.monthlyBudget)}</td>
@@ -3236,11 +4238,12 @@ function renderPlanningFullTable(){
       <td class="num">${fmt2(r.remainder)}</td>
       <td class="num">${pct(r.profitPercent)}</td>
     </tr>`;
-  }).join('') || `<tr><td colspan="13" style="text-align:center;color:var(--text-dim);padding:20px;">אין נתוני תכנון תואמים</td></tr>`;
+  }).join('') || `<tr><td colspan="15" style="text-align:center;color:var(--text-dim);padding:20px;">אין נתוני תכנון תואמים</td></tr>`;
 
   bindEmpCellClicks('planningFullTbody');
   updateSortIndicators('planningFullTable', planningSort);
   labelCells('planningFullTable');
+  applyVatLabels();
 }
 
 document.querySelectorAll('#planningFullTable thead th').forEach(th=>{
@@ -3252,7 +4255,6 @@ document.querySelectorAll('#planningFullTable thead th').forEach(th=>{
   });
 });
 document.getElementById('planningSearchBox').addEventListener('input', renderPlanningFullTable);
-document.getElementById('viewPlanningBtn').addEventListener('click', openPlanningModal);
 
 /* ============================ תצוגה מקדימה במובייל (iPhone 15) ============================ */
 function openMobilePreview(){
@@ -3267,8 +4269,6 @@ function closeMobilePreview(){
 document.getElementById('mobilePreviewBtn').addEventListener('click', openMobilePreview);
 document.getElementById('closeMobilePreviewBtn').addEventListener('click', closeMobilePreview);
 document.getElementById('mobilePreviewOverlay').addEventListener('click', (e)=>{ if(e.target.id==='mobilePreviewOverlay') closeMobilePreview(); });
-document.getElementById('planningModalCloseBtn').addEventListener('click', ()=> document.getElementById('planningModalOverlay').classList.remove('open'));
-document.getElementById('planningModalOverlay').addEventListener('click', (e)=>{ if(e.target.id==='planningModalOverlay') document.getElementById('planningModalOverlay').classList.remove('open'); });
 
 /* ============================ טבלת תכנון מול ביצוע ============================ */
 function utilBarHtml(utilization, remaining){
@@ -3386,16 +4386,18 @@ function renderDetailTable(){
       <td>${r.year||''}</td>
       <td>${r.company||''}</td>
       <td>${r.tenderType||''}</td>
+      <td>${r.client||''}</td>
       <td>${r.endClient||''}</td>
       <td>${r.approver||''}</td>
       <td>${r.employee||''}</td>
+      <td>${r.empType||''}</td>
       <td class="num">${fmt2(r.clientBilling)}</td>
       <td class="num">${fmt2(r.dealInvoice)}</td>
       <td class="num">${fmt2(r.employeePayment)}</td>
       <td class="num ${r.grossProfit<0?'profit-neg':'profit-pos'}">${fmt2(r.grossProfit)}</td>
       <td class="num ${r.marginPct<0?'profit-neg':'profit-pos'}">${pct(r.marginPct)}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="12" style="text-align:center;color:var(--text-dim);padding:20px;">אין רשומות התואמות את הסינון</td></tr>';
+  }).join('') || '<tr><td colspan="14" style="text-align:center;color:var(--text-dim);padding:20px;">אין רשומות התואמות את הסינון</td></tr>';
   labelCells('detailTable');
 
   document.getElementById('pagerInfo').textContent = `עמוד ${currentPage} מתוך ${totalPages} (${rows.length} רשומות)`;
@@ -3592,6 +4594,7 @@ applyA11ySettings(getA11ySettings()); // שחזור העדפות נגישות ש
 
 /* ============================ רענון ============================ */
 document.getElementById('refreshBtn').addEventListener('click', ()=>{
+  window.__manualRefresh = true;
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
   setTimeout(()=> btn.classList.remove('spinning'), 700);
@@ -3684,7 +4687,8 @@ function applyTheme(t, persist){
   applyChartTheme();
   if(companiesData.length || planningData.length){
     renderCharts(); renderBudgetCharts(); renderMonthlyTrend();
-    if(document.getElementById('planningModalOverlay').classList.contains('open')) renderPlanningCharts(getFilteredPlanning());
+    if(currentView === 'planning') renderPlanningCharts(getFilteredPlanning());
+    if(currentView === 'exp') renderExp(true); else if(currentView === 'cat') renderCat(true);
   }
 }
 document.getElementById('themeBtn').addEventListener('click', ()=> applyTheme(isDark() ? 'light' : 'dark', true));
@@ -3756,10 +4760,10 @@ function renderAlertStrip(){
 
 /* ============================ v3: השוואה לתקופה קודמת (כרטיסי KPI) ============================ */
 function matchNonDate(c, f){
-  if(!inSel(f.company, c.company) || !inSel(f.endClient, c.endClient) || !inSel(f.approver, c.approver) ||
+  if(!inSel(f.company, c.company) || !inSel(f.client, c.client) || !inSel(f.endClient, c.endClient) || !inSel(f.approver, c.approver) ||
      !inSel(f.employee, c.employee) || !inSel(f.tenderType, c.tenderType)) return false;
   if(f.search){
-    const hay = [c.company,c.tenderType,c.endClient,c.approver,c.employee].join(' ').toLowerCase();
+    const hay = [c.company,c.tenderType,c.client,c.endClient,c.approver,c.employee].join(' ').toLowerCase();
     if(!hay.includes(f.search)) return false;
   }
   return true;
@@ -3776,7 +4780,7 @@ function aggRange(f, a, b){
 }
 /* ============================ v3: דירוג רווחיות ============================ */
 let rankDim = 'employee';
-const RANK_DIMS = { employee:{ label:'עובד', title:'רווח גולמי לפי עובד' }, endClient:{ label:'לקוח קצה', title:'רווח גולמי לפי לקוח קצה' }, company:{ label:'חברה', title:'רווח גולמי לפי חברה' } };
+const RANK_DIMS = { employee:{ label:'עובד', title:'רווח גולמי לפי עובד' }, client:{ label:'לקוח', title:'רווח גולמי לפי לקוח' }, approver:{ label:'מאשר', title:'רווח גולמי לפי מאשר' }, endClient:{ label:'לקוח קצה', title:'רווח גולמי לפי לקוח קצה' }, company:{ label:'חברה', title:'רווח גולמי לפי חברה' } };
 function renderRanking(){
   const grid = document.getElementById('rankGrid'); if(!grid) return;
   document.querySelectorAll('#rankTabs button').forEach(b=> b.classList.toggle('on', b.dataset.dim === rankDim));
@@ -3908,19 +4912,19 @@ function excelDateSerial(s){
 }
 function buildExportSheets(){
   const H = (t)=>({ t:'head', v:t });
-  const rows1 = [[H('תאריך'),H('חברה'),H('סוג מכרז'),H('לקוח קצה'),H('מאשר'),H('שם עובד'),H('חיוב לקוח כולל מע״מ'),H('חשבונית עסקה'),H('תשלום לעובד'),H('רווח גולמי'),H('% רווח')]];
+  const rows1 = [[H('תאריך'),H('חברה'),H('סוג מכרז'),H('לקוח'),H('לקוח קצה'),H('מאשר'),H('שם עובד'),H('שכיר/עצמאי'),H(vt('חיוב לקוח כולל מע״מ')),H('חשבונית עסקה'),H('שכר עבודה'),H('רווח גולמי'),H('% רווח')]];
   const sorted = [...filteredCompanies].sort((a,b)=> String(a.date||'').localeCompare(String(b.date||'')));
-  sorted.forEach(c=> rows1.push([ {t:'date', v:excelDateSerial(c.date)}, c.company, c.tenderType, c.endClient, c.approver, c.employee,
+  sorted.forEach(c=> rows1.push([ {t:'date', v:excelDateSerial(c.date)}, c.company, c.tenderType, c.client||'', c.endClient, c.approver, c.employee, c.empType||'',
     {t:'money',v:c.clientBilling}, {t:'money',v:c.dealInvoice}, {t:'money',v:c.employeePayment}, {t:'money',v:c.grossProfit},
     {t:'pct', v: c.clientBilling ? c.grossProfit / c.clientBilling * 100 : 0} ]));
   const tb = sum(sorted,c=>c.clientBilling), td = sum(sorted,c=>c.dealInvoice), tp = sum(sorted,c=>c.employeePayment), tg = sum(sorted,c=>c.grossProfit);
-  rows1.push([{t:'bold',v:'סה״כ'},'','','','','',{t:'boldmoney',v:tb},{t:'boldmoney',v:td},{t:'boldmoney',v:tp},{t:'boldmoney',v:tg},{t:'pct',v: tb ? tg/tb*100 : 0}]);
-  const rows2 = [[H('שנה'),H('שם עובד'),H('חברה'),H('לקוח קצה'),H('מאשר'),H('סטטוס'),H('מסגרת שנתית'),H('מסגרת חודשית'),H('שולם בפועל השנה'),H('יתרה למסגרת'),H('% ניצול')]];
-  filterPlanRows(planningData, getFilters(), true).forEach(p=> rows2.push([ p.year||'', p.employee, p.company, p.endClient, p.approver, p.status,
+  rows1.push([{t:'bold',v:'סה״כ'},'','','','','','','',{t:'boldmoney',v:tb},{t:'boldmoney',v:td},{t:'boldmoney',v:tp},{t:'boldmoney',v:tg},{t:'pct',v: tb ? tg/tb*100 : 0}]);
+  const rows2 = [[H('שנה'),H('שם עובד'),H('שכיר/עצמאי'),H('חברה'),H('לקוח'),H('לקוח קצה'),H('מאשר'),H('סטטוס'),H('מסגרת שנתית'),H('מסגרת חודשית'),H('שולם בפועל השנה'),H('יתרה למסגרת'),H('% ניצול')]];
+  filterPlanRows(planningData, getFilters(), true).forEach(p=> rows2.push([ p.year||'', p.employee, p.empType||'', p.company, p.client||'', p.endClient, p.approver, p.status,
     {t:'money',v:p.annualBudget}, {t:'money',v:p.monthlyBudget}, {t:'money',v:p.actualPaidThisYear||0}, {t:'money',v:p.remaining}, {t:'pct',v:p.utilization} ]));
   return { count: sorted.length, sheets: [
-    { name:'חיוב חודשי (מסונן)', rows:rows1, widths:[12,18,14,18,14,16,18,16,16,16,10] },
-    { name:'תכנון מול ביצוע', rows:rows2, widths:[8,16,18,18,14,10,16,16,18,16,10] }
+    { name:'חיוב חודשי (מסונן)', rows:rows1, widths:[12,18,14,18,18,14,16,12,18,16,16,16,10] },
+    { name:'תכנון מול ביצוע', rows:rows2, widths:[8,16,12,18,18,18,14,10,16,16,18,16,10] }
   ] };
 }
 function exportExcel(){
@@ -3937,13 +4941,13 @@ function monthChoices(){
 }
 function fullMonthLabel(i){ const y = Math.floor((i-1)/12), m = (i-1)%12; return HEB_MONTHS[m] + ' ' + y; }
 function buildMonthlyReportHtml(monthIdx){
-  const f0 = { company:[], endClient:[], approver:[], employee:[], tenderType:[], search:'' };
+  const f0 = { company:[], client:[], endClient:[], approver:[], employee:[], tenderType:[], search:'' };
   const cur = aggRange(f0, monthIdx, monthIdx), prev = aggRange(f0, monthIdx-1, monthIdx-1), yoy = aggRange(f0, monthIdx-12, monthIdx-12);
   const rowsM = companiesData.filter(c=> dateIdx(c.date) === monthIdx);
   const dl = (a,b)=>{ if(!b.n) return '—'; const d = b.v ? (a.v-b.v)/Math.abs(b.v)*100 : 0; return (d>0?'▲ ':d<0?'▼ ':'') + Math.abs(d).toLocaleString('he-IL',{maximumFractionDigits:1}) + '%'; };
   const mg = o => o.clientBilling ? o.grossProfit/o.clientBilling*100 : 0;
   const kp = [
-    ['חיוב לקוחות כולל מע״מ','clientBilling'], ['חשבונית עסקה (אחרי מס)','dealInvoice'], ['שולם לעובדים','employeePayment'], ['רווח גולמי','grossProfit']
+    [vt('חיוב לקוחות כולל מע״מ'),'clientBilling'], ['חשבונית עסקה (אחרי מס)','dealInvoice'], ['שכר עבודה','employeePayment'], ['רווח גולמי','grossProfit']
   ].map(([l,k])=>`<tr><td>${l}</td><td class="n">${fmt(cur[k])}</td><td class="n">${dl({v:cur[k]},{v:prev[k],n:prev.n})}</td><td class="n">${dl({v:cur[k]},{v:yoy[k],n:yoy.n})}</td></tr>`).join('')
     + `<tr><td>אחוז רווח</td><td class="n">${pct(mg(cur))}</td><td class="n">${prev.n ? (mg(cur)-mg(prev)>=0?'▲ ':'▼ ') + Math.abs(mg(cur)-mg(prev)).toFixed(1) + ' נק׳' : '—'}</td><td class="n">${yoy.n ? (mg(cur)-mg(yoy)>=0?'▲ ':'▼ ') + Math.abs(mg(cur)-mg(yoy)).toFixed(1) + ' נק׳' : '—'}</td></tr>`;
   const top = (field, valKey, n)=>{ const m = groupSum(rowsM, c=>c[field]||'לא ידוע', c=>c[valKey]); return [...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,n); };
