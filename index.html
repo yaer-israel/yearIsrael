@@ -1647,7 +1647,7 @@ window.__DASHBOARD_PREFETCH__ = (function(){
         <div class="chart-card" data-group="clients" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11a4 4 0 1 0-8 0M4 21a8 8 0 0 1 16 0"/></svg></span><span class="cv-title">סה״כ חיובי לקוח לפי לקוח קצה<small>אילו לקוחות מביאים את ההכנסה</small></span></span></h3><div class="canvas-wrap"><canvas id="chartBillingByClient"></canvas></div></div>
         <div class="chart-card" data-group="clients" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M7.5 8a1.5 1.5 0 1 0 0-.01M16.5 17a1.5 1.5 0 1 0 0-.01"/></svg></span><span class="cv-title">אחוז רווח לפי לקוח קצה<small>אילו לקוחות הכי רווחיים באחוזים</small></span></span></h3><div class="canvas-wrap"><canvas id="chartMarginByClient"></canvas></div></div>
         <div class="chart-card" data-group="budget" style="--c:#6C4CE0;">
-          <h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3zM3 10h18M8 15h3"/></svg></span><span class="cv-title">סה״כ מסגרת לפי לקוח קצה<small>מסגרות התקציב שהוקצו</small></span></span><span style="display:flex;gap:6px;">
+          <h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3zM3 10h18M8 15h3"/></svg></span><span class="cv-title">סה״כ מסגרת לפי לקוח<small>מסגרות התקציב שהוקצו</small></span></span><span style="display:flex;gap:6px;">
               <button class="btn ghost" id="budgetMonthlyBtn" style="padding:4px 10px;font-size:11px;">חודשי</button>
               <button class="btn ghost" id="budgetAnnualBtn" style="padding:4px 10px;font-size:11px;">שנתי</button>
             </span>
@@ -1676,7 +1676,7 @@ window.__DASHBOARD_PREFETCH__ = (function(){
     <div class="charts-grid wide cv-grid" id="pvGrid">
     <div class="cv-group-head" data-group="budget" style="order:0"><b>מסגרות</b><span>תקציב חודשי מתוכנן</span></div>
         <div class="chart-card" data-group="budget" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">מסגרת חודשית לפי עובד<small>top 10 · לחיצה מסננת את הטבלה</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByEmployee"></canvas></div></div>
-        <div class="chart-card" data-group="budget" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">מסגרת חודשית לפי לקוח קצה<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByClient"></canvas></div></div>
+        <div class="chart-card" data-group="budget" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">מסגרת חודשית לפי לקוח<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByClient"></canvas></div></div>
         <div class="chart-card" data-group="budget" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="cv-title">מסגרת חודשית לפי מאשר<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByApprover"></canvas></div></div>
         <div class="chart-card" data-group="budget" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></span><span class="cv-title">מסגרת חודשית לפי חברה מעסיקה<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="planningChartBudgetByCompany"></canvas></div></div>
     <div class="cv-group-head" data-group="profit" style="order:20"><b>רווחיות</b><span>אחוז רווח צפוי</span></div>
@@ -2152,12 +2152,12 @@ function rebuildVatView(){
   if(vatOn){ companiesData = rawCompanies; planningData = rawPlanning; dashboardInsights = rawInsights; return; }
   const r2 = v => Math.round((Number(v)||0)*100)/100;
   const comps = rawCompanies.map(c=>{
-    const salary = (c.salary != null) ? Number(c.salary)||0 : (Number(c.employeePayment)||0);
+    const salary = r2((Number(c.employeePayment)||0) / VAT_RATE); // שכר עבודה כפי שבמצב כולל מע״מ ÷1.18
     const dealInvoice = (Number(c.dealInvoice)||0) / VAT_RATE;
     return { ...c, clientBilling:(Number(c.clientBilling)||0)/VAT_RATE, dealInvoice, employeePayment:salary, grossProfit: r2(dealInvoice - salary) };
   });
   const plans = rawPlanning.map(p=>{
-    const salary = (p.salary != null) ? Number(p.salary)||0 : (Number(p.employeePayment)||0);
+    const salary = r2((Number(p.employeePayment)||0) / VAT_RATE);
     const afterTax = (Number(p.afterTax)||0) / VAT_RATE;
     const remainder = r2(afterTax - salary);
     return { ...p, annualBudget:(Number(p.annualBudget)||0)/VAT_RATE, monthlyBudget:(Number(p.monthlyBudget)||0)/VAT_RATE,
@@ -2184,8 +2184,8 @@ function applyVatLabels(root){
 function refreshVatUi(){
   const sws = document.querySelectorAll('.vat-switch'); if(!sws.length) return;
   sws.forEach(sw=>{ sw.classList.toggle('on', vatOn); sw.setAttribute('aria-checked', vatOn ? 'true' : 'false'); const st = sw.querySelector('.vat-state'); if(st) st.textContent = vatOn ? 'ON' : 'OFF'; });
-  document.querySelectorAll('th[data-key="employeePayment"]:not(#planningFullTable th)').forEach(th=> th.title = vatOn ? 'שכיר: כפול 1.18' : 'שכיר: ללא תוספת 1.18');
-  document.querySelectorAll('.vat-note').forEach(n=> n.textContent = vatOn ? 'הסכומים מוצגים כולל מע״מ' : 'הסכומים מוצגים ללא מע״מ — חיוב וחשבונית ÷1.18, ושכר שכירים ללא תוספת 1.18');
+  document.querySelectorAll('th[data-key="employeePayment"]:not(#planningFullTable th)').forEach(th=> th.title = vatOn ? 'שכיר: כפול 1.18' : 'שכר עבודה ÷1.18');
+  document.querySelectorAll('.vat-note').forEach(n=> n.textContent = vatOn ? 'הסכומים מוצגים כולל מע״מ' : 'הסכומים מוצגים ללא מע״מ — חיוב, חשבונית ושכר עבודה ÷1.18');
 }
 document.querySelectorAll('.vat-switch').forEach(sw=>sw.addEventListener('click', ()=>{
   vatOn = !vatOn; refreshVatUi(); rebuildVatView(); populateFilterOptions(); applyFiltersAndRender();
@@ -3248,7 +3248,7 @@ function renderKPIs(){
   const cards = [
     {label:'סה״כ חיוב לקוחות כולל מע״מ', raw:totalBilling, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', hex:'#2F6FED', sub: filteredCompanies.length+' רשומות', metric:'billing', sparkKey:'clientBilling'},
     {label:'סה״כ חשבונית עסקה (אחרי מס)', raw:totalDeal, type:'currency', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', hex:'#6C4CE0', metric:'dealInvoice', sparkKey:'dealInvoice'},
-    {label:'שכר עבודה', sub:(vatOn ? 'שכיר כפול 1.18' : 'שכיר ללא תוספת 1.18'), raw:totalPaid, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', hex:'#D65A45', metric:'employeePayment', sparkKey:'employeePayment'},
+    {label:'שכר עבודה', sub:(vatOn ? 'שכיר כפול 1.18' : 'שכר עבודה ÷1.18'), raw:totalPaid, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', hex:'#D65A45', metric:'employeePayment', sparkKey:'employeePayment'},
     {label:'סה״כ רווח גולמי', raw:totalProfit, type:'currency', accent:'var(--accent-green)', soft:'var(--accent-green-soft)', hex:'#0E9488', metric:'grossProfit', sparkKey:'grossProfit'},
     {label:'אחוז רווח ממוצע', raw:avgMargin, type:'percent', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', hex:'#1E9BD7', metric:'margin', sparkKey:'margin'},
     {label:'פרויקטים', raw:projectRows().rows.length, sub:projectRows().label, type:'integer', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', hex:'#6C4CE0', metric:'projects', sparkKey:null},
@@ -3594,8 +3594,8 @@ function renderBudgetCharts(){
   const valFn = budgetMode === 'monthly' ? p=>p.monthlyBudget : p=>p.annualBudget;
   const valKey = budgetMode === 'monthly' ? 'monthlyBudget' : 'annualBudget';
   const plan = filterPlanRows(planningData, getFilters(), false);
-  barChart('chartBudgetByClient', sortedEntries(groupSum(plan, p=>p.endClient, valFn)), '#2F6FED', fmt,
-    (label)=>openBudgetCategoryModal('endClient', label, valKey, 'מסגרת — ' + label));
+  barChart('chartBudgetByClient', sortedEntries(groupSum(plan, p=>p.client, valFn)), '#2F6FED', fmt,
+    (label)=>openBudgetCategoryModal('client', label, valKey, 'מסגרת — ' + label));
   barChart('chartBudgetByApprover', sortedEntries(groupSum(plan, p=>p.approver, valFn)), '#6C4CE0', fmt,
     (label)=>openBudgetCategoryModal('approver', label, valKey, 'מסגרת — ' + label));
 }
@@ -4191,7 +4191,7 @@ function scrollFilterPlanningTable(value){
 function renderPlanningCharts(plan){
   barChart('planningChartBudgetByEmployee', sortedEntries(groupSum(plan, p=>p.employee, p=>p.monthlyBudget)), '#2F6FED', fmt,
     (label)=>scrollFilterPlanningTable(label));
-  barChart('planningChartBudgetByClient', sortedEntries(groupSum(plan, p=>p.endClient, p=>p.monthlyBudget)), '#6C4CE0', fmt,
+  barChart('planningChartBudgetByClient', sortedEntries(groupSum(plan, p=>p.client, p=>p.monthlyBudget)), '#6C4CE0', fmt,
     (label)=>scrollFilterPlanningTable(label));
   barChart('planningChartBudgetByApprover', sortedEntries(groupSum(plan, p=>p.approver, p=>p.monthlyBudget)), '#6C4CE0', fmt,
     (label)=>scrollFilterPlanningTable(label));
