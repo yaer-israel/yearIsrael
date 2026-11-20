@@ -471,6 +471,9 @@
     backdrop-filter:var(--glass-blur-sm);-webkit-backdrop-filter:var(--glass-blur-sm);
   }
   .search-box:focus{outline:none;border-color:var(--accent-blue);background:rgba(255,255,255,.75);}
+  .pnl-export{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .pnl-export .btn{padding:7px 12px;font-size:12.5px;}
+  @media (max-width:900px){ #pnlView .table-scroll{overflow-x:auto !important;-webkit-overflow-scrolling:touch;} #pnlView .table-scroll table{min-width:560px;} }
   .table-scroll{overflow-x:auto;}
   .grid-scroll{max-height:420px;overflow-y:auto;}
   .grid-scroll thead th{position:sticky;top:0;background:rgba(234,241,251,.88);backdrop-filter:var(--glass-blur-sm);-webkit-backdrop-filter:var(--glass-blur-sm);z-index:2;box-shadow:0 1px 0 var(--border-soft);}
@@ -974,6 +977,10 @@
 
   /* ============ v3: דירוג רווחיות ============ */
   .rank-card h3{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .rank-size{display:flex;align-items:center;gap:6px;margin:2px 0 12px;font-size:12px;color:var(--text-muted);}
+  .rank-size button{font-family:inherit;font-size:11.5px;padding:3px 12px;border-radius:999px;border:1px solid var(--border);background:var(--glass-bg);color:var(--text-muted);cursor:pointer;}
+  .rank-size button.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;font-weight:700;}
+  .rank-grid .rank-col.scroll{max-height:640px;overflow:auto;}
   .rank-tabs{display:flex;gap:4px;flex-wrap:wrap;}
   .rank-tabs button{font-family:inherit;font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--glass-bg);color:var(--text-muted);cursor:pointer;}
   .rank-tabs button.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;font-weight:700;}
@@ -1032,16 +1039,17 @@
   .vat-title{font-weight:700;font-size:13px;color:var(--text-muted);}
   .vat-switch{position:relative;display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;min-width:78px;height:32px;padding:0 12px 0 34px;border-radius:999px;
     border:1px solid var(--glass-border);background:var(--surface-2);color:var(--text-muted);font-weight:800;font-size:12px;letter-spacing:.5px;cursor:pointer;transition:background .2s,color .2s,border-color .2s;}
-  .vat-switch .vat-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s;}
-  .vat-switch.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;padding:0 34px 0 12px;justify-content:flex-end;}
-  .vat-switch.on .vat-knob{transform:translateX(46px);}
-  .vat-switch:focus-visible{outline:2px solid var(--accent-blue);outline-offset:2px;}
-  .xv-switch{position:relative;display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;min-width:78px;height:32px;padding:0 12px 0 34px;border-radius:999px;
+  .pv-switch{position:relative;display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;min-width:78px;height:32px;padding:0 12px 0 34px;border-radius:999px;
     border:1px solid var(--glass-border);background:var(--surface-2);color:var(--text-muted);font-weight:800;font-size:12px;letter-spacing:.5px;cursor:pointer;transition:background .2s,color .2s,border-color .2s;}
-  .xv-switch .vat-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s;}
-  .xv-switch.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;padding:0 34px 0 12px;justify-content:flex-end;}
-  .xv-switch.on .vat-knob{transform:translateX(46px);}
-  .xv-switch:focus-visible{outline:2px solid var(--accent-blue);outline-offset:2px;}
+  .vat-switch .vat-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s;}
+  .pv-switch .vat-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s;}
+  .vat-switch.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;padding:0 34px 0 12px;justify-content:flex-end;}
+  .pv-switch.on{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;padding:0 34px 0 12px;justify-content:flex-end;}
+  .vat-switch.on .vat-knob{transform:translateX(46px);}
+  .pv-switch.on .vat-knob{transform:translateX(46px);}
+  .vat-switch:focus-visible{outline:2px solid var(--accent-blue);outline-offset:2px;}
+  .pv-switch:focus-visible{outline:2px solid var(--accent-blue);outline-offset:2px;}
+    border:1px solid var(--glass-border);background:var(--surface-2);color:var(--text-muted);font-weight:800;font-size:12px;letter-spacing:.5px;cursor:pointer;transition:background .2s,color .2s,border-color .2s;}
   .vat-note{font-size:12px;color:var(--text-dim);}
   .emp-filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;}
   .emp-filter-btn{padding:7px 16px;font-size:13px;border-radius:999px;}
@@ -1144,7 +1152,9 @@
   .top-left{flex:none;}
   header.top .top-right{flex:1;min-width:0;justify-content:flex-end;flex-wrap:wrap;}
   header.top.compact .eyebrow{display:none;}
-  header.top.compact .btn{padding:6px 11px;font-size:12px;}
+  header.top.compact .btn{padding:6px 9px;font-size:11.5px;gap:5px;}
+  header.top.compact .top-right{gap:6px;}
+  header.top.compact .user-pill{padding:4px 9px;}
   header.top.compact #fullscreenLabel{display:none;}
   header.top.compact .view-tabs button{padding:5px 13px;font-size:12.5px;}
   header.top.compact h1{font-size:17px;}
@@ -1156,7 +1166,7 @@
   .view-tabs button.on{background:#fff;color:var(--accent-blue-deep);box-shadow:0 2px 10px rgba(0,0,0,.25);}
   .filter-badge{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 5px;margin-inline-start:6px;border-radius:999px;background:var(--accent-red,#D65A45);color:#fff;font-size:11px;font-weight:800;box-shadow:0 0 0 2px rgba(255,255,255,.35);}
   .filter-badge[hidden]{display:none;}
-  #chartsView[hidden], #mainView[hidden], #planningView[hidden], #expView[hidden], #catView[hidden]{display:none !important;}
+  #chartsView[hidden], #mainView[hidden], #planningView[hidden], #pnlView[hidden]{display:none !important;}
   #chartsView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
   #mainView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
   /* ============ עמוד התכנון ============ */
@@ -1181,54 +1191,38 @@
   #planningView .cv-group-head.plain{margin:10px 4px 10px;}
   @media (max-width:640px){ #planningView .kpi .value{font-size:22px;} }
   /* ============ עמוד התכנון ============ */
-  #expView[hidden]{display:none !important;}
-  #expView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
-  .cv-hero{--hero:1;}
-  #expView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(14,148,136,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(47,111,237,.5), transparent 60%), linear-gradient(120deg,#0B1B44,#14306E);}
-  #expView .kpi{border-radius:20px;padding:16px 18px 15px;
-    background:linear-gradient(160deg, color-mix(in srgb, var(--kpi-accent) 11%, transparent) 0%, transparent 55%), var(--glass-bg);
-    animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
-  #expView .kpi:nth-child(2){animation-delay:.05s;} #expView .kpi:nth-child(3){animation-delay:.1s;} #expView .kpi:nth-child(4){animation-delay:.15s;} #expView .kpi:nth-child(5){animation-delay:.2s;} #expView .kpi:nth-child(6){animation-delay:.25s;}
-  #expView .kpi::before{width:5px;background:linear-gradient(180deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 40%, transparent));}
-  #expView .kpi-icon{width:42px;height:42px;border-radius:14px;color:#fff;}
-  #expView .kpi-icon svg{width:21px;height:21px;}
-  #expView .kpi .label{font-size:12.5px;margin-bottom:6px;}
-  #expView .kpi .value{font-size:27px;letter-spacing:-.3px;}
-  #expView .table-card{position:relative;border-radius:22px;padding:18px 22px;--c:#6C4CE0;}
-  #expView .table-card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;border-radius:22px 0 0 22px;background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));}
-  #expView .table-card h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:12px;}
-  #expView .cv-ic.sm{width:34px;height:34px;border-radius:11px;}
-  #expView .cv-ic.sm svg{width:18px;height:18px;}
-  #expView .cv-group-head.plain{margin:10px 4px 10px;}
-  @media (max-width:640px){ #expView .kpi .value{font-size:22px;} }
+  
   /* ============ עמוד התכנון ============ */
-  #catView[hidden]{display:none !important;}
-  #catView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
+  #pnlView[hidden]{display:none !important;}
+  #pnlView{animation:viewIn .35s cubic-bezier(.2,.8,.2,1) both;}
   .cv-hero{--hero:1;}
-  #catView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(14,148,136,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(47,111,237,.5), transparent 60%), linear-gradient(120deg,#0B1B44,#14306E);}
-  #catView .kpi{border-radius:20px;padding:16px 18px 15px;
+  #pnlView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(14,148,136,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(47,111,237,.5), transparent 60%), linear-gradient(120deg,#0B1B44,#14306E);}
+  #pnlView .kpi{border-radius:20px;padding:16px 18px 15px;
     background:linear-gradient(160deg, color-mix(in srgb, var(--kpi-accent) 11%, transparent) 0%, transparent 55%), var(--glass-bg);
     animation:cvCard .6s cubic-bezier(.2,.8,.2,1) backwards;}
-  #catView .kpi:nth-child(2){animation-delay:.05s;} #catView .kpi:nth-child(3){animation-delay:.1s;} #catView .kpi:nth-child(4){animation-delay:.15s;} #catView .kpi:nth-child(5){animation-delay:.2s;} #catView .kpi:nth-child(6){animation-delay:.25s;}
-  #catView .kpi::before{width:5px;background:linear-gradient(180deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 40%, transparent));}
-  #catView .kpi-icon{width:42px;height:42px;border-radius:14px;color:#fff;}
-  #catView .kpi-icon svg{width:21px;height:21px;}
-  #catView .kpi .label{font-size:12.5px;margin-bottom:6px;}
-  #catView .kpi .value{font-size:27px;letter-spacing:-.3px;}
-  #catView .table-card{position:relative;border-radius:22px;padding:18px 22px;--c:#6C4CE0;}
-  #catView .table-card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;border-radius:22px 0 0 22px;background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));}
-  #catView .table-card h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:12px;}
-  #catView .cv-ic.sm{width:34px;height:34px;border-radius:11px;}
-  #catView .cv-ic.sm svg{width:18px;height:18px;}
-  #catView .cv-group-head.plain{margin:10px 4px 10px;}
-  @media (max-width:640px){ #catView .kpi .value{font-size:22px;} }
-  #expGrid .chart-card[data-group="a"], #catGrid .chart-card[data-group="a"]{order:1;} #expGrid .chart-card[data-group="b"], #catGrid .chart-card[data-group="b"]{order:21;}
-  #expView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(214,90,69,.45), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(108,76,224,.45), transparent 60%), linear-gradient(120deg,#2A1230,#4A1F3D);}
-  #catView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(108,76,224,.5), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(30,155,215,.45), transparent 60%), linear-gradient(120deg,#1A1646,#2C2470);}
-  .cv-hero .xv-switch{} .cv-hero .vat-bar .xv-switch{flex:none;}
-  .cv-tabs-mini{display:inline-flex;gap:6px;} .cv-tabs-mini .btn{padding:4px 12px;font-size:12px;} .cv-tabs-mini .btn.on{background:var(--accent-blue);color:#fff;border-color:var(--accent-blue);}
+  #pnlView .kpi:nth-child(2){animation-delay:.05s;} #pnlView .kpi:nth-child(3){animation-delay:.1s;} #pnlView .kpi:nth-child(4){animation-delay:.15s;} #pnlView .kpi:nth-child(5){animation-delay:.2s;} #pnlView .kpi:nth-child(6){animation-delay:.25s;}
+  #pnlView .kpi::before{width:5px;background:linear-gradient(180deg,var(--kpi-accent),color-mix(in srgb, var(--kpi-accent) 40%, transparent));}
+  #pnlView .kpi-icon{width:42px;height:42px;border-radius:14px;color:#fff;}
+  #pnlView .kpi-icon svg{width:21px;height:21px;}
+  #pnlView .kpi .label{font-size:12.5px;margin-bottom:6px;}
+  #pnlView .kpi .value{font-size:27px;letter-spacing:-.3px;}
+  #pnlView .table-card{position:relative;border-radius:22px;padding:18px 22px;--c:#6C4CE0;}
+  #pnlView .table-card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;border-radius:22px 0 0 22px;background:linear-gradient(180deg,var(--c),color-mix(in srgb, var(--c) 40%, transparent));}
+  #pnlView .table-card h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:12px;}
+  #pnlView .cv-ic.sm{width:34px;height:34px;border-radius:11px;}
+  #pnlView .cv-ic.sm svg{width:18px;height:18px;}
+  #pnlView .cv-group-head.plain{margin:10px 4px 10px;}
+  @media (max-width:640px){ #pnlView .kpi .value{font-size:22px;} }
+  /* ============ עמוד התכנון ============ */
+  
+  #pnlGrid .chart-card[data-group="a"]{order:1;} #pnlGrid .chart-card[data-group="b"]{order:21;} #pnlGrid .chart-card[data-group="c"]{order:41;}
+  #pnlView .cv-hero{background:radial-gradient(900px 300px at 85% -20%, rgba(14,148,136,.55), transparent 60%), radial-gradient(700px 260px at 0% 120%, rgba(214,90,69,.4), transparent 60%), linear-gradient(120deg,#0A2A2E,#12403F);}
+  .pnl-btn.on{background:linear-gradient(135deg,#0E9488,#2F6FED);color:#fff;border-color:transparent;}
+  .pnl-notice{margin:0 0 14px;padding:11px 16px;border-radius:14px;background:color-mix(in srgb,#E0A21B 14%,transparent);border:1px solid color-mix(in srgb,#E0A21B 45%,transparent);font-size:13px;line-height:1.6;}
   .pct-cell{display:flex;align-items:center;gap:10px;min-width:150px;} .pct-cell b{font-family:var(--font-mono);font-size:12.5px;min-width:48px;}
   .pct-cell i{flex:1;height:8px;border-radius:99px;background:color-mix(in srgb,var(--c,#6C4CE0) 14%,transparent);overflow:hidden;} .pct-cell i u{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--c,#6C4CE0),color-mix(in srgb,var(--c,#6C4CE0) 55%,#fff));}
+  #pnlView table td.up{color:#0E9488;font-weight:700;} #pnlView table td.down{color:#D65A45;font-weight:700;}
+  #pnlView table tr.tot td{font-weight:800;background:color-mix(in srgb,var(--c,#0E9488) 10%,transparent);}
   @keyframes viewIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
   :root{--card-solid:#FFFFFF;}
@@ -1270,9 +1264,11 @@
     .filters-overlay{padding:70px 10px 14px;}
     .fp-body, .fp-body .fp-dates{grid-template-columns:1fr;}
     .filters-pop{padding:18px 16px 16px;}
-    header.top{top:6px;}
-    header.top .top-right{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+    header.top{top:6px;position:relative;}
+    header.top .top-right{flex-wrap:wrap;overflow:visible;padding-bottom:2px;}
     header.top .top-right > *{flex:none;}
+    header.top .top-right > #viewTabs{order:-1;flex:1 1 100%;display:flex;}
+    header.top .top-right > #viewTabs .tab, header.top .top-right > #viewTabs button{flex:1;}
     header.top.compact .top-left > div:last-child{display:none;}
   }
   /* ============ לוגו עגול (יחס הלוגו 243:228, העיגול מתאים לו בדיוק) ============ */
@@ -1346,7 +1342,7 @@
    כבר בזמן שהדפדפן עדיין טוען וממיר את שאר הדף - כך הטעינה מרגישה מהירה יותר.
    כדי לחבר את הלוח לקובץ ה-Google Sheets שלכם, הדביקו כאן את כתובת ה-Web App
    שקיבלתם לאחר פריסת הקובץ Code.gs (ראו קובץ ההוראות המצורף). */
-window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbwqmbwmf2O_2BXHdrMaZ4oIYYs4UgaKokTIjEn2ChWbKZ4gkZZy6ane3R7TTRjF80Vc/exec"; // <-- הדביקו כאן את כתובת ה-Web App
+window.__DASHBOARD_API_URL__ = "https://script.google.com/macros/s/AKfycbyscvo7J4cVJa3op15APDn8Vw8LJExzSOsg-5kaDDBzqjlPG8wxiXaV78r-AVx8sL2M/exec"; // <-- הדביקו כאן את כתובת ה-Web App
 window.__DASHBOARD_PREFETCH__ = (function(){
   if(!window.__DASHBOARD_API_URL__) return null;
   var token = '';
@@ -1412,13 +1408,11 @@ window.__DASHBOARD_PREFETCH__ = (function(){
         <button type="button" role="tab" id="tabPlanning" aria-selected="false">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>תכנון
         </button>
-        <button type="button" role="tab" id="tabExp" aria-selected="false">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2V2z"/><path d="M9 8h6M9 12h6"/></svg>הוצאות
-        </button>
-        <button type="button" role="tab" id="tabCat" aria-selected="false">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>פירוט הוצאות
-        </button>
       </nav>
+      <button class="btn pnl-btn" id="pnlBtn" type="button" style="display:none;" aria-pressed="false" title="דשבורד רווח והפסד: הכנסות מול הוצאות">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+        רווח והפסד
+      </button>
       <button class="btn" id="openFiltersBtn" type="button" aria-haspopup="dialog" aria-controls="filtersOverlay">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>
         סינון <span class="filter-badge" id="filterBadge" hidden>0</span>
@@ -1535,6 +1529,7 @@ window.__DASHBOARD_PREFETCH__ = (function(){
             <button type="button" data-dim="company">חברות</button>
           </span>
         </h3>
+        <div class="rank-size" id="rankSize" role="group" aria-label="כמות שורות"><span>הצג:</span><button type="button" data-n="5">5</button><button type="button" data-n="10">10</button><button type="button" data-n="20">20</button><button type="button" data-n="0">הכל</button></div>
         <div class="rank-grid" id="rankGrid"></div>
       </div>
 
@@ -1644,6 +1639,7 @@ window.__DASHBOARD_PREFETCH__ = (function(){
         <div class="chart-card" data-group="profit" style="--c:#0E9488;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></span><span class="cv-title">רווח גולמי לפי עובד<small>מי מייצר את הרווח הגבוה ביותר</small></span></span></h3><div class="canvas-wrap"><canvas id="chartProfitByEmployee"></canvas></div></div>
         <div class="chart-card" data-group="profit" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M7.5 8a1.5 1.5 0 1 0 0-.01M16.5 17a1.5 1.5 0 1 0 0-.01"/></svg></span><span class="cv-title">אחוז רווח לפי עובד<small>איכות הרווח — כמה נשאר מכל שקל חיוב</small></span></span></h3><div class="canvas-wrap"><canvas id="chartMarginByEmployee"></canvas></div></div>
         <div class="chart-card" data-group="salary" style="--c:#D65A45;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12H3zM3 11h18M16 15h2"/></svg></span><span class="cv-title">סה״כ שכר עבודה לפי שם<small>עלות העובדים (שכיר כולל תוספת מעסיק)</small></span></span></h3><div class="canvas-wrap"><canvas id="chartPaymentByEmployee"></canvas></div></div>
+        <div class="chart-card" data-group="clients" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11a4 4 0 1 0-8 0M4 21a8 8 0 0 1 16 0"/></svg></span><span class="cv-title">סה״כ חיובי לקוח לפי לקוח<small>לפי עמודת "לקוח" בגיליון</small></span></span></h3><div class="canvas-wrap"><canvas id="chartBillingByParent"></canvas></div></div>
         <div class="chart-card" data-group="clients" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11a4 4 0 1 0-8 0M4 21a8 8 0 0 1 16 0"/></svg></span><span class="cv-title">סה״כ חיובי לקוח לפי לקוח קצה<small>אילו לקוחות מביאים את ההכנסה</small></span></span></h3><div class="canvas-wrap"><canvas id="chartBillingByClient"></canvas></div></div>
         <div class="chart-card" data-group="clients" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M7.5 8a1.5 1.5 0 1 0 0-.01M16.5 17a1.5 1.5 0 1 0 0-.01"/></svg></span><span class="cv-title">אחוז רווח לפי לקוח קצה<small>אילו לקוחות הכי רווחיים באחוזים</small></span></span></h3><div class="canvas-wrap"><canvas id="chartMarginByClient"></canvas></div></div>
         <div class="chart-card" data-group="budget" style="--c:#6C4CE0;">
@@ -1715,88 +1711,54 @@ window.__DASHBOARD_PREFETCH__ = (function(){
       </div>
   </section>
 
-  <section id="expView" hidden aria-label="הוצאות">
+  <section id="pnlView" hidden aria-label="רווח והפסד">
     <div class="cv-hero">
       <div class="cv-hero-top">
         <div class="cv-hero-text">
-          <span class="cv-eyebrow">ניהול הוצאות</span>
-          <h2>מרכז ההוצאות</h2>
-          <p>הוצאות לפי חודש, שנה, ספק ותצורת תשלום — כולל או ללא מע״מ. כפתור הסינון למעלה מסנן לפי שנה, חודש, תצורת תשלום וספק.</p>
+          <span class="cv-eyebrow">רווח והפסד</span>
+          <h2>הכנסות מול הוצאות</h2>
+          <p>רווח נקי, שיעור רווחיות ומע״מ לתשלום — לפי הגיליונות "הכנסות" ו"הוצאות". כפתור הסינון למעלה מסנן לפי תקופה, קטגוריה, ספק ולקוח.</p>
         </div>
         <div class="cv-hero-tools">
+          <div class="pnl-export" id="pnlExport"><button type="button" class="btn" id="pnlXlsBtn">ייצוא Excel</button><button type="button" class="btn" id="pnlPdfBtn">ייצוא PDF</button></div>
           <div class="vat-bar">
             <span class="vat-title">מע״מ</span>
-            <button type="button" class="xv-switch on" data-xk="exp" role="switch" aria-checked="true" aria-label="הצגת סכומים כולל או ללא מע״מ"><span class="vat-knob"></span><span class="vat-state">ON</span></button>
-            <span class="vat-note" data-xnote="exp">הסכומים מוצגים כולל מע״מ</span>
+            <button type="button" class="pv-switch on" id="pnlVatSwitch" role="switch" aria-checked="true" aria-label="הצגת סכומים כולל או ללא מע״מ"><span class="vat-knob"></span><span class="vat-state">ON</span></button>
+            <span class="vat-note" id="pnlVatNote">הסכומים מוצגים כולל מע״מ</span>
           </div>
         </div>
       </div>
-      <div class="cv-stats" id="expStats"></div>
+      <div class="cv-stats" id="pnlStats"></div>
     </div>
-    <div class="kpi-grid" id="expKpis" style="margin-bottom:18px;"></div>
-    <div class="charts-grid wide cv-grid" id="expGrid">
-    <div class="cv-group-head" style="order:0"><b>התפתחות</b><span>הוצאות לאורך זמן</span></div>
-      <div class="chart-card" data-group="a" style="--c:#D65A45;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="cv-title">הוצאות לפי תקופה<small><span id="expTrendSub">חודשי</span></small></span></span><span class="cv-tabs-mini"><button type="button" class="btn ghost on" data-xperiod="month">חודשי</button><button type="button" class="btn ghost" data-xperiod="year">שנתי</button></span></h3><div class="canvas-wrap"><canvas id="xChartTrend"></canvas></div></div>
-    <div class="cv-group-head" style="order:20"><b>פילוח</b><span>לפי תצורת תשלום וספק</span></div>
-      <div class="chart-card" data-group="b" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span class="cv-title">לפי תצורת תשלום<small>סה״כ הוצאה</small></span></span></h3><div class="canvas-wrap"><canvas id="xChartPay"></canvas></div></div>
-      <div class="chart-card" data-group="b" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">לפי ספק / מוצר<small>top 10 · לחיצה מסננת את הטבלה</small></span></span></h3><div class="canvas-wrap"><canvas id="xChartSupplier"></canvas></div></div>
+    <div class="pnl-notice" id="pnlNotice" hidden></div>
+    <div class="kpi-grid" id="pnlKpis" style="margin-bottom:18px;"></div>
+    <div class="charts-grid wide cv-grid" id="pnlGrid">
+    <div class="cv-group-head" style="order:0"><b>הכנסות מול הוצאות</b><span id="pnlCmpSub">השוואה</span></div>
+      <div class="chart-card" data-group="a" style="--c:#0E9488;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span class="cv-title">הכנסות, הוצאות ורווח נקי<small><span id="pnlCmpSub2">לפי חודש</span></small></span></span></h3><div class="canvas-wrap"><canvas id="pnlChartCmp"></canvas></div></div>
+    <div class="cv-group-head" style="order:20"><b>הוצאות</b><span>לפי קטגוריה, ספק ותצורת תשלום</span></div>
+      <div class="chart-card" data-group="b" style="--c:#D65A45;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span><span class="cv-title">הוצאות לפי קטגוריה<small>top 10 · לחיצה מסננת את הטבלה</small></span></span></h3><div class="canvas-wrap"><canvas id="pnlChartCat"></canvas></div></div>
+      <div class="chart-card" data-group="b" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg></span><span class="cv-title">אחוז מסך ההוצאות<small>התפלגות לפי קטגוריה</small></span></span></h3><div class="canvas-wrap"><canvas id="pnlChartShare"></canvas></div></div>
+      <div class="chart-card" data-group="b" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></span><span class="cv-title">הוצאות לפי ספק / מוצר<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="pnlChartSup"></canvas></div></div>
+      <div class="chart-card" data-group="b" style="--c:#E0A21B;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#E0A21B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span class="cv-title">הוצאות לפי תצורת תשלום<small>סה״כ הוצאה</small></span></span></h3><div class="canvas-wrap"><canvas id="pnlChartPay"></canvas></div></div>
+    <div class="cv-group-head" style="order:40"><b>הכנסות</b><span>לפי לקוח</span></div>
+      <div class="chart-card" data-group="c" style="--c:#2F6FED;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">הכנסות לפי לקוח<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="pnlChartCust"></canvas></div></div>
     </div>
-    <div class="cv-group-head" style="margin:22px 4px 12px"><b>טבלת הוצאות</b><span>כל הרשומות</span></div>
-    <div class="table-card" style="margin-bottom:0;">
-      <div class="head-row">
-        <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span id="expTableTitle">כל ההוצאות</span></h3>
-        <input class="search-box" id="expSearch" placeholder="חיפוש (ספק, חשבונית, תצורת תשלום...)">
-      </div>
-      <div class="table-scroll detail-table-wrap"><table id="expTable"><thead><tr>
-        <th>תאריך</th><th>ספק / מוצר</th><th>מס׳ חשבונית</th><th>תצורת תשלום</th><th class="num">תשלומים</th>
-        <th class="num">ללא מע״מ</th><th class="num">מע״מ מוכר</th><th class="num">כולל מע״מ</th><th class="num">% מהסה״כ</th>
-      </tr></thead><tbody id="expTbody"></tbody></table></div>
+    <div class="cv-group-head" style="margin:22px 4px 12px"><b>טבלאות</b><span>סיכום, קטגוריות ופירוט</span></div>
+    <div class="table-card" style="margin-bottom:16px;--c:#0E9488;">
+      <div class="head-row"><h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>דוח רווח והפסד</span></h3></div>
+      <div class="table-scroll detail-table-wrap"><table id="pnlSumTable"></table></div>
     </div>
-  </section>
-
-  <section id="catView" hidden aria-label="פירוט הוצאות">
-    <div class="cv-hero">
-      <div class="cv-hero-top">
-        <div class="cv-hero-text">
-          <span class="cv-eyebrow">פירוט לפי קטגוריה</span>
-          <h2>מרכז הקטגוריות</h2>
-          <p>סכומים לפי קטגוריה, אחוז מסך ההוצאות — כולל או ללא מע״מ. כפתור הסינון למעלה מסנן לפי קטגוריה ולקוח.</p>
-        </div>
-        <div class="cv-hero-tools">
-          <div class="vat-bar">
-            <span class="vat-title">מע״מ</span>
-            <button type="button" class="xv-switch on" data-xk="cat" role="switch" aria-checked="true" aria-label="הצגת סכומים כולל או ללא מע״מ"><span class="vat-knob"></span><span class="vat-state">ON</span></button>
-            <span class="vat-note" data-xnote="cat">הסכומים מוצגים כולל מע״מ</span>
-          </div>
-        </div>
-      </div>
-      <div class="cv-stats" id="catStats"></div>
+    <div class="table-card" style="margin-bottom:16px;--c:#D65A45;">
+      <div class="head-row"><h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>הוצאות לפי קטגוריה</span></h3></div>
+      <div class="table-scroll detail-table-wrap"><table id="pnlCatTable"><thead><tr><th>קטגוריה</th><th class="num">עסקאות</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th><th class="num">כולל מע״מ</th><th>אחוז מסך ההוצאות</th><th>נכלל בסה״כ</th></tr></thead><tbody id="pnlCatTbody"></tbody></table></div>
     </div>
-    <div class="kpi-grid" id="catKpis" style="margin-bottom:18px;"></div>
-    <div class="charts-grid wide cv-grid" id="catGrid">
-    <div class="cv-group-head" style="order:0"><b>קטגוריות</b><span>כמה כל קטגוריה מהסך</span></div>
-      <div class="chart-card" data-group="a" style="--c:#6C4CE0;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span><span class="cv-title">סכום לפי קטגוריה<small>top 10 · לחיצה מסננת את הטבלה</small></span></span></h3><div class="canvas-wrap"><canvas id="xcChartCat"></canvas></div></div>
-      <div class="chart-card" data-group="a" style="--c:#0E9488;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#0E9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg></span><span class="cv-title">אחוז מסך ההוצאות<small>התפלגות לפי קטגוריה</small></span></span></h3><div class="canvas-wrap"><canvas id="xcChartShare"></canvas></div></div>
-    <div class="cv-group-head" style="order:20" id="xcCustHead"><b>לקוחות</b><span>לפי שם הלקוח</span></div>
-      <div class="chart-card" id="xcCustCard" data-group="b" style="--c:#1E9BD7;"><h3 class="cv-h3"><span class="cv-h3-main"><span class="cv-ic" style="--c:#1E9BD7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="cv-title">סכום לפי לקוח<small>top 10</small></span></span></h3><div class="canvas-wrap"><canvas id="xcChartCust"></canvas></div></div>
+    <div class="table-card" style="margin-bottom:16px;--c:#2F6FED;">
+      <div class="head-row"><h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#2F6FED"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>פירוט הכנסות</span></h3><input class="search-box" id="pnlSearch" placeholder="חיפוש בהכנסות ובהוצאות..."></div>
+      <div class="table-scroll detail-table-wrap"><table id="pnlIncTable"><thead><tr><th>לקוח</th><th>תאריך</th><th>מס׳ חשבונית / קבלה</th><th>מס׳ הקצאה</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th><th class="num">כולל מע״מ</th></tr></thead><tbody id="pnlIncTbody"></tbody></table></div>
     </div>
-    <div class="cv-group-head" style="margin:22px 4px 12px"><b>טבלאות</b><span>סיכום ופירוט</span></div>
-    <div class="table-card" style="margin-bottom:16px;">
-      <div class="head-row">
-        <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>סיכום לפי קטגוריה</span></h3>
-      </div>
-      <div class="table-scroll detail-table-wrap"><table id="catSumTable"><thead><tr>
-        <th>קטגוריה</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th><th class="num">כולל מע״מ</th><th>אחוז מסך ההוצאות</th>
-      </tr></thead><tbody id="catSumTbody"></tbody></table></div>
-    </div>
-    <div class="table-card" style="margin-bottom:0;">
-      <div class="head-row">
-        <h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#D65A45"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>כל השורות</span></h3>
-        <input class="search-box" id="catSearch" placeholder="חיפוש (קטגוריה, קוד, לקוח, תיאור...)">
-      </div>
-      <div class="table-scroll detail-table-wrap"><table id="catTable"><thead><tr>
-        <th>קטגוריה</th><th>קוד</th><th>תיאור</th><th>לקוח</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th><th class="num">כולל מע״מ</th>
-      </tr></thead><tbody id="catTbody"></tbody></table></div>
+    <div class="table-card" style="margin-bottom:0px;--c:#6C4CE0;">
+      <div class="head-row"><h3 class="cv-h3-main"><span class="cv-ic sm" style="--c:#6C4CE0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>פירוט הוצאות</span></h3></div>
+      <div class="table-scroll detail-table-wrap"><table id="pnlExpTable"><thead><tr><th>תאריך</th><th>קטגוריה</th><th>ספק / מוצר</th><th>מס׳ חשבונית</th><th>תצורת תשלום</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th><th class="num">כולל מע״מ</th></tr></thead><tbody id="pnlExpTbody"></tbody></table></div>
     </div>
   </section>
 
@@ -1827,26 +1789,18 @@ window.__DASHBOARD_PREFETCH__ = (function(){
     </div>
   </div>
 
-  <div class="filters-overlay" id="xf_exp" aria-hidden="true">
-    <div class="filters-pop" role="dialog" aria-modal="true" aria-label="סינון הוצאות">
-      <div class="fp-head"><h3><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>סינון הוצאות</h3><button type="button" class="fp-close" data-xclose="exp" aria-label="סגירה">✕</button></div>
+  <div class="filters-overlay" id="xf_pnl" aria-hidden="true">
+    <div class="filters-pop" role="dialog" aria-modal="true" aria-label="סינון רווח והפסד">
+      <div class="fp-head"><h3><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>סינון רווח והפסד</h3><button type="button" class="fp-close" id="pnlFiltersClose" aria-label="סגירה">✕</button></div>
       <div class="fp-body">
-        <div class="field"><label>שנה</label><div id="xfExpYear"></div></div>
-        <div class="field"><label>חודש</label><div id="xfExpMonth"></div></div>
-        <div class="field"><label>תצורת תשלום</label><div id="xfExpPay"></div></div>
-        <div class="field"><label>ספק / מוצר</label><div id="xfExpSupplier"></div></div>
+        <div class="field"><label>שנה</label><div id="pfYear"></div></div>
+        <div class="field"><label>חודש</label><div id="pfMonth"></div></div>
+        <div class="field"><label>קטגוריית הוצאה</label><div id="pfCat"></div></div>
+        <div class="field"><label>תצורת תשלום</label><div id="pfPay"></div></div>
+        <div class="field"><label>ספק / מוצר</label><div id="pfSup"></div></div>
+        <div class="field"><label>לקוח (הכנסות)</label><div id="pfCust"></div></div>
       </div>
-      <div class="fp-foot"><button type="button" class="btn ghost" data-xclear="exp">נקה סינונים</button><button type="button" class="btn fp-apply" data-xclose="exp">הצג תוצאות</button></div>
-    </div>
-  </div>
-  <div class="filters-overlay" id="xf_cat" aria-hidden="true">
-    <div class="filters-pop" role="dialog" aria-modal="true" aria-label="סינון פירוט הוצאות">
-      <div class="fp-head"><h3><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>סינון פירוט הוצאות</h3><button type="button" class="fp-close" data-xclose="cat" aria-label="סגירה">✕</button></div>
-      <div class="fp-body">
-        <div class="field"><label>קטגוריה</label><div id="xfCatCategory"></div></div>
-        <div class="field"><label>לקוח</label><div id="xfCatCustomer"></div></div>
-      </div>
-      <div class="fp-foot"><button type="button" class="btn ghost" data-xclear="cat">נקה סינונים</button><button type="button" class="btn fp-apply" data-xclose="cat">הצג תוצאות</button></div>
+      <div class="fp-foot"><button type="button" class="btn ghost" id="pnlFiltersClear">נקה סינונים</button><button type="button" class="btn fp-apply" id="pnlFiltersApply">הצג תוצאות</button></div>
     </div>
   </div>
 
@@ -2176,7 +2130,7 @@ function applyVatLabels(root){
   const from = vatOn ? /ללא מע״מ/g : /כולל מע״מ/g, to = vatOn ? 'כולל מע״מ' : 'ללא מע״מ';
   const scope = root || document.body;
   const w = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, { acceptNode:n=>
-    (n.nodeValue.indexOf('מע״מ') !== -1 && !(n.parentElement && n.parentElement.closest('.vat-bar,script,style,.legal-modal,#planningView,#expView,#catView'))) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+    (n.nodeValue.indexOf('מע״מ') !== -1 && !(n.parentElement && n.parentElement.closest('.vat-bar,script,style,.legal-modal,#planningView,#pnlView'))) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
   const nodes = []; while(w.nextNode()) nodes.push(w.currentNode);
   nodes.forEach(n=>{ const v = n.nodeValue.replace(from, to); if(v !== n.nodeValue) n.nodeValue = v; });
   document.querySelectorAll('[title*="מע״מ"]').forEach(el=>{ if(el.closest('.vat-bar')) return; const t = el.getAttribute('title').replace(from, to); if(t !== el.getAttribute('title')) el.setAttribute('title', t); });
@@ -2197,7 +2151,7 @@ document.querySelectorAll('.vat-switch').forEach(sw=>sw.addEventListener('click'
 let planningData = [];
 let companiesData = [];
 let filteredCompanies = [];
-let expRows = [], catRows = [];
+let pnlExp = [], pnlInc = [];
 let rawPlanning = [], rawCompanies = [], rawInsights = { planning: { empty: true }, detail: { empty: true } }; // הנתונים כפי שהגיעו (כולל מע״מ)
 let vatOn = true; // true = כולל מע״מ (ברירת מחדל), false = ללא מע״מ
 let dashboardInsights = { planning: { empty: true }, detail: { empty: true } };
@@ -2280,7 +2234,7 @@ async function loadData(){
       maintenanceActive = false;
       rawPlanning = computeDemoPlanningRows(DEMO_PLANNING, DEMO_COMPANIES);
       rawCompanies = DEMO_COMPANIES;
-      expRows = DEMO_EXPENSES; catRows = DEMO_EXP_DETAIL;
+      pnlExp = DEMO_PNL_EXP; pnlInc = DEMO_PNL_INC;
       rawInsights = {
         planning: computeDemoPlanningInsights(rawPlanning.filter(p=>!p.year || p.year===new Date().getFullYear())),
         detail: computeDemoDetailInsights(rawCompanies)
@@ -2338,7 +2292,7 @@ async function loadData(){
       maintenanceActive = false;
       rawPlanning = json.planning || [];
       rawCompanies = json.companies || [];
-      expRows = json.expenses || []; catRows = json.expenseDetail || [];
+      pnlExp = (json.pnl && json.pnl.expenses) || []; pnlInc = (json.pnl && json.pnl.incomes) || [];
       rawInsights = json.insights || { planning:{empty:true}, detail:{empty:true} };
       document.getElementById('statusDot').className = 'status-dot live';
       document.getElementById('statusText').textContent = 'מחובר לגיליון';
@@ -2349,7 +2303,7 @@ async function loadData(){
     rebuildVatView();
     populateFilterOptions();
     applyFiltersAndRender();
-    xRefreshAll();
+    pnlPopulate();
     applyAuthGate();
     silentlyRetrying = false;
     retryAttemptCount = 0;
@@ -2616,6 +2570,7 @@ function applyRoleUI(){
     pill.style.display = 'none';
   }
   ['exportBtn','logBtn','mobilePreviewBtn'].forEach(id=>{ const el = document.getElementById(id); if(el) el.style.display = isAdminUser() ? '' : 'none'; });
+  { const pb = document.getElementById('pnlBtn'); if(pb) pb.style.display = isAdmin ? '' : 'none'; if(!isAdmin && currentView === 'pnl') setView('main'); };
   // מרנדרים מחדש את טבלאות התכנון כדי שעמודת העובד תהפוך לניתנת-ללחיצה (או לא) בהתאם להרשאה
   if(typeof renderPlanningTable === 'function' && planningData.length) renderPlanningTable();
   if(currentView === 'planning') renderPlanningDashboard();
@@ -3083,19 +3038,21 @@ document.getElementById('clearFilters').addEventListener('click', resetAllFilter
 /* ============ ניווט: ראשי / גרפים + פופ-אפ סינון + כותרת קבועה ============ */
 let currentView = 'main';
 function setView(v){
+  if(v === 'pnl' && !(currentUser && currentUser.role === 'admin')) v = 'main';
   currentView = v;
   document.getElementById('mainView').hidden = v !== 'main';
   document.getElementById('chartsView').hidden = v !== 'charts';
   document.getElementById('planningView').hidden = v !== 'planning';
-  document.getElementById('expView').hidden = v !== 'exp';
-  document.getElementById('catView').hidden = v !== 'cat';
-  [['tabMain','main'],['tabCharts','charts'],['tabPlanning','planning'],['tabExp','exp'],['tabCat','cat']].forEach(([id,k])=>{ const b = document.getElementById(id); b.classList.toggle('on', v === k); b.setAttribute('aria-selected', v === k ? 'true' : 'false'); });
-  try{ history.replaceState(null, '', v === 'charts' ? '#charts' : v === 'planning' ? '#planning' : (v === 'exp' || v === 'cat') ? '#' + v : location.pathname + location.search); }catch(e){}
+  document.getElementById('pnlView').hidden = v !== 'pnl';
+  { const pb = document.getElementById('pnlBtn'); pb.classList.toggle('on', v === 'pnl'); pb.setAttribute('aria-pressed', v === 'pnl' ? 'true' : 'false'); }
+  
+  [['tabMain','main'],['tabCharts','charts'],['tabPlanning','planning']].forEach(([id,k])=>{ const b = document.getElementById(id); b.classList.toggle('on', v === k); b.setAttribute('aria-selected', v === k ? 'true' : 'false'); });
+  try{ history.replaceState(null, '', v === 'charts' ? '#charts' : v === 'planning' ? '#planning' : v === 'pnl' ? '#pnl' : location.pathname + location.search); }catch(e){}
   window.scrollTo({ top:0, behavior:'auto' });
   // גרפים שנוצרו בזמן שהתצוגה הייתה מוסתרת צריכים לחשב גודל מחדש
   requestAnimationFrame(()=>{
     updateFilterBadge();
-    if(v === 'exp') renderExp(); else if(v === 'cat') renderCat();
+    if(v === 'pnl') renderPnl();
     else if(v === 'planning') renderPlanningDashboard();
     else if(v === 'charts') renderGridCharts();      // מצייר מחדש כשהעמוד נראה: גודל נכון + אנימציית כניסה
     else renderMonthlyTrend();
@@ -3112,12 +3069,10 @@ document.getElementById('cvTabs').addEventListener('click', (e)=>{
 document.getElementById('tabMain').addEventListener('click', ()=> setView('main'));
 document.getElementById('tabCharts').addEventListener('click', ()=> setView('charts'));
 document.getElementById('tabPlanning').addEventListener('click', ()=> setView('planning'));
-document.getElementById('tabExp').addEventListener('click', ()=> setView('exp'));
-document.getElementById('tabCat').addEventListener('click', ()=> setView('cat'));
+document.getElementById('pnlBtn').addEventListener('click', ()=>{ if(currentUser && currentUser.role === 'admin') setView('pnl'); });
 if(location.hash === '#charts') setView('charts');
 else if(location.hash === '#planning') setView('planning');
-else if(location.hash === '#exp') setView('exp');
-else if(location.hash === '#cat') setView('cat');
+else if(location.hash === '#pnl') setView('pnl');
 
 function periodLabel(f){
   const m = (mo,y)=> (mo ? HEB_MONTHS[mo-1] + ' ' : '') + y;
@@ -3138,7 +3093,7 @@ function activeFilterCount(){
   return ['company','client','endClient','approver','employee','tenderType'].filter(k=> f[k] && f[k].length).length + ((f.fromYear || f.toYear) ? 1 : 0);
 }
 function updateFilterBadge(){
-  const n = (typeof currentView !== 'undefined' && (currentView === 'exp' || currentView === 'cat')) ? xCount(currentView) : activeFilterCount(), b = document.getElementById('filterBadge');
+  const n = (typeof currentView !== 'undefined' && currentView === 'pnl') ? pnlFilterCount() : activeFilterCount(), b = document.getElementById('filterBadge');
   if(!b) return; b.textContent = n; b.hidden = n === 0;
   const ap = document.getElementById('applyFiltersBtn');
   if(ap) ap.textContent = 'הצג ' + filteredCompanies.length.toLocaleString('he-IL') + ' רשומות';
@@ -3162,7 +3117,7 @@ function closeFiltersPop(){
   setTimeout(()=>{ if(!ov.classList.contains('open')) ov.classList.remove('show'); }, 320);
   if(filtersLastFocus && filtersLastFocus.focus) filtersLastFocus.focus({preventScroll:true});
 }
-document.getElementById('openFiltersBtn').addEventListener('click', ()=>{ if(currentView === 'exp' || currentView === 'cat') xfOpen(currentView); else openFiltersPop(); });
+document.getElementById('openFiltersBtn').addEventListener('click', ()=>{ if(currentView === 'pnl') pnlFiltersOpen(); else openFiltersPop(); });
 document.getElementById('filtersCloseBtn').addEventListener('click', closeFiltersPop);
 document.getElementById('applyFiltersBtn').addEventListener('click', closeFiltersPop);
 document.getElementById('filtersOverlay').addEventListener('mousedown', (e)=>{ if(e.target.id === 'filtersOverlay') closeFiltersPop(); });
@@ -3579,6 +3534,8 @@ function renderGridCharts(){
     (label)=>openCategoryModal('employee', label, 'grossProfit', 'רווח גולמי — ' + label));
   barChart('chartPaymentByEmployee', sortedEntries(groupSum(filteredCompanies, c=>c.employee, c=>c.employeePayment)), '#D65A45', fmt,
     (label)=>openCategoryModal('employee', label, 'employeePayment', 'שכר עבודה — ' + label));
+  barChart('chartBillingByParent', sortedEntries(groupSum(filteredCompanies, c=>c.client, c=>c.clientBilling)), '#6C4CE0', fmt,
+    (label)=>openCategoryModal('client', label, 'clientBilling', 'חיובי לקוח — ' + label));
   barChart('chartBillingByClient', sortedEntries(groupSum(filteredCompanies, c=>c.endClient, c=>c.clientBilling)), '#2F6FED', fmt,
     (label)=>openCategoryModal('endClient', label, 'clientBilling', 'חיובי לקוח — ' + label));
   barChart('chartMarginByEmployee', sortedEntries(groupRatioPct(filteredCompanies, c=>c.employee, c=>c.grossProfit, c=>c.clientBilling)), '#1E9BD7', pct,
@@ -3922,208 +3879,275 @@ document.getElementById('detailModalCloseBtn').addEventListener('click', ()=> do
 document.getElementById('detailModalOverlay').addEventListener('click', (e)=>{ if(e.target.id==='detailModalOverlay') document.getElementById('detailModalOverlay').classList.remove('open'); });
 
 
-/* ============================ עמודי הוצאות ופירוט הוצאות ============================ */
-const DEMO_EXPENSES = [
-  {date:'2026-01-01',supplier:'פנגו',invoiceNo:'187463446',payType:'אשראי חברה',payments:1,incl:117.9,exVat:99.92,vat:17.98},
-  {date:'2026-01-04',supplier:'משה משה',invoiceNo:'10005',payType:'העברה בנקאית',payments:2,incl:35000,exVat:29661.02,vat:5338.98},
-  {date:'2026-01-05',supplier:'משה מיוסי',invoiceNo:'1007',payType:'העברה בנקאית',payments:4,incl:62959,exVat:53355.08,vat:9603.92},
-  {date:'2026-01-06',supplier:'יניב',invoiceNo:'20010',payType:'העברה בנקאית',payments:1,incl:36000,exVat:30508.47,vat:5491.53},
-  {date:'2026-02-03',supplier:'פנגו',invoiceNo:'188120012',payType:'אשראי חברה',payments:1,incl:240,exVat:203.39,vat:36.61},
-  {date:'2026-02-10',supplier:'משה משה',invoiceNo:'10031',payType:'העברה בנקאית',payments:1,incl:35000,exVat:29661.02,vat:5338.98},
-  {date:'2026-03-02',supplier:'חברת חשמל',invoiceNo:'55012',payType:'הוראת קבע',payments:1,incl:4180,exVat:3542.37,vat:637.63},
-  {date:'2026-03-15',supplier:'יניב',invoiceNo:'20044',payType:'העברה בנקאית',payments:1,incl:36000,exVat:30508.47,vat:5491.53},
-  {date:'2025-12-20',supplier:'חברת חשמל',invoiceNo:'54001',payType:'הוראת קבע',payments:1,incl:3900,exVat:3305.08,vat:594.92},
-  {date:'2025-11-08',supplier:'משה מיוסי',invoiceNo:'990',payType:'אשראי חברה',payments:3,incl:21000,exVat:17796.61,vat:3203.39}
+
+/* ============================ דשבורד רווח והפסד (הכנסות מול הוצאות) ============================ */
+const DEMO_PNL_EXP = [
+  {date:'2026-07-02',category:'כיבוד',supplier:'פנגו',invoiceNo:'1874',payType:'אשראי חברה',incl:20078,exVat:17015,vat:3063},
+  {date:'2026-07-05',category:'משרד',supplier:'משה משה',invoiceNo:'10005',payType:'העברה בנקאית',incl:70008,exVat:59328,vat:10679},
+  {date:'2026-07-06',category:'שכר עבודה',supplier:'יניב',invoiceNo:'20010',payType:'העברה בנקאית',incl:290000,exVat:290000,vat:0},
+  {date:'2026-07-09',category:'רכב',supplier:'ליאת',invoiceNo:'3251',payType:'אשראי חברה',incl:80000,exVat:67797,vat:12203},
+  {date:'2026-07-11',category:'תרומה',supplier:'נועם',invoiceNo:'235325',payType:'אשראי חברה',incl:100000,exVat:100000,vat:0},
+  {date:'2026-07-12',category:'בעלים',supplier:'החזר',invoiceNo:'',payType:'העברה בנקאית',incl:85,exVat:85,vat:0,excluded:true},
+  {date:'2026-06-04',category:'משרד',supplier:'משה משה',invoiceNo:'9988',payType:'העברה בנקאית',incl:52000,exVat:44068,vat:7932},
+  {date:'2026-06-10',category:'שכר עבודה',supplier:'יניב',invoiceNo:'19000',payType:'העברה בנקאית',incl:270000,exVat:270000,vat:0},
+  {date:'2026-06-18',category:'כיבוד',supplier:'פנגו',invoiceNo:'1801',payType:'אשראי חברה',incl:14000,exVat:11864,vat:2136},
+  {date:'2026-05-08',category:'שכר עבודה',supplier:'יניב',invoiceNo:'18000',payType:'העברה בנקאית',incl:250000,exVat:250000,vat:0}
 ];
-const DEMO_EXP_DETAIL = [
-  {category:'משרד',code:'500170',incl:42500.06,exVat:36017,vat:6483.06,description:'ציוד משרדי ושכירות',customer:''},
-  {category:'שכר עבודה',code:'500171',incl:50006.04,exVat:42378,vat:7628.04,description:'שכר',customer:''},
-  {category:'כיבוד',code:'500172',incl:60180,exVat:51000,vat:9180,description:'כיבוד לאירועים',customer:'אגף'},
-  {category:'שיווק',code:'500173',incl:18000,exVat:15254.24,vat:2745.76,description:'פרסום',customer:'הגנה'}
+const DEMO_PNL_INC = [
+  {date:'2026-07-02',customer:'איי.או.אס ייעוץ',docNo:'500223',allocation:'20260702',incl:100000,exVat:84746,vat:15254},
+  {date:'2026-07-05',customer:'ש.נועם יעוץ',docNo:'500224',allocation:'20260705',incl:100000,exVat:84746,vat:15254},
+  {date:'2026-07-06',customer:'נס.א.ט',docNo:'500225',allocation:'20260706',incl:200000,exVat:169492,vat:30508},
+  {date:'2026-07-16',customer:'תים נקום',docNo:'500226',allocation:'',incl:100000,exVat:84746,vat:15254},
+  {date:'2026-07-31',customer:'אור ימים ניהול',docNo:'700093',allocation:'',incl:47200,exVat:40000,vat:7200},
+  {date:'2026-06-12',customer:'נס.א.ט',docNo:'500200',allocation:'',incl:420000,exVat:355932,vat:64068},
+  {date:'2026-05-14',customer:'אור ימים ניהול',docNo:'500190',allocation:'',incl:300000,exVat:254237,vat:45763}
 ];
-const X = { exp:{ vat:true, period:'month' }, cat:{ vat:true } };
-const XF = {
-  exp:[['xfExpYear', r=>String(r.date||'').slice(0,4)],['xfExpMonth', r=>{const m=+String(r.date||'').slice(5,7); return m ? HEB_MONTHS[m-1] : '';}],['xfExpPay', r=>r.payType],['xfExpSupplier', r=>r.supplier]],
-  cat:[['xfCatCategory', r=>r.category],['xfCatCustomer', r=>r.customer]]
-};
-const xRows = k => k === 'exp' ? expRows : catRows;
-const xAmt = (k, r) => X[k].vat ? r.incl : r.exVat;
-function xFiltered(k){
-  const sels = XF[k].map(([id, fn])=>[msGet(id), fn]);
-  return xRows(k).filter(r=> sels.every(([sel, fn])=> !sel.length || sel.includes(fn(r))));
+const PNL = { vat:true };
+const PF = ['pfYear','pfMonth','pfCat','pfPay','pfSup','pfCust'];
+const pYear = r => String(r.date||'').slice(0,4);
+const pMonthNo = r => +String(r.date||'').slice(5,7) || 0;
+const pMonthName = r => pMonthNo(r) ? HEB_MONTHS[pMonthNo(r)-1] : '';
+const pnlBasis = r => PNL.vat ? r.incl : r.exVat;
+const pnlHasIncDate = () => pnlInc.some(r=>r.date);
+function pnlFilterCount(){ return PF.filter(id=> msGet(id).length).length; }
+PF.forEach(id=>{ msInit(id); document.getElementById(id)._onChange = ()=>{ renderPnl(true); updateFilterBadge(); }; });
+function pnlPopulate(){
+  const all = [...pnlExp, ...pnlInc];
+  msSetOptions('pfYear', new Set(all.map(pYear).filter(Boolean)));
+  msSetOptions('pfCat', new Set(pnlExp.map(r=>r.category).filter(Boolean)));
+  msSetOptions('pfPay', new Set(pnlExp.map(r=>r.payType).filter(Boolean)));
+  msSetOptions('pfSup', new Set(pnlExp.map(r=>r.supplier).filter(Boolean)));
+  msSetOptions('pfCust', new Set(pnlInc.map(r=>r.customer).filter(Boolean)));
+  const mr = document.getElementById('pfMonth'); mr._opts = HEB_MONTHS.filter(m=> all.some(r=> pMonthName(r) === m)); [...mr._sel].forEach(v=>{ if(!mr._opts.includes(v)) mr._sel.delete(v); }); msUpdateLabel(mr);
+  if(currentView === 'pnl') renderPnl(true);
 }
-function xCount(k){ return XF[k].filter(([id])=> msGet(id).length).length; }
-function xPopulate(k){
-  XF[k].forEach(([id, fn])=>{
-    const vals = new Set(xRows(k).map(fn).filter(Boolean));
-    if(id === 'xfExpMonth') msSetOptions(id, HEB_MONTHS.filter(m=>vals.has(m))); else msSetOptions(id, vals);
-    if(id === 'xfExpMonth'){ const r = document.getElementById(id); r._opts = HEB_MONTHS.filter(m=>vals.has(m)); msUpdateLabel(r); }
-  });
+function pnlSel(){ const g = id=>msGet(id); return { Y:g('pfYear'), M:g('pfMonth'), C:g('pfCat'), P:g('pfPay'), S:g('pfSup'), U:g('pfCust') }; }
+function pnlSets(f, period){
+  const hasD = pnlHasIncDate();
+  return {
+    inc: pnlInc.filter(r=> (!hasD || period(r)) && (!f.U.length || f.U.includes(r.customer))),
+    exp: pnlExp.filter(r=> period(r) && (!f.C.length || f.C.includes(r.category)) && (!f.P.length || f.P.includes(r.payType)) && (!f.S.length || f.S.includes(r.supplier)))
+  };
 }
-function xRefreshAll(){ xPopulate('exp'); xPopulate('cat'); if(currentView === 'exp') renderExp(); else if(currentView === 'cat') renderCat(); }
-['exp','cat'].forEach(k=> XF[k].forEach(([id])=>{ msInit(id); document.getElementById(id)._onChange = ()=>{ xRender(k); updateFilterBadge(); }; }));
-function xRender(k){ if(k === 'exp') renderExp(); else renderCat(); }
-function xfOpen(k){
-  const ov = document.getElementById('xf_' + k), pop = ov.querySelector('.filters-pop'), btn = document.getElementById('openFiltersBtn');
+function pnlCalc(sets){
+  const inc = sets.inc, ex = sets.exp.filter(r=>!r.excluded), ow = sets.exp.filter(r=>r.excluded);
+  const t = { incIncl:sum(inc,r=>r.incl), incEx:sum(inc,r=>r.exVat), incVat:sum(inc,r=>r.vat),
+    expIncl:sum(ex,r=>r.incl), expEx:sum(ex,r=>r.exVat), expVat:sum(ex,r=>r.vat), ownIncl:sum(ow,r=>r.incl), ownEx:sum(ow,r=>r.exVat) };
+  t.netIncl = t.incIncl - t.expIncl; t.netEx = t.incEx - t.expEx;
+  t.mgIncl = t.incIncl ? t.netIncl / t.incIncl * 100 : 0; t.mgEx = t.incEx ? t.netEx / t.incEx * 100 : 0;
+  t.vatPay = t.incVat - t.expVat;
+  return t;
+}
+const tB = (t, k)=> PNL.vat ? t[k + 'Incl'] : t[k + 'Ex'];
+function pnlPct(p, c){ return '<div class="pct-cell" style="--c:' + c + '"><b>' + pct(p) + '</b><i><u style="width:' + Math.max(0, Math.min(100, p)) + '%"></u></i></div>'; }
+const PNL_PAL = ['#2F6FED','#6C4CE0','#0E9488','#D65A45','#1E9BD7','#E0A21B','#C2417C','#4F9D3A','#7A8AA6','#8A5A2B'];
+function pnlEmpty(canvasId, show){
+  const cv = document.getElementById(canvasId), wrap = cv.parentElement;
+  const old = wrap.querySelector('.chart-empty'); if(old) old.remove();
+  cv.style.display = show ? 'none' : 'block';
+  if(show){ const d = document.createElement('div'); d.className = 'chart-empty'; d.textContent = 'אין נתונים להצגה'; wrap.appendChild(d); }
+}
+function pnlDestroy(id){ if(charts[id]){ charts[id].destroy(); charts[id] = null; } }
+function renderPnl(force){
+  if(document.getElementById('pnlView').hidden && !force) return;
+  const f = pnlSel(), hasD = pnlHasIncDate();
+  const period = r=> (!f.Y.length || f.Y.includes(pYear(r))) && (!f.M.length || f.M.includes(pMonthName(r)));
+  const cur = pnlSets(f, period), T = pnlCalc(cur);
+  // השוואה: חודש קודם ומצטבר שנתי (רק כשנבחרו שנה וחודש אחד ויש תאריכים בהכנסות)
+  let prevT = null, ytdT = null, single = null;
+  if(hasD && f.Y.length === 1 && f.M.length === 1){
+    const y = +f.Y[0], m = HEB_MONTHS.indexOf(f.M[0]) + 1; single = { y, m };
+    const py = m === 1 ? y - 1 : y, pm = m === 1 ? 12 : m - 1;
+    prevT = pnlCalc(pnlSets(f, r=> +pYear(r) === py && pMonthNo(r) === pm));
+    ytdT = pnlCalc(pnlSets(f, r=> +pYear(r) === y && pMonthNo(r) >= 1 && pMonthNo(r) <= m));
+  }
+  // הודעות
+  const notes = [];
+  if(!pnlInc.length) notes.push('לא נמצאו הכנסות בגיליון "הכנסות".');
+  if(!pnlExp.length) notes.push('לא נמצאו הוצאות בגיליון "הוצאות".');
+  if(pnlInc.length && !hasD) notes.push('בגיליון "הכנסות" אין עמודת <b>תאריך</b> — ההכנסות מוצגות במלואן ואינן מסוננות לפי תקופה, ואי אפשר להציג השוואה חודשית. כדי לקבל אותה: הוסף בגיליון עמודה בשם "תאריך".');
+  const nb = document.getElementById('pnlNotice'); nb.hidden = !notes.length; nb.innerHTML = notes.join('<br>');
+  // כותרת + KPI
+  const inc = tB(T,'inc'), exp = tB(T,'exp'), net = tB(T,'net'), mg = PNL.vat ? T.mgIncl : T.mgEx;
+  const lbl = PNL.vat ? 'כולל מע״מ' : 'ללא מע״מ';
+  const stat = (l, v, sub, i)=> '<div class="cv-stat" style="--i:' + i + '"><span>' + l + '</span><b>' + v + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
+  document.getElementById('pnlStats').innerHTML = stat('הכנסות ' + lbl, fmt(inc), cur.inc.length + ' חשבוניות', 0) + stat('הוצאות ' + lbl, fmt(exp), cur.exp.filter(r=>!r.excluded).length + ' הוצאות', 1)
+    + stat('רווח נקי', fmt(net), net < 0 ? 'הפסד' : 'רווח', 2) + stat('שיעור רווחיות', pct(mg), 'מההכנסות', 3);
+  const kp = (label, raw, type, accent, icon)=> `
+    <div class="kpi static" style="--kpi-accent:var(--accent-${accent});--kpi-accent-soft:var(--accent-${accent}-soft);">
+      <div class="kpi-top"><div class="kpi-icon">${KPI_ICONS[icon]}</div></div>
+      <div class="label">${label}</div>
+      <div class="value num" data-raw="${raw}" data-type="${type}">0</div>
+    </div>`;
+  document.getElementById('pnlKpis').innerHTML = kp('הכנסות ' + lbl, inc, 'currency', 'green', 'billing') + kp('הוצאות ' + lbl, exp, 'currency', 'red', 'employeePayment')
+    + kp('רווח נקי', net, 'currency', net < 0 ? 'red' : 'blue', 'grossProfit') + kp('שיעור רווחיות', mg, 'percent', 'indigo', 'margin')
+    + kp('מע״מ לתשלום', T.vatPay, 'currency', 'sky', 'dealInvoice') + kp('החזר בעלים (לא נכלל)', PNL.vat ? T.ownIncl : T.ownEx, 'currency', 'indigo', 'activeEmployees');
+  animateValuesIn('#pnlKpis .value');
+  // גרף השוואה
+  pnlDestroy('pnlChartCmp');
+  const buckets = new Map(), add = (key, k, v)=>{ if(!buckets.has(key)) buckets.set(key, { inc:0, exp:0 }); buckets.get(key)[k] += v; };
+  const monthly = hasD || pnlExp.some(r=>r.date);
+  cur.inc.forEach(r=>{ const key = hasD ? String(r.date||'').slice(0,7) : 'all'; if(key) add(hasD ? key : 'all', 'inc', pnlBasis(r)); });
+  cur.exp.filter(r=>!r.excluded).forEach(r=>{ const key = hasD ? String(r.date||'').slice(0,7) : 'all'; if(key) add(key, 'exp', pnlBasis(r)); });
+  const keys = [...buckets.keys()].sort();
+  pnlEmpty('pnlChartCmp', !keys.length);
+  document.getElementById('pnlCmpSub2').textContent = hasD ? 'לפי חודש' : 'סה״כ התקופה';
+  document.getElementById('pnlCmpSub').textContent = hasD ? 'חודש אחר חודש' : 'סיכום כולל';
+  if(keys.length){
+    const labels = keys.map(k=> k === 'all' ? 'סה״כ' : HEB_MONTHS[+k.slice(5,7)-1] + ' ' + k.slice(2,4));
+    const incV = keys.map(k=> Math.round(buckets.get(k).inc*100)/100), expV = keys.map(k=> Math.round(buckets.get(k).exp*100)/100), netV = keys.map((k,i)=> Math.round((incV[i]-expV[i])*100)/100);
+    const txt = isDark() ? '#B9C6E4' : '#4A5878';
+    charts['pnlChartCmp'] = new Chart(document.getElementById('pnlChartCmp').getContext('2d'), {
+      type:'bar',
+      data:{ labels, datasets:[
+        { label:'הכנסות', data:incV, backgroundColor:'#0E9488', borderRadius:8, maxBarThickness:48 },
+        { label:'הוצאות', data:expV, backgroundColor:'#D65A45', borderRadius:8, maxBarThickness:48 },
+        { type:'line', label:'רווח נקי', data:netV, borderColor:'#2F6FED', backgroundColor:'#2F6FED', borderWidth:2.5, tension:.25, pointRadius:4 } ] },
+      options:{ responsive:true, maintainAspectRatio:false, animation:{ duration: prefersReducedMotion ? 0 : 700 },
+        plugins:{ legend:{ position:'bottom', labels:{ color:txt, boxWidth:12, padding:16 } }, tooltip:{ callbacks:{ label:(c)=> c.dataset.label + ': ' + fmt(c.parsed.y) } } },
+        scales:{ x:{ ticks:{ color:txt }, grid:{ display:false } }, y:{ ticks:{ color:txt, callback:(v)=>fmt(v) }, grid:{ color: isDark() ? 'rgba(255,255,255,.08)' : 'rgba(20,40,90,.08)' } } } }
+    });
+  }
+  // גרפי הוצאות והכנסות
+  const expInc = cur.exp.filter(r=>!r.excluded);
+  const setSearch = (label)=>{ document.getElementById('pnlSearch').value = label; renderPnl(true); document.getElementById('pnlExpTable').scrollIntoView({behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start'}); };
+  const byCat = sortedEntries(groupSum(expInc, r=>r.category, pnlBasis));
+  barChart('pnlChartCat', byCat, '#D65A45', fmt, setSearch);
+  barChart('pnlChartSup', sortedEntries(groupSum(expInc, r=>r.supplier || 'לא צוין', pnlBasis)), '#1E9BD7', fmt, setSearch);
+  barChart('pnlChartPay', sortedEntries(groupSum(expInc, r=>r.payType || 'לא צוין', pnlBasis)), '#E0A21B', fmt, setSearch);
+  barChart('pnlChartCust', sortedEntries(groupSum(cur.inc, r=>r.customer || 'לא צוין', pnlBasis)), '#2F6FED', fmt, setSearch);
+  pnlDestroy('pnlChartShare'); pnlEmpty('pnlChartShare', !byCat.length);
+  if(byCat.length){
+    const totalC = byCat.reduce((a,e)=>a+e[1],0), txt = isDark() ? '#B9C6E4' : '#4A5878';
+    charts['pnlChartShare'] = new Chart(document.getElementById('pnlChartShare').getContext('2d'), {
+      type:'doughnut',
+      data:{ labels:byCat.map(e=>e[0]), datasets:[{ data:byCat.map(e=>e[1]), backgroundColor:byCat.map((e,i)=>PNL_PAL[i % PNL_PAL.length]), borderWidth:2, borderColor: isDark() ? '#0F1B3D' : '#fff' }] },
+      options:{ responsive:true, maintainAspectRatio:false, cutout:'58%', animation:{ duration: prefersReducedMotion ? 0 : 700 },
+        plugins:{ legend:{ position:'bottom', labels:{ color:txt, boxWidth:12, padding:14 } }, tooltip:{ callbacks:{ label:(c)=> c.label + ': ' + fmt(c.parsed) + ' · ' + pct(totalC ? c.parsed / totalC * 100 : 0) } } } }
+    });
+  }
+  // טבלת רווח והפסד
+  const cmp = !!prevT;
+  const chg = (c, p, goodUp)=>{ if(!p) return '<td class="num">—</td>'; const d = (c - p) / Math.abs(p) * 100; const good = goodUp ? d >= 0 : d <= 0; return '<td class="num ' + (Math.abs(d) < 0.05 ? '' : good ? 'up' : 'down') + '">' + (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + pct(Math.abs(d)) + '</td>'; };
+  const row = (name, k, o)=>{
+    o = o || {};
+    const v = (key)=> t=> t ? t[k + key] : 0;
+    let h = '<tr' + (o.tot ? ' class="tot"' : '') + '><td><b>' + name + '</b></td>';
+    if(o.rate){ h += '<td class="num">' + pct(T.mgIncl) + '</td><td class="num">' + pct(T.mgEx) + '</td><td class="num">—</td>'; }
+    else if(o.vatOnly){ h += '<td class="num">—</td><td class="num">—</td><td class="num">' + fmt(T.vatPay) + '</td>'; }
+    else { h += '<td class="num">' + fmt(T[k+'Incl']) + '</td><td class="num">' + fmt(T[k+'Ex']) + '</td><td class="num">' + (o.noVat ? '—' : fmt(T[k+'Incl'] - T[k+'Ex'])) + '</td>'; }
+    if(cmp){
+      if(o.rate){ h += '<td class="num">' + pct(PNL.vat ? prevT.mgIncl : prevT.mgEx) + '</td><td class="num">—</td><td class="num">' + pct(PNL.vat ? ytdT.mgIncl : ytdT.mgEx) + '</td>'; }
+      else if(o.vatOnly){ h += '<td class="num">' + fmt(prevT.vatPay) + '</td>' + chg(T.vatPay, prevT.vatPay, false) + '<td class="num">' + fmt(ytdT.vatPay) + '</td>'; }
+      else { const c = tB(T,k), p = tB(prevT,k), y = tB(ytdT,k); h += '<td class="num">' + fmt(p) + '</td>' + chg(c, p, !o.bad) + '<td class="num">' + fmt(y) + '</td>'; }
+    }
+    return h + '</tr>';
+  };
+  document.getElementById('pnlSumTable').innerHTML = '<thead><tr><th></th><th class="num">כולל מע״מ</th><th class="num">ללא מע״מ</th><th class="num">מע״מ</th>'
+    + (cmp ? '<th class="num">חודש קודם</th><th class="num">שינוי</th><th class="num">מצטבר שנתי</th>' : '') + '</tr></thead><tbody>'
+    + row('הכנסות','inc') + row('הוצאות (נכללות)','exp',{bad:true}) + row('רווח נקי','net',{tot:true}) + row('שיעור רווחיות','mg',{rate:true}) + row('מע״מ לתשלום','vatPay',{vatOnly:true}) + row('החזר בעלים (לא נכלל)','own',{bad:true,noVat:true}) + '</tbody>';
+  // טבלת קטגוריות
+  const catAll = new Map();
+  cur.exp.forEach(r=>{ const o = catAll.get(r.category) || { n:0, ex:0, vat:0, incl:0, excl:!!r.excluded }; o.n++; o.ex += r.exVat; o.vat += r.vat; o.incl += r.incl; catAll.set(r.category, o); });
+  const totB = sum(expInc, pnlBasis);
+  const cats = [...catAll.entries()].sort((a,b)=> (a[1].excl - b[1].excl) || (PNL.vat ? b[1].incl - a[1].incl : b[1].ex - a[1].ex));
+  let ci = 0;
+  document.getElementById('pnlCatTbody').innerHTML = cats.map(([name, o])=>{
+    const bval = PNL.vat ? o.incl : o.ex, color = o.excl ? '#7A8AA6' : PNL_PAL[ci++ % PNL_PAL.length];
+    return '<tr><td><b>' + escHtml(name) + '</b></td><td class="num">' + o.n + '</td><td class="num">' + fmt(o.ex) + '</td><td class="num">' + fmt(o.vat) + '</td><td class="num">' + fmt(o.incl) + '</td><td>' + (o.excl ? '—' : pnlPct(totB ? bval / totB * 100 : 0, color)) + '</td><td>' + (o.excl ? 'לא' : 'כן') + '</td></tr>';
+  }).join('') + (cats.length ? '<tr class="tot"><td>סה״כ הוצאות (נכללות)</td><td class="num">' + expInc.length + '</td><td class="num">' + fmt(T.expEx) + '</td><td class="num">' + fmt(T.expVat) + '</td><td class="num">' + fmt(T.expIncl) + '</td><td>100%</td><td></td></tr>' : '<tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:22px;">אין הוצאות להצגה</td></tr>');
+  // פירוט
+  const q = (document.getElementById('pnlSearch').value || '').trim().toLowerCase();
+  const fd = d=>{ const m = String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[3] + '.' + m[2] + '.' + m[1] : ''; };
+  const incL = cur.inc.filter(r=> !q || [r.customer,r.docNo,r.allocation,r.date].join(' ').toLowerCase().includes(q)).sort((a,b)=> String(b.date).localeCompare(String(a.date)));
+  document.getElementById('pnlIncTbody').innerHTML = incL.slice(0,500).map(r=> '<tr><td>' + escHtml(r.customer) + '</td><td>' + fd(r.date) + '</td><td>' + escHtml(r.docNo) + '</td><td>' + escHtml(r.allocation) + '</td><td class="num">' + fmt(r.exVat) + '</td><td class="num">' + fmt(r.vat) + '</td><td class="num">' + fmt(r.incl) + '</td></tr>').join('')
+    + (incL.length ? '<tr class="tot"><td>סה״כ הכנסות</td><td></td><td></td><td></td><td class="num">' + fmt(sum(incL, r=>r.exVat)) + '</td><td class="num">' + fmt(sum(incL, r=>r.vat)) + '</td><td class="num">' + fmt(sum(incL, r=>r.incl)) + '</td></tr>' : '<tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:22px;">אין הכנסות להצגה</td></tr>');
+  const expL = cur.exp.filter(r=> !q || [r.category,r.supplier,r.invoiceNo,r.payType,r.date].join(' ').toLowerCase().includes(q)).sort((a,b)=> String(b.date).localeCompare(String(a.date)));
+  document.getElementById('pnlExpTbody').innerHTML = expL.slice(0,500).map(r=> '<tr><td>' + fd(r.date) + '</td><td>' + escHtml(r.category) + (r.excluded ? ' <small>(לא נכלל)</small>' : '') + '</td><td>' + escHtml(r.supplier) + '</td><td>' + escHtml(r.invoiceNo) + '</td><td>' + escHtml(r.payType) + '</td><td class="num">' + fmt(r.exVat) + '</td><td class="num">' + fmt(r.vat) + '</td><td class="num">' + fmt(r.incl) + '</td></tr>').join('')
+    || '<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:22px;">אין הוצאות להצגה</td></tr>';
+  PNL_LAST = { cur, T, prevT, ytdT, f, cats, expInc };
+  updateFilterBadge();
+}
+document.getElementById('pnlSearch').addEventListener('input', ()=> renderPnl(true));
+document.getElementById('pnlVatSwitch').addEventListener('click', ()=>{
+  PNL.vat = !PNL.vat; const sw = document.getElementById('pnlVatSwitch');
+  sw.classList.toggle('on', PNL.vat); sw.setAttribute('aria-checked', PNL.vat ? 'true' : 'false'); sw.querySelector('.vat-state').textContent = PNL.vat ? 'ON' : 'OFF';
+  document.getElementById('pnlVatNote').textContent = PNL.vat ? 'הסכומים מוצגים כולל מע״מ' : 'הסכומים מוצגים ללא מע״מ';
+  renderPnl(true);
+});
+
+let PNL_LAST = null;
+function pnlPeriodLabel(){
+  if(!PNL_LAST) return '';
+  const f = PNL_LAST.f, y = f.Y.length ? f.Y.join(', ') : 'כל השנים', m = f.M.length ? f.M.join(', ') : 'כל החודשים';
+  return m + ' · ' + y;
+}
+function pnlExportRows(){
+  const L = PNL_LAST, T = L.T, hasD = pnlHasIncDate();
+  const sum_ = [[{v:'סעיף',t:'head'},{v:'כולל מע״מ',t:'head'},{v:'ללא מע״מ',t:'head'},{v:'מע״מ',t:'head'}],
+    ['תקופה: ' + pnlPeriodLabel()],
+    ['הכנסות',{v:T.incIncl,t:'money'},{v:T.incEx,t:'money'},{v:T.incVat,t:'money'}],
+    ['הוצאות (נכללות)',{v:T.expIncl,t:'money'},{v:T.expEx,t:'money'},{v:T.expVat,t:'money'}],
+    [{v:'רווח נקי',t:'bold'},{v:T.netIncl,t:'boldmoney'},{v:T.netEx,t:'boldmoney'},''],
+    ['שיעור רווחיות',pct(T.mgIncl),pct(T.mgEx),''],
+    ['מע״מ לתשלום','','',{v:T.vatPay,t:'money'}],
+    ['החזר בעלים (לא נכלל)',{v:T.ownIncl,t:'money'},{v:T.ownEx,t:'money'},'']];
+  if(L.prevT){ sum_.push([''],[{v:'השוואה (ללא מע״מ / לפי המתג)',t:'bold'}],['רווח נקי חודש קודם',{v:tB(L.prevT,'net'),t:'money'}],['רווח נקי מצטבר שנתי',{v:tB(L.ytdT,'net'),t:'money'}]); }
+  const cats = [[{v:'קטגוריה',t:'head'},{v:'עסקאות',t:'head'},{v:'ללא מע״מ',t:'head'},{v:'מע״מ',t:'head'},{v:'כולל מע״מ',t:'head'},{v:'% מההוצאות',t:'head'}]];
+  const totB = sum(L.expInc, pnlBasis);
+  L.cats.forEach(([n,o])=> cats.push([n + (o.excl ? ' (לא נכלל)' : ''), o.n, {v:o.ex,t:'money'}, {v:o.vat,t:'money'}, {v:o.incl,t:'money'}, o.excl || !totB ? '' : pct((PNL.vat ? o.incl : o.ex) / totB * 100)]));
+  const inc = [[{v:'לקוח',t:'head'},{v:'תאריך',t:'head'},{v:'מס׳ חשבונית',t:'head'},{v:'הקצאה',t:'head'},{v:'ללא מע״מ',t:'head'},{v:'מע״מ',t:'head'},{v:'כולל מע״מ',t:'head'}]];
+  L.cur.inc.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(r=> inc.push([r.customer, String(r.date||'').slice(0,10), r.docNo, r.allocation, {v:r.exVat,t:'money'}, {v:r.vat,t:'money'}, {v:r.incl,t:'money'}]));
+  const exp = [[{v:'תאריך',t:'head'},{v:'קטגוריה',t:'head'},{v:'ספק',t:'head'},{v:'תשלום',t:'head'},{v:'מס׳ חשבונית',t:'head'},{v:'ללא מע״מ',t:'head'},{v:'מע״מ',t:'head'},{v:'כולל מע״מ',t:'head'}]];
+  L.cur.exp.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(r=> exp.push([String(r.date||'').slice(0,10), r.category + (r.excluded ? ' (לא נכלל)' : ''), r.supplier, r.payType, r.invoiceNo, {v:r.exVat,t:'money'}, {v:r.vat,t:'money'}, {v:r.incl,t:'money'}]));
+  return [ {name:'סיכום', rows:sum_, widths:[28,16,16,16]}, {name:'הוצאות לפי קטגוריה', rows:cats, widths:[26,10,16,14,16,14]},
+    {name:'הכנסות', rows:inc, widths:[26,12,16,18,14,12,14]}, {name:'הוצאות', rows:exp, widths:[12,24,24,14,16,14,12,14]} ];
+}
+function pnlExportExcel(){
+  if(!(currentUser && currentUser.role === 'admin') || !PNL_LAST) return;
+  downloadBlob(makeXlsx(pnlExportRows()), 'profit_loss_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  showToast('דוח רווח והפסד יוצא ל-Excel', 'success');
+}
+function pnlExportPdf(){
+  if(!(currentUser && currentUser.role === 'admin') || !PNL_LAST) return;
+  const L = PNL_LAST, T = L.T, n = v=> fmt(v);
+  const r3 = (name, a, b, c, cls)=> `<tr${cls ? ' class="' + cls + '"' : ''}><td>${name}</td><td class="n">${a}</td><td class="n">${b}</td><td class="n">${c}</td></tr>`;
+  const catRows = L.cats.map(([nm,o])=> `<tr><td>${escHtml(nm)}${o.excl ? ' (לא נכלל)' : ''}</td><td class="n">${o.n}</td><td class="n">${n(o.ex)}</td><td class="n">${n(o.vat)}</td><td class="n">${n(o.incl)}</td></tr>`).join('');
+  const html = `<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>דוח רווח והפסד — ${escHtml(pnlPeriodLabel())}</title><style>
+    @page{size:A4;margin:14mm} *{box-sizing:border-box} body{font-family:Heebo,Arial,sans-serif;color:#122142;font-size:12.5px;margin:0}
+    h1{font-size:22px;margin:0 0 2px;color:#17337A} .sub{color:#54688C;margin-bottom:18px} h3{font-size:14px;margin:18px 0 6px;color:#17337A}
+    table.t{width:100%;border-collapse:collapse} .t th,.t td{border:1px solid #D8E3F3;padding:6px 9px;text-align:right} .t th{background:#EAF1FB} .t td.n{text-align:left;direction:ltr;white-space:nowrap} .t tr.tot td{font-weight:700;background:#F3F7FD} .foot{margin-top:22px;color:#8DA0BE;font-size:10.5px}
+  </style></head><body>
+    <h1>י.מ ירום ישראל בע״מ</h1><div class="sub">דוח רווח והפסד — ${escHtml(pnlPeriodLabel())}</div>
+    <h3>סיכום</h3><table class="t"><thead><tr><th></th><th>כולל מע״מ</th><th>ללא מע״מ</th><th>מע״מ</th></tr></thead><tbody>
+      ${r3('הכנסות', n(T.incIncl), n(T.incEx), n(T.incVat))}${r3('הוצאות (נכללות)', n(T.expIncl), n(T.expEx), n(T.expVat))}${r3('רווח נקי', n(T.netIncl), n(T.netEx), '—', 'tot')}
+      ${r3('שיעור רווחיות', pct(T.mgIncl), pct(T.mgEx), '—')}${r3('מע״מ לתשלום', '—', '—', n(T.vatPay))}${r3('החזר בעלים (לא נכלל)', n(T.ownIncl), n(T.ownEx), '—')}
+    </tbody></table>
+    <h3>הוצאות לפי קטגוריה</h3><table class="t"><thead><tr><th>קטגוריה</th><th>עסקאות</th><th>ללא מע״מ</th><th>מע״מ</th><th>כולל מע״מ</th></tr></thead><tbody>${catRows || '<tr><td colspan="5">אין נתונים</td></tr>'}</tbody></table>
+    <div class="foot">הופק ${new Date().toLocaleString('he-IL')}${currentUser ? ' · ' + escHtml(currentUser.username) : ''} · הדוח משקף את הסינון שנבחר במסך.</div>
+  </body></html>`;
+  printHtmlViaFrame(html);
+}
+document.getElementById('pnlXlsBtn').addEventListener('click', pnlExportExcel);
+document.getElementById('pnlPdfBtn').addEventListener('click', pnlExportPdf);
+function pnlFiltersOpen(){
+  const ov = document.getElementById('xf_pnl'), pop = ov.querySelector('.filters-pop'), btn = document.getElementById('openFiltersBtn');
   ov.classList.add('show'); ov.setAttribute('aria-hidden','false');
   const br = btn.getBoundingClientRect(), pr = pop.getBoundingClientRect();
   pop.style.transformOrigin = (br.left + br.width/2 - pr.left) + 'px ' + (br.top + br.height/2 - pr.top) + 'px';
   pop.querySelectorAll('.fp-body .field').forEach((el,i)=> el.style.setProperty('--i', i));
   requestAnimationFrame(()=> requestAnimationFrame(()=> ov.classList.add('open')));
 }
-function xfClose(k){
-  const ov = document.getElementById('xf_' + k); if(!ov.classList.contains('show')) return;
-  ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
-  ov.querySelectorAll('.ms.open').forEach(m=>m.classList.remove('open'));
+function pnlFiltersClose(){
+  const ov = document.getElementById('xf_pnl'); if(!ov.classList.contains('show')) return;
+  ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); ov.querySelectorAll('.ms.open').forEach(m=>m.classList.remove('open'));
   setTimeout(()=>{ if(!ov.classList.contains('open')) ov.classList.remove('show'); }, 320);
 }
-document.querySelectorAll('[data-xclose]').forEach(b=> b.addEventListener('click', ()=> xfClose(b.dataset.xclose)));
-document.querySelectorAll('[data-xclear]').forEach(b=> b.addEventListener('click', ()=>{ const k = b.dataset.xclear; XF[k].forEach(([id])=> msClear(id)); xRender(k); updateFilterBadge(); }));
-['exp','cat'].forEach(k=> document.getElementById('xf_' + k).addEventListener('mousedown', (e)=>{ if(e.target.id === 'xf_' + k) xfClose(k); }));
-document.addEventListener('keydown', (e)=>{ if(e.key !== 'Escape') return; ['exp','cat'].forEach(k=>{ const ov = document.getElementById('xf_' + k); if(ov.classList.contains('open') && !ov.querySelector('.ms.open')) xfClose(k); }); });
-document.querySelectorAll('.xv-switch').forEach(sw=> sw.addEventListener('click', ()=>{
-  const k = sw.dataset.xk; X[k].vat = !X[k].vat;
-  sw.classList.toggle('on', X[k].vat); sw.setAttribute('aria-checked', X[k].vat ? 'true' : 'false'); sw.querySelector('.vat-state').textContent = X[k].vat ? 'ON' : 'OFF';
-  document.querySelector('[data-xnote="' + k + '"]').textContent = X[k].vat ? 'הסכומים מוצגים כולל מע״מ' : 'הסכומים מוצגים ללא מע״מ';
-  xRender(k);
-}));
-document.querySelectorAll('[data-xperiod]').forEach(b=> b.addEventListener('click', ()=>{
-  X.exp.period = b.dataset.xperiod;
-  document.querySelectorAll('[data-xperiod]').forEach(x=> x.classList.toggle('on', x === b));
-  renderExp();
-}));
-const XPAL = ['#2F6FED','#6C4CE0','#0E9488','#D65A45','#1E9BD7','#E0A21B','#C2417C','#4F9D3A','#7A8AA6','#8A5A2B'];
-function xStats(id, cards){
-  document.getElementById(id).innerHTML = cards.map((c,i)=> '<div class="cv-stat" style="--i:' + i + '"><span>' + c[0] + '</span><b>' + c[1] + '</b>' + (c[2] ? '<small>' + c[2] + '</small>' : '') + '</div>').join('');
-}
-function xKpis(id, cards){
-  document.getElementById(id).innerHTML = cards.map(c=>`
-    <div class="kpi static" style="--kpi-accent:${c.accent};--kpi-accent-soft:${c.soft};">
-      <div class="kpi-top"><div class="kpi-icon">${KPI_ICONS[c.icon]}</div></div>
-      <div class="label">${c.label}</div>
-      <div class="value num" data-raw="${c.raw}" data-type="${c.type}">0</div>
-    </div>`).join('');
-  animateValuesIn('#' + id + ' .value');
-}
-function xEmpty(canvasId, show){
-  const cv = document.getElementById(canvasId), wrap = cv.parentElement;
-  const old = wrap.querySelector('.chart-empty'); if(old) old.remove();
-  cv.style.display = show ? 'none' : 'block';
-  if(show){ const d = document.createElement('div'); d.className = 'chart-empty'; d.textContent = 'אין נתונים להצגה'; wrap.appendChild(d); }
-}
-function xPctCell(p, c){ return '<div class="pct-cell" style="--c:' + c + '"><b>' + pct(p) + '</b><i><u style="width:' + Math.max(0, Math.min(100, p)) + '%"></u></i></div>'; }
-function xTrendChart(rows){
-  const id = 'xChartTrend';
-  if(charts[id]){ charts[id].destroy(); charts[id] = null; }
-  const map = new Map();
-  rows.forEach(r=>{
-    const d = String(r.date||''); const key = X.exp.period === 'year' ? d.slice(0,4) : d.slice(0,7);
-    if(!/^\d{4}/.test(key)) return;
-    map.set(key, (map.get(key)||0) + xAmt('exp', r));
-  });
-  const keys = [...map.keys()].sort();
-  xEmpty(id, !keys.length);
-  document.getElementById('expTrendSub').textContent = X.exp.period === 'year' ? 'שנתי' : 'חודשי';
-  if(!keys.length) return;
-  const labels = keys.map(k=> X.exp.period === 'year' ? k : HEB_MONTHS[+k.slice(5,7)-1] + ' ' + k.slice(2,4));
-  const vals = keys.map(k=> Math.round(map.get(k)*100)/100);
-  const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
-  const txt = isDark() ? '#B9C6E4' : '#4A5878';
-  charts[id] = new Chart(document.getElementById(id).getContext('2d'), {
-    type:'bar',
-    data:{ labels, datasets:[{ label:'הוצאות', data:vals, backgroundColor:'#D65A45', borderRadius:8, maxBarThickness:56 },
-      { type:'line', label:'ממוצע', data:vals.map(()=>avg), borderColor:'#7A8AA6', borderDash:[6,5], borderWidth:1.5, pointRadius:0 }] },
-    options:{ responsive:true, maintainAspectRatio:false, animation:{ duration: prefersReducedMotion ? 0 : 700 },
-      plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=> c.dataset.label + ': ' + fmt(c.parsed.y) } } },
-      scales:{ x:{ ticks:{ color:txt }, grid:{ display:false } }, y:{ ticks:{ color:txt, callback:(v)=>fmt(v) }, grid:{ color: isDark() ? 'rgba(255,255,255,.08)' : 'rgba(20,40,90,.08)' } } } }
-  });
-}
-function renderExp(){
-  if(document.getElementById('expView').hidden && !arguments[0]) return;
-  const rows = xFiltered('exp'), amt = r=>xAmt('exp', r);
-  const total = sum(rows, amt), incl = sum(rows, r=>r.incl), ex = sum(rows, r=>r.exVat), vat = sum(rows, r=>r.vat);
-  const months = new Set(rows.map(r=>String(r.date||'').slice(0,7)).filter(Boolean)).size;
-  const bySup = sortedEntries(groupSum(rows, r=>r.supplier, amt));
-  xStats('expStats', [
-    ['סה״כ הוצאות ' + (X.exp.vat ? 'כולל מע״מ' : 'ללא מע״מ'), fmt(total), rows.length + ' הוצאות', 0],
-    ['מע״מ מוכר', fmt(vat), total ? '' : '', 1],
-    ['ממוצע חודשי', fmt(months ? total / months : 0), months + ' חודשים', 2],
-    ['ספק מוביל', bySup.length ? escHtml(bySup[0][0]) : '—', bySup.length ? fmt(bySup[0][1]) + ' · ' + pct(total ? bySup[0][1] / total * 100 : 0) : '', 3]
-  ]);
-  xKpis('expKpis', [
-    {label:'סה״כ כולל מע״מ', raw:incl, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'billing'},
-    {label:'סה״כ ללא מע״מ', raw:ex, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', icon:'dealInvoice'},
-    {label:'מע״מ מוכר (18%)', raw:vat, type:'currency', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', icon:'margin'},
-    {label:'מספר הוצאות', raw:rows.length, type:'integer', accent:'var(--accent-green)', soft:'var(--accent-green-soft)', icon:'projects'},
-    {label:'ממוצע להוצאה', raw:rows.length ? total / rows.length : 0, type:'currency', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', icon:'employeePayment'},
-    {label:'ממוצע חודשי', raw:months ? total / months : 0, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'grossProfit'}
-  ]);
-  xTrendChart(rows);
-  const setSearch = (label)=>{ const b = document.getElementById('expSearch'); b.value = label; renderExp(true); document.getElementById('expTable').scrollIntoView({behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start'}); };
-  barChart('xChartPay', sortedEntries(groupSum(rows, r=>r.payType || 'לא צוין', amt)), '#6C4CE0', fmt, setSearch);
-  barChart('xChartSupplier', sortedEntries(groupSum(rows, r=>r.supplier || 'לא צוין', amt)), '#1E9BD7', fmt, setSearch);
-  const q = (document.getElementById('expSearch').value || '').trim().toLowerCase();
-  const list = rows.filter(r=> !q || [r.date,r.supplier,r.invoiceNo,r.payType].join(' ').toLowerCase().includes(q)).sort((a,b)=> String(b.date).localeCompare(String(a.date)));
-  document.getElementById('expTableTitle').textContent = 'כל ההוצאות · ' + rows.length + (q ? ' · ' + list.length + ' תוצאות חיפוש' : '');
-  const shown = list.slice(0, 500);
-  document.getElementById('expTbody').innerHTML = shown.map(r=>{
-    const d = String(r.date||'').match(/^(\d{4})-(\d{2})-(\d{2})/);
-    return '<tr><td>' + (d ? d[3] + '.' + d[2] + '.' + d[1] : escHtml(r.date)) + '</td><td>' + escHtml(r.supplier) + '</td><td>' + escHtml(r.invoiceNo) + '</td><td>' + escHtml(r.payType) + '</td>'
-      + '<td class="num">' + (r.payments || '') + '</td><td class="num">' + fmt(r.exVat) + '</td><td class="num">' + fmt(r.vat) + '</td><td class="num">' + fmt(r.incl) + '</td>'
-      + '<td>' + xPctCell(total ? amt(r) / total * 100 : 0, '#D65A45') + '</td></tr>';
-  }).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-dim);padding:22px;">אין הוצאות להצגה</td></tr>';
-  updateFilterBadge();
-}
-document.getElementById('expSearch').addEventListener('input', ()=> renderExp(true));
-function renderCat(){
-  if(document.getElementById('catView').hidden && !arguments[0]) return;
-  const rows = xFiltered('cat'), amt = r=>xAmt('cat', r);
-  const total = sum(rows, amt), incl = sum(rows, r=>r.incl), ex = sum(rows, r=>r.exVat), vat = sum(rows, r=>r.vat);
-  const byCat = sortedEntries(groupSum(rows, r=>r.category, amt));
-  xStats('catStats', [
-    ['סה״כ ' + (X.cat.vat ? 'כולל מע״מ' : 'ללא מע״מ'), fmt(total), rows.length + ' שורות', 0],
-    ['קטגוריות', byCat.length, '', 1],
-    ['קטגוריה מובילה', byCat.length ? escHtml(byCat[0][0]) : '—', byCat.length ? fmt(byCat[0][1]) : '', 2],
-    ['אחוז הקטגוריה המובילה', byCat.length && total ? pct(byCat[0][1] / total * 100) : '—', 'מסך ההוצאות', 3]
-  ]);
-  xKpis('catKpis', [
-    {label:'סה״כ כולל מע״מ', raw:incl, type:'currency', accent:'var(--accent-indigo)', soft:'var(--accent-indigo-soft)', icon:'billing'},
-    {label:'סה״כ ללא מע״מ', raw:ex, type:'currency', accent:'var(--accent-blue)', soft:'var(--accent-blue-soft)', icon:'dealInvoice'},
-    {label:'מע״מ (18%)', raw:vat, type:'currency', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', icon:'margin'},
-    {label:'קטגוריות', raw:byCat.length, type:'integer', accent:'var(--accent-green)', soft:'var(--accent-green-soft)', icon:'projects'},
-    {label:'מספר שורות', raw:rows.length, type:'integer', accent:'var(--accent-sky)', soft:'var(--accent-sky-soft)', icon:'activeEmployees'},
-    {label:'ממוצע לקטגוריה', raw:byCat.length ? total / byCat.length : 0, type:'currency', accent:'var(--accent-red)', soft:'var(--accent-red-soft)', icon:'employeePayment'}
-  ]);
-  const setSearch = (label)=>{ document.getElementById('catSearch').value = label; renderCat(true); document.getElementById('catTable').scrollIntoView({behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start'}); };
-  barChart('xcChartCat', byCat, '#6C4CE0', fmt, setSearch);
-  // התפלגות (דונאט)
-  const id = 'xcChartShare';
-  if(charts[id]){ charts[id].destroy(); charts[id] = null; }
-  xEmpty(id, !byCat.length);
-  if(byCat.length){
-    const txt = isDark() ? '#B9C6E4' : '#4A5878';
-    charts[id] = new Chart(document.getElementById(id).getContext('2d'), {
-      type:'doughnut',
-      data:{ labels:byCat.map(e=>e[0]), datasets:[{ data:byCat.map(e=>e[1]), backgroundColor:byCat.map((e,i)=>XPAL[i % XPAL.length]), borderWidth:2, borderColor: isDark() ? '#0F1B3D' : '#fff' }] },
-      options:{ responsive:true, maintainAspectRatio:false, cutout:'58%', animation:{ duration: prefersReducedMotion ? 0 : 700 },
-        plugins:{ legend:{ position:'bottom', labels:{ color:txt, boxWidth:12, padding:14 } },
-          tooltip:{ callbacks:{ label:(c)=> c.label + ': ' + fmt(c.parsed) + ' · ' + pct(total ? c.parsed / total * 100 : 0) } } } }
-    });
-  }
-  const byCust = sortedEntries(groupSum(rows.filter(r=>r.customer), r=>r.customer, amt));
-  document.getElementById('xcCustCard').hidden = !byCust.length; document.getElementById('xcCustHead').hidden = !byCust.length;
-  if(byCust.length) barChart('xcChartCust', byCust, '#1E9BD7', fmt, setSearch);
-  document.getElementById('catSumTbody').innerHTML = byCat.map(([name, v], i)=>{
-    const rs = rows.filter(r=>r.category === name);
-    return '<tr><td><b>' + escHtml(name) + '</b></td><td class="num">' + fmt(sum(rs, r=>r.exVat)) + '</td><td class="num">' + fmt(sum(rs, r=>r.vat)) + '</td><td class="num">' + fmt(sum(rs, r=>r.incl)) + '</td><td>' + xPctCell(total ? v / total * 100 : 0, XPAL[i % XPAL.length]) + '</td></tr>';
-  }).join('') + (byCat.length ? '<tr style="font-weight:800;"><td>סה״כ</td><td class="num">' + fmt(ex) + '</td><td class="num">' + fmt(vat) + '</td><td class="num">' + fmt(incl) + '</td><td>100%</td></tr>' : '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:22px;">אין נתונים להצגה</td></tr>');
-  const q = (document.getElementById('catSearch').value || '').trim().toLowerCase();
-  const list = rows.filter(r=> !q || [r.category,r.code,r.description,r.customer].join(' ').toLowerCase().includes(q));
-  document.getElementById('catTbody').innerHTML = list.slice(0, 500).map(r=> '<tr><td>' + escHtml(r.category) + '</td><td>' + escHtml(r.code) + '</td><td>' + escHtml(r.description) + '</td><td>' + escHtml(r.customer) + '</td><td class="num">' + fmt(r.exVat) + '</td><td class="num">' + fmt(r.vat) + '</td><td class="num">' + fmt(r.incl) + '</td></tr>').join('')
-    || '<tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:22px;">אין שורות להצגה</td></tr>';
-  updateFilterBadge();
-}
-document.getElementById('catSearch').addEventListener('input', ()=> renderCat(true));
+document.getElementById('pnlFiltersClose').addEventListener('click', pnlFiltersClose);
+document.getElementById('pnlFiltersApply').addEventListener('click', pnlFiltersClose);
+document.getElementById('pnlFiltersClear').addEventListener('click', ()=>{ PF.forEach(id=> msClear(id)); renderPnl(true); updateFilterBadge(); });
+document.getElementById('xf_pnl').addEventListener('mousedown', (e)=>{ if(e.target.id === 'xf_pnl') pnlFiltersClose(); });
+document.addEventListener('keydown', (e)=>{ if(e.key !== 'Escape') return; const ov = document.getElementById('xf_pnl'); if(ov.classList.contains('open') && !ov.querySelector('.ms.open')) pnlFiltersClose(); }, true);
 
 /* ============================ מודל צפייה בתכנון עתידי (דשבורד) ============================ */
 let planningSort = { key:'employee', dir:1 };
@@ -4688,7 +4712,7 @@ function applyTheme(t, persist){
   if(companiesData.length || planningData.length){
     renderCharts(); renderBudgetCharts(); renderMonthlyTrend();
     if(currentView === 'planning') renderPlanningCharts(getFilteredPlanning());
-    if(currentView === 'exp') renderExp(true); else if(currentView === 'cat') renderCat(true);
+    if(currentView === 'pnl') renderPnl();
   }
 }
 document.getElementById('themeBtn').addEventListener('click', ()=> applyTheme(isDark() ? 'light' : 'dark', true));
@@ -4779,11 +4803,12 @@ function aggRange(f, a, b){
   return o;
 }
 /* ============================ v3: דירוג רווחיות ============================ */
-let rankDim = 'employee';
+let rankDim = 'employee', rankN = 5;
 const RANK_DIMS = { employee:{ label:'עובד', title:'רווח גולמי לפי עובד' }, client:{ label:'לקוח', title:'רווח גולמי לפי לקוח' }, approver:{ label:'מאשר', title:'רווח גולמי לפי מאשר' }, endClient:{ label:'לקוח קצה', title:'רווח גולמי לפי לקוח קצה' }, company:{ label:'חברה', title:'רווח גולמי לפי חברה' } };
 function renderRanking(){
   const grid = document.getElementById('rankGrid'); if(!grid) return;
   document.querySelectorAll('#rankTabs button').forEach(b=> b.classList.toggle('on', b.dataset.dim === rankDim));
+  document.querySelectorAll('#rankSize button').forEach(b=> b.classList.toggle('on', +b.dataset.n === rankN));
   const profit = groupSum(filteredCompanies, c=>c[rankDim] || 'לא ידוע', c=>c.grossProfit);
   const bill = groupSum(filteredCompanies, c=>c[rankDim] || 'לא ידוע', c=>c.clientBilling);
   const items = [...profit.entries()].map(([k,v])=>({ name:k, profit:v, margin: bill.get(k) ? v / bill.get(k) * 100 : 0 })).sort((a,b)=> b.profit - a.profit);
@@ -4793,11 +4818,11 @@ function renderRanking(){
       <span class="rk">${rank}</span><span class="nm">${escHtml(it.name)}</span>
       <span class="bar"><i style="width:${Math.max(3, Math.abs(it.profit)/maxAbs*100)}%;background:${it.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)'};"></i></span>
       <span class="val ${it.profit<0?'profit-neg':''}">${fmt(it.profit)}<small>${pct(it.margin)} מהחיוב</small></span></div>`;
-  if(items.length <= 8){
+  if(rankN === 0 || items.length <= Math.max(8, rankN * 2)){
     grid.className = 'rank-grid one';
-    grid.innerHTML = '<div class="rank-col">' + items.map((it,i)=>row(it,i+1)).join('') + '</div>';
+    grid.innerHTML = '<div class="rank-col' + (items.length > 20 ? ' scroll' : '') + '">' + items.map((it,i)=>row(it,i+1)).join('') + '</div>';
   } else {
-    const top = items.slice(0,5), bottom = items.slice(-5).reverse();
+    const top = items.slice(0,rankN), bottom = items.slice(-rankN).reverse();
     grid.className = 'rank-grid';
     grid.innerHTML = '<div class="rank-col"><h4>🔝 מושכים את הרווח למעלה</h4>' + top.map((it,i)=>row(it,i+1)).join('') + '</div>'
       + '<div class="rank-col"><h4>🔻 מושכים את הרווח למטה</h4>' + bottom.map((it,i)=>row(it, items.length - i)).join('') + '</div>';
@@ -4805,6 +4830,7 @@ function renderRanking(){
   grid.querySelectorAll('.rank-row').forEach(el=> el.addEventListener('click', ()=> openCategoryModal(rankDim, el.dataset.name, 'grossProfit', RANK_DIMS[rankDim].title + ' — ' + el.dataset.name)));
 }
 document.querySelectorAll('#rankTabs button').forEach(b=> b.addEventListener('click', ()=>{ rankDim = b.dataset.dim; renderRanking(); }));
+document.querySelectorAll('#rankSize button').forEach(b=> b.addEventListener('click', ()=>{ rankN = +b.dataset.n; renderRanking(); }));
 
 /* ============================ v3: תחזית סוף שנה לכל עובד ============================ */
 function forecastFor(r){
